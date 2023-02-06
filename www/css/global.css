@@ -1,0 +1,72 @@
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+  color: #222;
+  user-select: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #eee;
+  }
+
+  a {
+    color: #58a7ff;
+  }
+}
+
+/* Buttons */
+
+button {
+  position: relative;
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  border-radius: 6px;
+}
+
+button > img {
+  position: absolute;
+  max-height: 100%;
+  max-width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(75%);
+
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: invert(32%) sepia(0%) saturate(60%) hue-rotate(224deg) brightness(100%) contrast(95%);
+}
+
+button.blurred > img,
+button:disabled > img {
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: invert(82%) sepia(3%) saturate(20%) hue-rotate(339deg) brightness(84%) contrast(86%);
+}
+
+button:not(:disabled):hover {
+  background-color: #eee;
+}
+
+button:not(:disabled):active {
+  background-color: #ddd;
+}
+
+@media (prefers-color-scheme: dark) {
+  button > img {
+    /* https://codepen.io/sosuke/pen/Pjoqqp */
+    filter: invert(75%) sepia(0%) saturate(0%) hue-rotate(138deg) brightness(83%) contrast(81%);
+  }
+
+  button.blurred > img,
+  button:disabled > img {
+    /* https://codepen.io/sosuke/pen/Pjoqqp */
+    filter: invert(30%) sepia(11%) saturate(12%) hue-rotate(104deg) brightness(104%) contrast(93%);
+  }
+
+  button:not(:disabled):hover {
+    background-color: #333;
+  }
+
+  button:not(:disabled):active {
+    background-color: #444;
+  }
+}

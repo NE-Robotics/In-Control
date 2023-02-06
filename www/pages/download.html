@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/download.css" />
+    <script type="module" src="../../bundles/download.js"></script>
+    <title>Download Logs &mdash; AdvantageScope</title>
+  </head>
+
+  <body>
+    <div class="file-list">
+      <span></span>
+      <div class="loading">
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+        <div class="loading-bar"></div>
+      </div>
+    </div>
+
+    <div class="alert-text" hidden></div>
+    <progress min="0" max="1" hidden></progress>
+    <div class="progress-details" hidden></div>
+
+    <button id="exit" tabindex="-1">
+      <img src="../symbols/xmark.svg" />
+    </button>
+    <button id="download" tabindex="-1">
+      <img src="../symbols/arrow.down.svg" />
+    </button>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+body {
+  background-color: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #222;
+  }
+}
+
+table {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: calc(100% - 20px);
+  border-spacing: 0px;
+}
+
+tr {
+  line-height: 27px;
+}
+
+td {
+  margin: 0px;
+  padding: 0px;
+}
+
+td.label {
+  white-space: nowrap;
+  width: 1px;
+  text-align: right;
+  font-size: 14px;
+}
+
+input,
+select {
+  box-sizing: border-box;
+  display: block;
+  margin-left: 5px;
+  width: calc(100% - 5px);
+}
+
+button,
+div.help-div {
+  position: absolute;
+  bottom: 8px;
+  width: 30px;
+  height: 30px;
+}
+
+#exit {
+  right: 43px;
+}
+
+#confirm {
+  right: 8px;
+}
+
+div.help-div {
+  right: 78px;
+  width: 50px;
+}
+
+div.help-div > a {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

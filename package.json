@@ -1,0 +1,52 @@
+{
+  "name": "frc-in-control",
+  "productName": "FRC-IN-CONTROL",
+  "version": "1.0.0",
+  "description": "Robot dashboard, data logger, and data visualizer for FRC teams",
+  "author": {
+    "name": "Autumn O."
+  },
+  "dependencies": {
+    "electron-fetch": "^1.7.4",
+    "jsonfile": "^6.1.0",
+    "ssh2": "^1.5.0"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "trailingComma": "none"
+  },
+  "devDependencies": {
+    "@types/jsonfile": "^6.1.1",
+    "@types/remarkable": "^2.0.3",
+    "@types/ssh2": "^1.11.7",
+    "@types/three": "^0.149.0",
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "10.0.1",
+    "@types/chart.js": "^2.9.37",
+    "@types/mathjs": "^9.4.2",
+    "chart.js": "^3.9.1",
+    "download": "^8.0.0",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.3.3",
+    "mathjs": "^11.3.0",
+    "prettier": "2.7.1",
+    "remarkable": "^2.0.1",
+    "rollup": "^3.8.0",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "simple-statistics": "^7.7.6",
+    "three": "^0.144.0",
+    "tslib": "^2.4.0",
+    "typescript": "4.7.4"
+  },
+  "main": "bundles/main.js",
+  "scripts": {
+    "start": "electron bundles/main.js",
+    "compile": "rollup -c --configMain && rollup -c --configLargeRenderers && rollup -c --configSmallRenderers && rollup -c --configWorkers",
+    "build": "npm run compile && electron-builder build",
+    "fast-build": "npm run compile && electron-builder build --dir",
+    "watch": "rollup -c -w",
+    "format": "prettier --write .",
+    "check-format": "prettier --check ."
+  }
+}
