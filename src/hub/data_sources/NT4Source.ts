@@ -1,3 +1,4 @@
+import { string } from "mathjs";
 import Log from "../../packages/log/Log";
 import LoggableType from "../../packages/log/LoggableType";
 import { checkArrayType } from "../../packages/utils/util";
@@ -9,6 +10,7 @@ export default class NT4Source extends LiveDataSource {
   private AKIT_PREFIX = "/AdvantageKit";
 
   private akitMode: boolean;
+  private configurableMode: boolean;
   private log: Log | null = null;
   private client: NT4_Client | null = null;
 
@@ -16,9 +18,10 @@ export default class NT4Source extends LiveDataSource {
   private connectServerTime: number | null = null;
   private noFieldsTimeout: NodeJS.Timeout | null = null;
 
-  constructor(akitMode: boolean) {
+  constructor(akitMode: boolean, configurableMode: boolean) {
     super();
     this.akitMode = akitMode;
+    this.configurableMode = configurableMode;
 
     // Check periodically if output callback should be triggered
     // (prevents running the callback many times for each frame)
@@ -61,7 +64,7 @@ export default class NT4Source extends LiveDataSource {
       this.log = new Log();
       this.client = new NT4_Client(
         address,
-        "AdvantageScope",
+        "In Control",
         (topic: NT4_Topic) => {
           // Announce
           if (!this.log) return;
@@ -84,11 +87,7 @@ export default class NT4Source extends LiveDataSource {
           }
 
           let key = this.getKeyFromTopic(topic);
-          let timestamp =
-            Math.max(
-              timestamp_us,
-              this.connectServerTime == null ? 0 : this.connectServerTime
-            ) / 1000000;
+          let timestamp = Math.max(timestamp_us, this.connectServerTime == null ? 0 : this.connectServerTime) / 1000000;
           let type = this.getLogType(topic.type);
 
           let updated = false;
@@ -102,10 +101,7 @@ export default class NT4Source extends LiveDataSource {
                   }
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a raw value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a raw value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.Boolean:
@@ -113,10 +109,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putBoolean(key, timestamp, value);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a boolean value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a boolean value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.Number:
@@ -124,10 +117,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putNumber(key, timestamp, value);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a number value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a number value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.String:
@@ -135,10 +125,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putString(key, timestamp, value);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a string value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a string value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.BooleanArray:
@@ -146,10 +133,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putBooleanArray(key, timestamp, value as boolean[]);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a boolean[] value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a boolean[] value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.NumberArray:
@@ -157,10 +141,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putNumberArray(key, timestamp, value as number[]);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a number[] value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a number[] value for "' + key + '" but got:', value);
                 }
                 break;
               case LoggableType.StringArray:
@@ -168,10 +149,7 @@ export default class NT4Source extends LiveDataSource {
                   this.log?.putStringArray(key, timestamp, value as string[]);
                   updated = true;
                 } else {
-                  console.warn(
-                    'Expected a string[] value for "' + key + '" but got:',
-                    value
-                  );
+                  console.warn('Expected a string[] value for "' + key + '" but got:', value);
                 }
                 break;
             }
@@ -188,7 +166,7 @@ export default class NT4Source extends LiveDataSource {
               window.sendMainMessage("error", {
                 title: "Problem with NT4 connection",
                 content:
-                  "No fields were received from the server. AdvantageKit mode is selected. Are you connecting to a server without AdvantageKit?",
+                  "No fields were received from the server. AdvantageKit mode is selected. Are you connecting to a server without AdvantageKit?"
               });
             }, 5000);
           }
@@ -203,6 +181,13 @@ export default class NT4Source extends LiveDataSource {
       this.client.connect();
       if (this.akitMode) {
         this.client?.subscribe([this.AKIT_PREFIX + "/"], true, true, 0);
+      } else if (this.configurableMode) {
+        for (const key of window.preferences.keys) {
+          console.log(
+            "Key: " + key + " key[0] " + key[0] + " key[1] " + key[1] + " key[2] " + key[2] + " key[3] " + key[3]
+          );
+          this.client?.subscribe([key[0]], key[1], key[2], key[3]);
+        }
       } else {
         this.client?.subscribe(["/"], true, true, 0);
       }

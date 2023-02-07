@@ -7,6 +7,7 @@
     "name": "Autumn O."
   },
   "dependencies": {
+    "@rollup/plugin-json": "^6.0.0",
     "electron-fetch": "^1.7.4",
     "jsonfile": "^6.1.0",
     "ssh2": "^1.5.0"
@@ -16,15 +17,15 @@
     "trailingComma": "none"
   },
   "devDependencies": {
-    "@types/jsonfile": "^6.1.1",
-    "@types/remarkable": "^2.0.3",
-    "@types/ssh2": "^1.11.7",
-    "@types/three": "^0.149.0",
     "@rollup/plugin-commonjs": "^24.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "10.0.1",
     "@types/chart.js": "^2.9.37",
+    "@types/jsonfile": "^6.1.1",
     "@types/mathjs": "^9.4.2",
+    "@types/remarkable": "^2.0.3",
+    "@types/ssh2": "^1.11.7",
+    "@types/three": "^0.149.0",
     "chart.js": "^3.9.1",
     "download": "^8.0.0",
     "electron": "^22.0.0",

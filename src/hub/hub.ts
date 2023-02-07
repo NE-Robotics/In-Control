@@ -6,14 +6,8 @@ import { getEnabledData } from "../packages/log/LogUtil";
 import NamedMessage from "../packages/utils/NamedMessage";
 import Preferences from "../packages/convenience/Preferences";
 import { htmlEncode } from "../packages/utils/util";
-import {
-  HistorialDataSource,
-  HistorialDataSourceStatus,
-} from "./data_sources/HistoricalDataSource";
-import {
-  LiveDataSource,
-  LiveDataSourceStatus,
-} from "./data_sources/LiveDataSource";
+import { HistorialDataSource, HistorialDataSourceStatus } from "./data_sources/HistoricalDataSource";
+import { LiveDataSource, LiveDataSourceStatus } from "./data_sources/LiveDataSource";
 import NT4Source from "./data_sources/NT4Source";
 import RLOGServerSource from "./data_sources/RLOGServerSource";
 import Selection from "./Selection";
@@ -24,9 +18,7 @@ import WorkerManager from "./WorkerManager";
 // Constants
 const SAVE_PERIOD_MS = 250;
 const DRAG_ITEM = document.getElementById("dragItem") as HTMLElement;
-const UPDATE_BUTTON = document.getElementsByClassName(
-  "update"
-)[0] as HTMLElement;
+const UPDATE_BUTTON = document.getElementsByClassName("update")[0] as HTMLElement;
 
 // Global variables
 declare global {
@@ -46,19 +38,9 @@ declare global {
     tabs: Tabs;
     messagePort: MessagePort | null;
     sendMainMessage: (name: string, data?: any) => void;
-    startDrag: (
-      x: number,
-      y: number,
-      offsetX: number,
-      offsetY: number,
-      data: any
-    ) => void;
+    startDrag: (x: number, y: number, offsetX: number, offsetY: number, data: any) => void;
 
-    override3dRobotConfig: (
-      title: string,
-      rotations: Config3d_Rotation[],
-      position: [number, number, number]
-    ) => void;
+    override3dRobotConfig: (title: string, rotations: Config3d_Rotation[], position: [number, number, number]) => void;
   }
 }
 window.log = new Log();
@@ -90,10 +72,7 @@ let dragData: any = null;
 // WINDOW UTILITIES
 
 function setWindowTitle(name: string, status?: string) {
-  let title =
-    htmlEncode(name) +
-    (status ? " (" + htmlEncode(status) + ")" : "") +
-    " &mdash; AdvantageScope";
+  let title = htmlEncode(name) + (status ? " (" + htmlEncode(status) + ")" : "") + " &mdash; FRC In Control";
   document.getElementsByTagName("title")[0].innerHTML = title;
   document.getElementsByClassName("title-bar-text")[0].innerHTML = title;
 }
@@ -102,19 +81,13 @@ function setLoading(active: boolean) {
   if (active) {
     document.getElementsByClassName("loading-glow")[0].classList.add("active");
   } else {
-    document
-      .getElementsByClassName("loading-glow")[0]
-      .classList.remove("active");
+    document.getElementsByClassName("loading-glow")[0].classList.remove("active");
   }
 }
 
 function updateFancyWindow() {
   // Using fancy title bar?
-  if (
-    window.platform == "darwin" &&
-    Number(window.platformRelease.split(".")[0]) >= 20 &&
-    !window.isFullscreen
-  ) {
+  if (window.platform == "darwin" && Number(window.platformRelease.split(".")[0]) >= 20 && !window.isFullscreen) {
     document.body.classList.add("fancy-title-bar");
   } else {
     document.body.classList.remove("fancy-title-bar");
@@ -158,7 +131,7 @@ window.override3dRobotConfig = (title, rotations, position) => {
 function saveState(): HubState {
   return {
     sidebar: window.sidebar.saveState(),
-    tabs: window.tabs.saveState(),
+    tabs: window.tabs.saveState()
   };
 }
 
@@ -195,7 +168,7 @@ function dragMove(x: number, y: number) {
     dragLastY = y;
     window.dispatchEvent(
       new CustomEvent("drag-update", {
-        detail: { end: false, x: x, y: y, data: dragData },
+        detail: { end: false, x: x, y: y, data: dragData }
       })
     );
   }
@@ -213,7 +186,7 @@ function dragEnd() {
     DRAG_ITEM.hidden = true;
     window.dispatchEvent(
       new CustomEvent("drag-update", {
-        detail: { end: true, x: dragLastX, y: dragLastY, data: dragData },
+        detail: { end: true, x: dragLastX, y: dragLastY, data: dragData }
       })
     );
   }
@@ -253,8 +226,7 @@ function startHistorical(path: string, shouldMerge: boolean = false) {
           setLoading(false);
           window.sendMainMessage("error", {
             title: "Failed to open log",
-            content:
-              "There was a problem while reading the log file. Please try again.",
+            content: "There was a problem while reading the log file. Please try again."
           });
           break;
         case HistorialDataSourceStatus.Stopped:
@@ -274,7 +246,7 @@ function startHistorical(path: string, shouldMerge: boolean = false) {
           window.sendMainMessage("error", {
             title: "Failed to merge logs",
             content:
-              "The logs contain conflicting fields. Merging is only possible when the logged fields don't overlap.",
+              "The logs contain conflicting fields. Merging is only possible when the logged fields don't overlap."
           });
           return;
         }
@@ -285,20 +257,12 @@ function startHistorical(path: string, shouldMerge: boolean = false) {
         let currentEnabledData = getEnabledData(window.log);
         let newEnabledData = getEnabledData(log);
         if (currentEnabledData && currentEnabledData.values.includes(true)) {
-          currentFirstEnable =
-            currentEnabledData.timestamps[
-              currentEnabledData.values.indexOf(true)
-            ];
+          currentFirstEnable = currentEnabledData.timestamps[currentEnabledData.values.indexOf(true)];
         }
         if (newEnabledData && newEnabledData.values.includes(true)) {
-          newFirstEnabled =
-            newEnabledData.timestamps[newEnabledData.values.indexOf(true)];
+          newFirstEnabled = newEnabledData.timestamps[newEnabledData.values.indexOf(true)];
         }
-        window.log = Log.mergeLogs(
-          window.log,
-          log,
-          currentFirstEnable - newFirstEnabled
-        );
+        window.log = Log.mergeLogs(window.log, log, currentFirstEnable - newFirstEnabled);
       } else {
         window.log = log;
         logPath = path;
@@ -319,10 +283,13 @@ function startLive(isSim: boolean) {
   if (!window.preferences) return;
   switch (window.preferences.liveMode) {
     case "nt4":
-      liveSource = new NT4Source(false);
+      liveSource = new NT4Source(false, false);
       break;
     case "nt4-akit":
-      liveSource = new NT4Source(true);
+      liveSource = new NT4Source(true, false);
+      break;
+    case "nt4-configurable":
+      liveSource = new NT4Source(false, true);
       break;
     case "rlog":
       liveSource = new RLOGServerSource();
@@ -355,7 +322,7 @@ function startLive(isSim: boolean) {
           window.sendMainMessage("error", {
             title: "Problem with live source",
             content:
-              "There was a problem while connecting to the live source. Please check your connection settings and try again.",
+              "There was a problem while connecting to the live source. Please check your connection settings and try again."
           });
           break;
       }
@@ -456,10 +423,7 @@ function handleMainMessage(message: NamedMessage) {
       break;
 
     case "show-update-button":
-      document.documentElement.style.setProperty(
-        "--show-update-button",
-        message.data ? "1" : "0"
-      );
+      document.documentElement.style.setProperty("--show-update-button", message.data ? "1" : "0");
       UPDATE_BUTTON.hidden = !message.data;
       break;
 
@@ -512,11 +476,7 @@ function handleMainMessage(message: NamedMessage) {
       break;
 
     case "edit-axis":
-      window.tabs.editAxis(
-        message.data.legend,
-        message.data.lockedRange,
-        message.data.unitConversion
-      );
+      window.tabs.editAxis(message.data.legend, message.data.lockedRange, message.data.unitConversion);
       break;
 
     case "clear-axis":
@@ -537,8 +497,7 @@ function handleMainMessage(message: NamedMessage) {
       } else {
         window.sendMainMessage("error", {
           title: "Cannot export data",
-          content:
-            "Please open a log file or connect to a live source, then try again.",
+          content: "Please open a log file or connect to a live source, then try again."
         });
       }
       break;
@@ -547,19 +506,18 @@ function handleMainMessage(message: NamedMessage) {
       setLoading(true);
       WorkerManager.request("../bundles/hub$exportWorker.js", {
         options: message.data.options,
-        log: window.log.toSerialized(),
+        log: window.log.toSerialized()
       })
         .then((content) => {
           window.sendMainMessage("write-export", {
             path: message.data.path,
-            content: content,
+            content: content
           });
         })
         .catch(() => {
           window.sendMainMessage("error", {
             title: "Failed to export data",
-            content:
-              "There was a problem while converting to the export format. Please try again.",
+            content: "There was a problem while converting to the export format. Please try again."
           });
         });
       break;
