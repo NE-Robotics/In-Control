@@ -1786,11 +1786,6 @@ app.whenReady().then(() => {
       prefs.rlogPort = oldPrefs.rlogPort;
     }
     console.log(prefs);
-    for (const key of prefs.keys) {
-      console.log(
-        "Key: " + key + " key[0] " + key[0] + " key[1] " + key[1] + " key[2] " + key[2] + " key[3] " + key[3]
-      );
-    }
     jsonfile.writeFileSync(PREFS_FILENAME, prefs);
     nativeTheme.themeSource = prefs.theme;
   }
