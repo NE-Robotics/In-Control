@@ -876,7 +876,7 @@ function setupMenu() {
 
   const template: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] = [
     {
-      label: "File",
+      label: "Utilities",
       submenu: [
         {
           label: "Open Log...",
@@ -954,16 +954,6 @@ function setupMenu() {
           click(_, window) {
             if (window == null || !hubWindows.includes(window)) return;
             sendMessage(window, "start-export");
-          }
-        },
-        { type: "separator" },
-        {
-          label: "Use USB roboRIO Address",
-          type: "checkbox",
-          checked: false,
-          click(item) {
-            usingUsb = item.checked;
-            sendAllPreferences();
           }
         },
         { type: "separator" },
@@ -1061,7 +1051,7 @@ function setupMenu() {
                     dialog.showMessageBox(window, {
                       type: "error",
                       title: "Error",
-                      message: "Failed to import config",
+                      message: "Failed to import NT4 config",
                       detail: "The selected config file was not a recognized format.",
                       icon: WINDOW_ICON
                     });
@@ -1082,12 +1072,16 @@ function setupMenu() {
                     });
                     if (result != 0) return;
                   }
-                  let configPath = path.join(app.getPath("userData"), "nt4-config.json");
-
+                  let oldPrefs = jsonfile.readFileSync(PREFS_FILENAME);
                   jsonfile.writeFile(
-                    configPath,
+                    PREFS_FILENAME,
                     {
                       version: app.isPackaged ? app.getVersion() : "dev",
+                      theme: oldPrefs.theme,
+                      rioAddress: oldPrefs.rioAddress,
+                      liveMode: oldPrefs.liveMode,
+                      rlogPort: oldPrefs.rlogPort,
+                      threeDimensionMode: oldPrefs.threeDimensionMode,
                       keys: data.keys
                     },
                     { spaces: 2 }
@@ -1109,6 +1103,29 @@ function setupMenu() {
     },
     { role: "editMenu" },
     { role: "viewMenu" },
+    {
+      label: "Preferences",
+      submenu: [
+        {
+          label: "Edit Preferences...",
+          accelerator: "Ctrl+,",
+          click(_, window) {
+            if (window == null) return;
+            openPreferences(window);
+          }
+        },
+        { type: "separator" },
+        {
+          label: "Use USB roboRIO Address",
+          type: "checkbox",
+          checked: false,
+          click(item) {
+            usingUsb = item.checked;
+            sendAllPreferences();
+          }
+        }
+      ]
+    },
     {
       label: "Tabs",
       submenu: [
@@ -1256,14 +1273,6 @@ function setupMenu() {
             buttons: ["Close"],
             icon: WINDOW_ICON
           });
-        }
-      },
-      {
-        label: "Show Preferences...",
-        accelerator: "Ctrl+,",
-        click(_, window) {
-          if (window == null) return;
-          openPreferences(window);
         }
       },
       { type: "separator" }
