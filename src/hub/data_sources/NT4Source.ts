@@ -1,4 +1,3 @@
-import { string } from "mathjs";
 import Log from "../../packages/log/Log";
 import LoggableType from "../../packages/log/LoggableType";
 import { checkArrayType } from "../../packages/utils/util";

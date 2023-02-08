@@ -2,9 +2,7 @@
 
 _[< Return to homepage](/docs/INDEX.md)_
 
-AdvantageScope includes a default set of flat field images, field models, robot models, and joystick configurations. These can be customized to add more options if desired. To open the configuration folder, click "Help" > "Show FRC Data Folder". AdvantageScope must be restarted for changes to take effect.
-
-The expected formats for the configuration files are defined below. See the [built-in configurations](https://github.com/Mechanical-Advantage/AdvantageScope/tree/main/frcData) for reference.
+In Control includes a default set of flat field images, field models, robot models, and joystick configurations. These can be customized to add more options if desired. To open the configuration folder, click "Help" > "Show FRC Data Folder". In Control must be restarted for changes to take effect.
 
 ## Flat Field Images
 

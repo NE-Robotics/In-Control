@@ -135,7 +135,7 @@ function generateCsvList(log: Log, fields: string[]) {
 }
 
 function generateWPILOG(log: Log, fields: string[]) {
-  let encoder = new WPILOGEncoder("AdvantageScope");
+  let encoder = new WPILOGEncoder("In Control");
   fields.forEach((field, index) => {
     let fieldData = log.getRange(field, -Infinity, Infinity);
     let fieldType = log.getType(field);

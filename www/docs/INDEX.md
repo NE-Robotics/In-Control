@@ -1,10 +1,10 @@
-# Welcome to INCONTROL!
+# Welcome to In Control!
 
-FRC In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams.
+FRC In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
 
 ## Getting Started
 
-These links cover the basics of getting around in AdvantageScope and and accessing data.
+These links cover the basics of getting around in In Control and and accessing data.
 
 - [App Navigation](/docs/NAVIGATION.md)
 - [Opening/Downloading Log Files](/docs/OPEN-FILE.md)
@@ -30,10 +30,6 @@ In Control supports many ways to view and analyze data, organized into tabs. The
 
 ## Other Links
 
-- [AdvantageKit Documentation](https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/README.md)
-- [AdvantageScope Repository](https://github.com/Mechanical-Advantage/AdvantageScope/)
 - [Sample Log Data](https://drive.google.com/drive/folders/14Bbp10csQPjh2VcApNM07lwt2v77-z_I?usp=share_link) (6328 @ 2022 Championship)
 - [Custom Fields/Robots/Joysticks](/docs/CUSTOM-CONFIG.md)
 - [Converting Onshape & STEP Files to glTF](/docs/GLTF-CONVERT.md)
-
-To submit a bug report or feature request, please visit our [GitHub issues](https://github.com/Mechanical-Advantage/AdvantageScope/issues) page.
