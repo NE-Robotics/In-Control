@@ -16,6 +16,7 @@ These links cover the basics of getting around in In Control and and accessing d
 In Control supports many ways to view and analyze data, organized into tabs. The type of visualization is selectable for each new tab opened, and multiple tabs of a given type can be open at once. Tabs can be named for ease of organization and many can "pop out" to separate windows for simultaneous, synchronized data viewing.
 
 - 📉 [Line Graph](/docs/tabs/LINE-GRAPH.md)
+- 💻 [Dashboard](/docs/tabs/DASHBOARD.md)
 - 🔢 [Table](/docs/tabs/TABLE.md)
 - 💬 [Console](/docs/tabs/CONSOLE.md)
 - 📊 [Statistics](/docs/tabs/STATISTICS.md)
