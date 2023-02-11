@@ -2,14 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; connect-src ws: wss: file: blob:"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; connect-src ws: wss: file: blob:"
-    />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="../css/global.css" />
     <link rel="stylesheet" href="../css/hub.css" />
@@ -709,12 +702,13 @@
             </div>
           </div>
           <!-- Dashboard -->
-          <div class="tab-content">
-            <div class="tab-centered">No Dashboard Setup.</div>
-            <div src class="dashboard-video-feed"></div>
+          <div class="tab-centered">
+            <img src class="dashboard-video-container"></img>
+            <!--
             <div class="dashboard-table-container">
               <table class="dashboard-table">
                 <tbody>
+                  <input class="dashboard-table-jump-input" type="number" placeholder="0.000" tabindex="-1" />
                   <tr>
                     <td>Mode</td>
                     <td><span id="CurrentMode"></span></td>
@@ -729,7 +723,35 @@
                   </tr>
                 </tbody>
               </table>
+            </div> -->
+            <div class="dash-table-drag-highlight" hidden></div>
+            <div class="tab-centered">Drag a field to view data.</div>
+
+            <span class="dash-table-header-template" hidden>
+              <div class="dash-table-key-container">
+                <span></span>
+              </div>
+              <button class="dash-table-key-delete" tabindex="-1">
+                <img src="../symbols/xmark.svg" />
+              </button>
+            </span>
+
+            <div class="dash-table-container">
+              <table class="dash-table">
+                <tbody>
+                  <tr>
+                    <th>
+                      <input class="dash-table-jump-input" type="number" placeholder="0.000" tabindex="-1" />
+                      <button class="dash-table-jump-button" tabindex="-1">
+                        <img src="../symbols/arrow.down.to.line.svg" />
+                      </button>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <div class="dash-table-drag-highlight" hidden></div>
+          
           </div>
         </span>
       </div>
