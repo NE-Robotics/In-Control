@@ -1,7 +1,7 @@
 {
   "name": "frc-in-control",
   "productName": "FRC In Control",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Robot dashboard, data logger, and data visualizer for FRC teams",
   "author": {
     "name": "Autumn O."
@@ -49,5 +49,23 @@
     "watch": "rollup -c -w",
     "format": "prettier --write .",
     "check-format": "prettier --check ."
+  },
+  "build": {
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "multiLanguageInstaller": true
+    }
   }
 }

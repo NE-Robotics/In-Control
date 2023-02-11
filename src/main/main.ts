@@ -876,84 +876,126 @@ function setupMenu() {
 
   const template: (Electron.MenuItemConstructorOptions | Electron.MenuItem)[] = [
     {
-      label: "Utilities",
+      label: "Data",
+      //label: "Logs",
+      //submenu: getLogOptions()
       submenu: [
         {
-          label: "Open Log...",
-          accelerator: "CmdOrCtrl+O",
-          click(_, window) {
-            if (window == null || !hubWindows.includes(window)) return;
-            dialog
-              .showOpenDialog(window, {
-                title: "Select a robot log file to open",
-                properties: ["openFile"],
-                filters: [
-                  {
-                    name: "Robot logs",
-                    extensions: ["rlog", "wpilog", "dslog", "dsevents"]
-                  }
-                ]
-              })
-              .then((files) => {
-                if (files.filePaths.length > 0) {
-                  sendMessage(window, "open-file", files.filePaths[0]);
-                }
-              });
-          }
+          label: "Logs",
+          submenu: [
+            {
+              label: "Open Log...",
+              accelerator: "CmdOrCtrl+O",
+              click(_, window) {
+                if (window == null || !hubWindows.includes(window)) return;
+                dialog
+                  .showOpenDialog(window, {
+                    title: "Select a robot log file to open",
+                    properties: ["openFile"],
+                    filters: [
+                      {
+                        name: "Robot logs",
+                        extensions: ["rlog", "wpilog", "dslog", "dsevents"]
+                      }
+                    ]
+                  })
+                  .then((files) => {
+                    if (files.filePaths.length > 0) {
+                      sendMessage(window, "open-file", files.filePaths[0]);
+                    }
+                  });
+              }
+            },
+            {
+              label: "Merge Log...",
+              accelerator: "CmdOrCtrl+Shift+O",
+              click(_, window) {
+                if (window == null || !hubWindows.includes(window)) return;
+                dialog
+                  .showOpenDialog(window, {
+                    title: "Select a robot log file to merge with the current data",
+                    properties: ["openFile"],
+                    filters: [
+                      {
+                        name: "Robot logs",
+                        extensions: ["rlog", "wpilog", "dslog", "dsevents"]
+                      }
+                    ]
+                  })
+                  .then((files) => {
+                    if (files.filePaths.length > 0) {
+                      sendMessage(window, "open-file-merge", files.filePaths[0]);
+                    }
+                  });
+              }
+            },
+            {
+              label: "Download Logs...",
+              accelerator: "CmdOrCtrl+D",
+              click(_, window) {
+                if (window == null) return;
+                openDownload(window);
+              }
+            },
+            {
+              label: "Export Data...",
+              accelerator: "CmdOrCtrl+E",
+              click(_, window) {
+                if (window == null || !hubWindows.includes(window)) return;
+                sendMessage(window, "start-export");
+              }
+            }
+          ]
         },
+        { type: "separator" },
         {
-          label: "Merge Log...",
-          accelerator: "CmdOrCtrl+Shift+O",
-          click(_, window) {
-            if (window == null || !hubWindows.includes(window)) return;
-            dialog
-              .showOpenDialog(window, {
-                title: "Select a robot log file to merge with the current data",
-                properties: ["openFile"],
-                filters: [
-                  {
-                    name: "Robot logs",
-                    extensions: ["rlog", "wpilog", "dslog", "dsevents"]
-                  }
-                ]
-              })
-              .then((files) => {
-                if (files.filePaths.length > 0) {
-                  sendMessage(window, "open-file-merge", files.filePaths[0]);
-                }
-              });
-          }
+          label: "Connections",
+          submenu: [
+            {
+              label: "Connect to Robot",
+              accelerator: "CmdOrCtrl+K",
+              click(_, window) {
+                if (window == null || !hubWindows.includes(window)) return;
+                sendMessage(window, "start-live", false);
+              }
+            },
+            {
+              label: "Connect to Simulator",
+              accelerator: "CmdOrCtrl+Shift+K",
+              click(_, window) {
+                if (window == null || !hubWindows.includes(window)) return;
+                sendMessage(window, "start-live", true);
+              }
+            },
+            {
+              label: "Use USB roboRIO Address",
+              type: "checkbox",
+              checked: false,
+              click(item) {
+                usingUsb = item.checked;
+                sendAllPreferences();
+              }
+            }
+          ]
         },
+        { type: "separator" },
         {
-          label: "Connect to Robot",
-          accelerator: "CmdOrCtrl+K",
-          click(_, window) {
-            if (window == null || !hubWindows.includes(window)) return;
-            sendMessage(window, "start-live", false);
+          label: "Show FRC Data Folder",
+          click() {
+            shell.openPath(EXTRA_FRC_DATA);
           }
-        },
+        }
+      ]
+    },
+    {
+      label: "Options",
+      submenu: [
         {
-          label: "Connect to Simulator",
-          accelerator: "CmdOrCtrl+Shift+K",
-          click(_, window) {
-            if (window == null || !hubWindows.includes(window)) return;
-            sendMessage(window, "start-live", true);
-          }
-        },
-        {
-          label: "Download Logs...",
-          accelerator: "CmdOrCtrl+D",
+          label: "Preferences",
+          accelerator: "Ctrl+,",
           click(_, window) {
             if (window == null) return;
-            openDownload(window);
-          }
-        },
-        {
-          label: "Export Data...",
-          accelerator: "CmdOrCtrl+E",
-          click(_, window) {
-            if (window == null || !hubWindows.includes(window)) return;
-            sendMessage(window, "start-export");
+            openPreferences(window);
           }
         },
         { type: "separator" },
@@ -1089,40 +1131,6 @@ function setupMenu() {
                 }
               });
           }
-        },
-        { type: "separator" },
-        {
-          label: "New Window",
-          accelerator: "CommandOrControl+N",
-          click() {
-            createHubWindow();
-          }
-        },
-        { role: "close", accelerator: "Shift+CmdOrCtrl+W" }
-      ]
-    },
-    { role: "editMenu" },
-    { role: "viewMenu" },
-    {
-      label: "Preferences",
-      submenu: [
-        {
-          label: "Edit Preferences...",
-          accelerator: "Ctrl+,",
-          click(_, window) {
-            if (window == null) return;
-            openPreferences(window);
-          }
-        },
-        { type: "separator" },
-        {
-          label: "Use USB roboRIO Address",
-          type: "checkbox",
-          checked: false,
-          click(item) {
-            usingUsb = item.checked;
-            sendAllPreferences();
-          }
         }
       ]
     },
@@ -1201,14 +1209,24 @@ function setupMenu() {
         }
       ]
     },
-    { role: "windowMenu" },
+    {
+      label: "Display",
+      submenu: [{ role: "windowMenu" }, { role: "viewMenu" }]
+    },
     {
       role: "help",
       submenu: [
         {
-          label: "Show FRC Data Folder",
+          label: "App Info",
           click() {
-            shell.openPath(EXTRA_FRC_DATA);
+            dialog.showMessageBox({
+              type: "info",
+              title: "About",
+              message: "FRC In-Control",
+              detail: "Version: " + app.getVersion() + "\nPlatform: " + process.platform + "-" + process.arch,
+              buttons: ["Close"],
+              icon: WINDOW_ICON
+            });
           }
         },
         { type: "separator" },
@@ -1219,15 +1237,9 @@ function setupMenu() {
           }
         },
         {
-          label: "View Repository",
+          label: "Github Page",
           click() {
             shell.openExternal("https://github.com/" + REPOSITORY);
-          }
-        },
-        {
-          label: "Team Website",
-          click() {
-            shell.openExternal("https://littletonrobotics.org");
           }
         }
       ]
@@ -1258,25 +1270,6 @@ function setupMenu() {
         { role: "quit" }
       ]
     });
-  } else {
-    (template[template.length - 1].submenu as Electron.MenuItemConstructorOptions[]).splice(
-      0,
-      0,
-      {
-        label: "About FRC In-Control",
-        click() {
-          dialog.showMessageBox({
-            type: "info",
-            title: "About",
-            message: "FRC In-Control",
-            detail: "Version: " + app.getVersion() + "\nPlatform: " + process.platform + "-" + process.arch,
-            buttons: ["Close"],
-            icon: WINDOW_ICON
-          });
-        }
-      },
-      { type: "separator" }
-    );
   }
 
   const menu = Menu.buildFromTemplate(template);
