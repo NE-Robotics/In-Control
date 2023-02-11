@@ -1,5 +1,6 @@
 enum TabType {
   Documentation,
+  Dashboard,
   LineGraph,
   Table,
   Console,
@@ -11,8 +12,7 @@ enum TabType {
   Swerve,
   Mechanism,
   Points,
-  Metadata,
-  Dashboard
+  AKMetadata
 }
 
 export default TabType;
@@ -35,6 +35,8 @@ export function getDefaultTabTitle(type: TabType): string {
   switch (type) {
     case TabType.Documentation:
       return "";
+    case TabType.Dashboard:
+      return "Dashboard";
     case TabType.LineGraph:
       return "Line Graph";
     case TabType.Table:
@@ -57,10 +59,9 @@ export function getDefaultTabTitle(type: TabType): string {
       return "Mechanism";
     case TabType.Points:
       return "Points";
-    case TabType.Metadata:
-      return "Metadata";
-    case TabType.Dashboard:
-      return "Dashboard";
+    case TabType.AKMetadata:
+      return "AK Metadata";
+
     default:
       return "";
   }
@@ -70,6 +71,8 @@ export function getTabIcon(type: TabType): string {
   switch (type) {
     case TabType.Documentation:
       return "📖";
+    case TabType.Dashboard:
+      return "💻";
     case TabType.LineGraph:
       return "📉";
     case TabType.Table:
@@ -92,10 +95,8 @@ export function getTabIcon(type: TabType): string {
       return "🦾";
     case TabType.Points:
       return "🔵";
-    case TabType.Metadata:
+    case TabType.AKMetadata:
       return "🔍";
-    case TabType.Dashboard:
-      return "💻";
     default:
       return "";
   }

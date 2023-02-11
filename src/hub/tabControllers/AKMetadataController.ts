@@ -4,7 +4,7 @@ import TabType from "../../packages/utils/TabType";
 import { arraysEqual } from "../../packages/utils/util";
 import TabController from "../TabController";
 
-export default class MetadataController implements TabController {
+export default class AKMetadataController implements TabController {
   private NO_DATA_ALERT: HTMLElement;
   private TABLE_CONTAINER: HTMLElement;
   private TABLE_BODY: HTMLElement;
@@ -12,19 +12,14 @@ export default class MetadataController implements TabController {
   private lastFieldList: string[] = [];
 
   constructor(content: HTMLElement) {
-    this.NO_DATA_ALERT = content.getElementsByClassName(
-      "tab-centered"
-    )[0] as HTMLElement;
-    this.TABLE_CONTAINER = content.getElementsByClassName(
-      "metadata-table-container"
-    )[0] as HTMLElement;
-    this.TABLE_BODY = content.getElementsByClassName("metadata-table")[0]
-      .firstElementChild as HTMLElement;
+    this.NO_DATA_ALERT = content.getElementsByClassName("tab-centered")[0] as HTMLElement;
+    this.TABLE_CONTAINER = content.getElementsByClassName("metadata-table-container")[0] as HTMLElement;
+    this.TABLE_BODY = content.getElementsByClassName("metadata-table")[0].firstElementChild as HTMLElement;
     this.refresh();
   }
 
   saveState(): TabState {
-    return { type: TabType.Metadata };
+    return { type: TabType.AKMetadata };
   }
 
   restoreState(state: TabState) {}
@@ -43,21 +38,15 @@ export default class MetadataController implements TabController {
 
     // Get data
     let tree = window.log.getFieldTree();
-    let data: { [id: string]: { real: string | null; replay: string | null } } =
-      {};
-    let scanTree = (
-      fieldData: LogFieldTree,
-      prefix: string,
-      isReal: boolean
-    ) => {
+    let data: { [id: string]: { real: string | null; replay: string | null } } = {};
+    let scanTree = (fieldData: LogFieldTree, prefix: string, isReal: boolean) => {
       if (fieldData.fullKey) {
         let cleanKey = fieldData.fullKey.slice(prefix.length);
         if (!(cleanKey in data)) {
           data[cleanKey] = { real: null, replay: null };
         }
         let logData = window.log.getString(fieldData.fullKey, 0, 0);
-        if (logData)
-          data[cleanKey][isReal ? "real" : "replay"] = logData.values[0];
+        if (logData) data[cleanKey][isReal ? "real" : "replay"] = logData.values[0];
       } else {
         Object.values(fieldData.children).forEach((child) => {
           scanTree(child, prefix, isReal);
@@ -76,11 +65,7 @@ export default class MetadataController implements TabController {
         scanTree(akitTable["RealMetadata"], "/AdvantageKit/RealMetadata", true);
       }
       if ("ReplayMetadata" in akitTable) {
-        scanTree(
-          akitTable["ReplayMetadata"],
-          "/AdvantageKit/ReplayMetadata",
-          false
-        );
+        scanTree(akitTable["ReplayMetadata"], "/AdvantageKit/ReplayMetadata", false);
       }
     }
 

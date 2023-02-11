@@ -8,7 +8,7 @@ import DocumentationController from "./tabControllers/DocumentationController";
 import JoysticksController from "./tabControllers/JoysticksController";
 import LineGraphController from "./tabControllers/LineGraphController";
 import MechanismController from "./tabControllers/MechanismController";
-import MetadataController from "./tabControllers/MetadataController";
+import AKMetadataController from "./tabControllers/AKMetadataController";
 import OdometryController from "./tabControllers/OdometryController";
 import PointsController from "./tabControllers/PointsController";
 import StatisticsController from "./tabControllers/StatisticsController";
@@ -163,8 +163,8 @@ export default class Tabs {
   /** Creates a new tab. */
   addTab(type: TabType) {
     // Select existing metadata tab
-    if (type == TabType.Metadata) {
-      let existingIndex = this.tabList.findIndex((tab) => tab.type == TabType.Metadata);
+    if (type == TabType.AKMetadata) {
+      let existingIndex = this.tabList.findIndex((tab) => tab.type == TabType.AKMetadata);
       if (existingIndex >= 0) {
         this.setSelected(existingIndex);
         return;
@@ -230,9 +230,9 @@ export default class Tabs {
         contentElement.appendChild(this.CONTENT_TEMPLATES.children[12].cloneNode(true));
         controller = new PointsController(contentElement);
         break;
-      case TabType.Metadata:
+      case TabType.AKMetadata:
         contentElement = this.CONTENT_TEMPLATES.children[13].cloneNode(true) as HTMLElement;
-        controller = new MetadataController(contentElement);
+        controller = new AKMetadataController(contentElement);
         break;
       case TabType.Dashboard:
         contentElement = this.CONTENT_TEMPLATES.children[14].cloneNode(true) as HTMLElement;
