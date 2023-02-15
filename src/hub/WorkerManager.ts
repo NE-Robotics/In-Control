@@ -1,3 +1,5 @@
+import { BrowserWindow } from "electron";
+
 /** Manages communication with worker scripts. Duplicate workers are avoided and the response is provided through a promise. */
 export default abstract class WorkerManager {
   private static workers: { [id: string]: Worker } = {};
@@ -7,7 +9,8 @@ export default abstract class WorkerManager {
 
   static request(script: string, payload: any): Promise<any> {
     if (!(script in this.workers)) {
-      this.workers[script] = new Worker(script);
+      // DO NOT REMOVE THE ../ IN THE PATH. IT IS NECESSARY TO LOAD THE WORKER SCRIPTS FROM THE MAIN PROCESS.
+      this.workers[script] = new Worker("../" + script);
       this.workers[script].onmessage = this.handleResponse;
     }
 

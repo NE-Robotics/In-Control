@@ -702,56 +702,32 @@
             </div>
           </div>
           <!-- Dashboard -->
-          <div class="tab-centered">
-            <img src class="dashboard-video-container"></img>
-            <!--
-            <div class="dashboard-table-container">
-              <table class="dashboard-table">
-                <tbody>
-                  <input class="dashboard-table-jump-input" type="number" placeholder="0.000" tabindex="-1" />
-                  <tr>
-                    <td>Mode</td>
-                    <td><span id="CurrentMode"></span></td>
-                  </tr>
-                  <tr>
-                    <td>FMS</td>
-                    <td><span id="isFMSConnected"></span></td>
-                  </tr>
-                  <tr>
-                    <td>Allaince</td>
-                    <td><span id="AllainceColour"></span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div> -->
-            <div class="dash-table-drag-highlight" hidden></div>
-            <div class="tab-centered">Drag a field to view data.</div>
-
-            <span class="dash-table-header-template" hidden>
-              <div class="dash-table-key-container">
-                <span></span>
+          <div class="tab-content">
+            <div class="dash-main">
+              <div class="left">
+                <img src class="dashboard-video-container"></img>
               </div>
-              <button class="dash-table-key-delete" tabindex="-1">
-                <img src="../symbols/xmark.svg" />
-              </button>
-            </span>
-
-            <div class="dash-table-container">
-              <table class="dash-table">
-                <tbody>
-                  <tr>
-                    <th>
-                      <input class="dash-table-jump-input" type="number" placeholder="0.000" tabindex="-1" />
-                      <button class="dash-table-jump-button" tabindex="-1">
-                        <img src="../symbols/arrow.down.to.line.svg" />
-                      </button>
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
+              <div class="right">
+                <div class="dashboard-table-container">
+                  <table class="dashboard-table">
+                    <tbody>
+                      <tr>
+                        <td>Mode</td>
+                        <td><span class="CurrentMode"></span></td>
+                      </tr>
+                      <tr>
+                        <td>FMS</td>
+                        <td><span class="isFMSConnected"></span></td>
+                      </tr>
+                      <tr>
+                        <td>Allaince</td>
+                        <td><span class="AllainceColour"></span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-            <div class="dash-table-drag-highlight" hidden></div>
-          
           </div>
         </span>
       </div>
