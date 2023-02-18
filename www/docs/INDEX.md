@@ -1,6 +1,6 @@
 # Welcome to In Control!
 
-FRC In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
+In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
 
 ## Getting Started
 
@@ -28,7 +28,7 @@ In Control supports many ways to view and analyze data, organized into tabs. The
 - 🦀 [Swerve](/docs/tabs/SWERVE.md)
 - 🦾 [Mechanism](/docs/tabs/MECHANISM.md)
 - 🔵 [Points](/docs/tabs/POINTS.md)
-- 🔍 [Metadata](/docs/tabs/METADATA.md)
+- 🔍 [AK Metadata](/docs/tabs/METADATA.md)
 
 ## Other Links
 

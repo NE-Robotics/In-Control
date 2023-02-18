@@ -1,7 +1,7 @@
 {
   "name": "in-control",
   "productName": "In Control",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Robot dashboard, data logger, and data visualizer for FRC teams",
   "author": {
     "name": "Autumn O."
