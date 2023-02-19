@@ -1,15 +1,9 @@
 import { AllColors } from "../../packages/utils/Colors";
 import LoggableType from "../../packages/log/LoggableType";
 import { getLogValueText } from "../../packages/log/LogUtil";
-import {
-  LogValueSetAny,
-  LogValueSetNumber,
-} from "../../packages/log/LogValueSets";
+import { LogValueSetAny, LogValueSetNumber } from "../../packages/log/LogValueSets";
 import TabType from "../../packages/utils/TabType";
-import {
-  convertWithPreset,
-  UnitConversionPreset,
-} from "../../packages/utils/units";
+import { convertWithPreset, UnitConversionPreset } from "../../packages/utils/units";
 import { cleanFloat, scaleValue, shiftColor } from "../../packages/utils/util";
 import { LineGraphState } from "../../packages/utils/HubState";
 import ScrollSensor from "../ScrollSensor";
@@ -56,11 +50,11 @@ export default class LineGraphController implements TabController {
   private rightRenderedRange: [number, number] = [-1, 1];
   private leftUnitConversion: UnitConversionPreset = {
     type: null,
-    factor: 1,
+    factor: 1
   };
   private rightUnitConversion: UnitConversionPreset = {
     type: null,
-    factor: 1,
+    factor: 1
   };
 
   private timestampRange: [number, number] = [0, 10];
@@ -73,56 +67,31 @@ export default class LineGraphController implements TabController {
 
   constructor(content: HTMLElement) {
     this.CONTENT = content;
-    this.LEGEND_ITEM_TEMPLATE = content.getElementsByClassName(
-      "legend-item-template"
-    )[0].firstElementChild as HTMLElement;
-    this.CANVAS_CONTAINER = content.getElementsByClassName(
-      "line-graph-canvas-container"
-    )[0] as HTMLElement;
-    this.CANVAS = content.getElementsByClassName(
-      "line-graph-canvas"
-    )[0] as HTMLCanvasElement;
-    this.SCROLL_OVERLAY = content.getElementsByClassName(
-      "line-graph-scroll"
-    )[0] as HTMLElement;
+    this.LEGEND_ITEM_TEMPLATE = content.getElementsByClassName("legend-item-template")[0]
+      .firstElementChild as HTMLElement;
+    this.CANVAS_CONTAINER = content.getElementsByClassName("line-graph-canvas-container")[0] as HTMLElement;
+    this.CANVAS = content.getElementsByClassName("line-graph-canvas")[0] as HTMLCanvasElement;
+    this.SCROLL_OVERLAY = content.getElementsByClassName("line-graph-scroll")[0] as HTMLElement;
 
-    this.LEFT_LIST = content.getElementsByClassName(
-      "legend-left"
-    )[0] as HTMLElement;
-    this.DISCRETE_LIST = content.getElementsByClassName(
-      "legend-discrete"
-    )[0] as HTMLElement;
-    this.RIGHT_LIST = content.getElementsByClassName(
-      "legend-right"
-    )[0] as HTMLElement;
-    this.LEFT_LABELS = this.LEFT_LIST.firstElementChild?.firstElementChild
-      ?.lastElementChild as HTMLElement;
-    this.RIGHT_LABELS = this.RIGHT_LIST.firstElementChild?.firstElementChild
-      ?.lastElementChild as HTMLElement;
-    this.LEFT_DRAG_TARGET = content.getElementsByClassName(
-      "legend-left"
-    )[1] as HTMLElement;
-    this.DISCRETE_DRAG_TARGET = content.getElementsByClassName(
-      "legend-discrete"
-    )[1] as HTMLElement;
-    this.RIGHT_DRAG_TARGET = content.getElementsByClassName(
-      "legend-right"
-    )[1] as HTMLElement;
+    this.LEFT_LIST = content.getElementsByClassName("legend-left")[0] as HTMLElement;
+    this.DISCRETE_LIST = content.getElementsByClassName("legend-discrete")[0] as HTMLElement;
+    this.RIGHT_LIST = content.getElementsByClassName("legend-right")[0] as HTMLElement;
+    this.LEFT_LABELS = this.LEFT_LIST.firstElementChild?.firstElementChild?.lastElementChild as HTMLElement;
+    this.RIGHT_LABELS = this.RIGHT_LIST.firstElementChild?.firstElementChild?.lastElementChild as HTMLElement;
+    this.LEFT_DRAG_TARGET = content.getElementsByClassName("legend-left")[1] as HTMLElement;
+    this.DISCRETE_DRAG_TARGET = content.getElementsByClassName("legend-discrete")[1] as HTMLElement;
+    this.RIGHT_DRAG_TARGET = content.getElementsByClassName("legend-right")[1] as HTMLElement;
 
     // Scroll handling
     this.SCROLL_OVERLAY.addEventListener("mousemove", (event) => {
-      this.lastCursorX =
-        event.clientX - this.SCROLL_OVERLAY.getBoundingClientRect().x;
+      this.lastCursorX = event.clientX - this.SCROLL_OVERLAY.getBoundingClientRect().x;
     });
     this.SCROLL_OVERLAY.addEventListener("mouseleave", () => {
       this.lastCursorX = null;
     });
-    this.scrollSensor = new ScrollSensor(
-      this.SCROLL_OVERLAY,
-      (dx: number, dy: number) => {
-        this.updateScroll(dx, dy);
-      }
-    );
+    this.scrollSensor = new ScrollSensor(this.SCROLL_OVERLAY, (dx: number, dy: number) => {
+      this.updateScroll(dx, dy);
+    });
 
     // Pan handling
     this.SCROLL_OVERLAY.addEventListener("mousedown", (event) => {
@@ -139,8 +108,7 @@ export default class LineGraphController implements TabController {
     });
     this.SCROLL_OVERLAY.addEventListener("mousemove", (event) => {
       if (this.panActive) {
-        let cursorX =
-          event.clientX - this.SCROLL_OVERLAY.getBoundingClientRect().x;
+        let cursorX = event.clientX - this.SCROLL_OVERLAY.getBoundingClientRect().x;
         this.updateScroll(this.panLastCursorX - cursorX, 0);
         this.panLastCursorX = cursorX;
       }
@@ -148,13 +116,7 @@ export default class LineGraphController implements TabController {
 
     // Selection handling
     this.SCROLL_OVERLAY.addEventListener("click", (event) => {
-      if (
-        Math.abs(
-          event.clientX -
-            this.SCROLL_OVERLAY.getBoundingClientRect().x -
-            this.panStartCursorX
-        ) <= 5
-      ) {
+      if (Math.abs(event.clientX - this.SCROLL_OVERLAY.getBoundingClientRect().x - this.panStartCursorX) <= 5) {
         let hoveredTime = window.selection.getHoveredTime();
         if (hoveredTime) {
           window.selection.setSelectedTime(hoveredTime);
@@ -171,8 +133,7 @@ export default class LineGraphController implements TabController {
     });
 
     // Edit axis handling
-    let leftExitAxisButton =
-      this.LEFT_LIST.firstElementChild?.lastElementChild!;
+    let leftExitAxisButton = this.LEFT_LIST.firstElementChild?.lastElementChild!;
     leftExitAxisButton.addEventListener("click", () => {
       let rect = leftExitAxisButton.getBoundingClientRect();
       window.sendMainMessage("ask-edit-axis", {
@@ -180,21 +141,19 @@ export default class LineGraphController implements TabController {
         y: Math.round(rect.top),
         legend: "left",
         lockedRange: this.leftLockedRange,
-        unitConversion: this.leftUnitConversion,
+        unitConversion: this.leftUnitConversion
       });
     });
-    let discreteEditAxisButton =
-      this.DISCRETE_LIST.firstElementChild?.lastElementChild!;
+    let discreteEditAxisButton = this.DISCRETE_LIST.firstElementChild?.lastElementChild!;
     discreteEditAxisButton.addEventListener("click", () => {
       let rect = discreteEditAxisButton.getBoundingClientRect();
       window.sendMainMessage("ask-edit-axis", {
         x: Math.round(rect.right),
         y: Math.round(rect.top),
-        legend: "discrete",
+        legend: "discrete"
       });
     });
-    let rightEditAxisButton =
-      this.RIGHT_LIST.firstElementChild?.lastElementChild!;
+    let rightEditAxisButton = this.RIGHT_LIST.firstElementChild?.lastElementChild!;
     rightEditAxisButton.addEventListener("click", () => {
       let rect = rightEditAxisButton.getBoundingClientRect();
       window.sendMainMessage("ask-edit-axis", {
@@ -202,7 +161,7 @@ export default class LineGraphController implements TabController {
         y: Math.round(rect.top),
         legend: "right",
         lockedRange: this.rightLockedRange,
-        unitConversion: this.rightUnitConversion,
+        unitConversion: this.rightUnitConversion
       });
     });
   }
@@ -214,17 +173,17 @@ export default class LineGraphController implements TabController {
         left: {
           lockedRange: this.leftLockedRange,
           unitConversion: this.leftUnitConversion,
-          fields: this.leftFields,
+          fields: this.leftFields
         },
         discrete: {
-          fields: this.discreteFields,
+          fields: this.discreteFields
         },
         right: {
           lockedRange: this.rightLockedRange,
           unitConversion: this.rightUnitConversion,
-          fields: this.rightFields,
-        },
-      },
+          fields: this.rightFields
+        }
+      }
     };
   }
 
@@ -239,12 +198,9 @@ export default class LineGraphController implements TabController {
     this.leftFields = [];
     this.discreteFields = [];
     this.rightFields = [];
-    while (this.LEFT_LIST.children[1])
-      this.LEFT_LIST.removeChild(this.LEFT_LIST.children[1]);
-    while (this.DISCRETE_LIST.children[1])
-      this.DISCRETE_LIST.removeChild(this.DISCRETE_LIST.children[1]);
-    while (this.RIGHT_LIST.children[1])
-      this.RIGHT_LIST.removeChild(this.RIGHT_LIST.children[1]);
+    while (this.LEFT_LIST.children[1]) this.LEFT_LIST.removeChild(this.LEFT_LIST.children[1]);
+    while (this.DISCRETE_LIST.children[1]) this.DISCRETE_LIST.removeChild(this.DISCRETE_LIST.children[1]);
+    while (this.RIGHT_LIST.children[1]) this.RIGHT_LIST.removeChild(this.RIGHT_LIST.children[1]);
 
     // Add new fields
     state.legends.left.fields.forEach((field) => {
@@ -261,9 +217,7 @@ export default class LineGraphController implements TabController {
   /** Updates the axis labels based on the locked and unit conversion status. */
   updateAxisLabels() {
     let leftLocked = this.leftLockedRange != null;
-    let leftConverted =
-      this.leftUnitConversion.type != null ||
-      this.leftUnitConversion.factor != 1;
+    let leftConverted = this.leftUnitConversion.type != null || this.leftUnitConversion.factor != 1;
     if (leftLocked && leftConverted) {
       this.LEFT_LABELS.innerText = " [Locked, Converted]";
     } else if (leftLocked) {
@@ -275,9 +229,7 @@ export default class LineGraphController implements TabController {
     }
 
     let rightLocked = this.rightLockedRange != null;
-    let rightConverted =
-      this.rightUnitConversion.type != null ||
-      this.rightUnitConversion.factor != 1;
+    let rightConverted = this.rightUnitConversion.type != null || this.rightUnitConversion.factor != 1;
     if (rightLocked && rightConverted) {
       this.RIGHT_LABELS.innerText = " [Locked, Converted]";
     } else if (rightLocked) {
@@ -290,11 +242,7 @@ export default class LineGraphController implements TabController {
   }
 
   /** Adjusts the locked range and unit conversion for an axis. */
-  editAxis(
-    legend: string,
-    lockedRange: [number, number] | null,
-    unitConversion: UnitConversionPreset
-  ) {
+  editAxis(legend: string, lockedRange: [number, number] | null, unitConversion: UnitConversionPreset) {
     switch (legend) {
       case "left":
         if (lockedRange == null) {
@@ -326,20 +274,17 @@ export default class LineGraphController implements TabController {
     switch (legend) {
       case "left":
         this.leftFields = [];
-        while (this.LEFT_LIST.children[1])
-          this.LEFT_LIST.removeChild(this.LEFT_LIST.children[1]);
+        while (this.LEFT_LIST.children[1]) this.LEFT_LIST.removeChild(this.LEFT_LIST.children[1]);
         break;
 
       case "discrete":
         this.discreteFields = [];
-        while (this.DISCRETE_LIST.children[1])
-          this.DISCRETE_LIST.removeChild(this.DISCRETE_LIST.children[1]);
+        while (this.DISCRETE_LIST.children[1]) this.DISCRETE_LIST.removeChild(this.DISCRETE_LIST.children[1]);
         break;
 
       case "right":
         this.rightFields = [];
-        while (this.RIGHT_LIST.children[1])
-          this.RIGHT_LIST.removeChild(this.RIGHT_LIST.children[1]);
+        while (this.RIGHT_LIST.children[1]) this.RIGHT_LIST.removeChild(this.RIGHT_LIST.children[1]);
         break;
     }
   }
@@ -352,20 +297,14 @@ export default class LineGraphController implements TabController {
     [
       { fields: this.leftFields, element: this.LEFT_LIST },
       { fields: this.discreteFields, element: this.DISCRETE_LIST },
-      { fields: this.rightFields, element: this.RIGHT_LIST },
+      { fields: this.rightFields, element: this.RIGHT_LIST }
     ].forEach((data) => {
       let fields = data.fields;
       let element = data.element;
 
       for (let i = 0; i < fields.length; i++) {
-        let keyElement = element.children[i + 1].getElementsByClassName(
-          "legend-key"
-        )[0] as HTMLElement;
-        keyElement.style.textDecoration = availableFields.includes(
-          fields[i].key
-        )
-          ? "initial"
-          : "line-through";
+        let keyElement = element.children[i + 1].getElementsByClassName("legend-key")[0] as HTMLElement;
+        keyElement.style.textDecoration = availableFields.includes(fields[i].key) ? "initial" : "line-through";
       }
     });
   }
@@ -379,7 +318,7 @@ export default class LineGraphController implements TabController {
         element: this.LEFT_LIST,
         target: this.LEFT_DRAG_TARGET,
         normalTypes: [LoggableType.Number],
-        arrayTypes: [LoggableType.NumberArray],
+        arrayTypes: [LoggableType.NumberArray]
       },
       {
         legend: "discrete",
@@ -392,17 +331,17 @@ export default class LineGraphController implements TabController {
           LoggableType.String,
           LoggableType.BooleanArray,
           LoggableType.NumberArray,
-          LoggableType.StringArray,
+          LoggableType.StringArray
         ],
-        arrayTypes: [],
+        arrayTypes: []
       },
       {
         legend: "right",
         element: this.RIGHT_LIST,
         target: this.RIGHT_DRAG_TARGET,
         normalTypes: [LoggableType.Number],
-        arrayTypes: [LoggableType.NumberArray],
-      },
+        arrayTypes: [LoggableType.NumberArray]
+      }
     ].forEach((data) => {
       let legend = data.legend as "left" | "discrete" | "right";
       let element = data.element;
@@ -413,10 +352,7 @@ export default class LineGraphController implements TabController {
       // Check if active and valid type
       let rect = element.getBoundingClientRect();
       let active =
-        dragData.x > rect.left &&
-        dragData.x < rect.right &&
-        dragData.y > rect.top &&
-        dragData.y < rect.bottom;
+        dragData.x > rect.left && dragData.x < rect.right && dragData.y > rect.top && dragData.y < rect.bottom;
       let validType = false;
       dragData.data.fields.forEach((key: string) => {
         let type = window.log.getType(key) as LoggableType;
@@ -455,25 +391,16 @@ export default class LineGraphController implements TabController {
   }
 
   /** Adds a new field. */
-  private addField(
-    legend: "left" | "discrete" | "right",
-    key: string,
-    color?: string,
-    show: boolean = true
-  ) {
+  private addField(legend: "left" | "discrete" | "right", key: string, color?: string, show: boolean = true) {
     // Get color if not provided
     if (color == null) {
       let usedColors: string[] = [];
-      [this.leftFields, this.discreteFields, this.rightFields].forEach(
-        (legend) => {
-          legend.forEach((field) => {
-            usedColors.push(field.color);
-          });
-        }
-      );
-      let availableColors = AllColors.filter(
-        (color) => !usedColors.includes(color)
-      );
+      [this.leftFields, this.discreteFields, this.rightFields].forEach((legend) => {
+        legend.forEach((field) => {
+          usedColors.push(field.color);
+        });
+      });
+      let availableColors = AllColors.filter((color) => !usedColors.includes(color));
       if (availableColors.length == 0) {
         color = AllColors[Math.floor(Math.random() * AllColors.length)];
       } else {
@@ -485,45 +412,34 @@ export default class LineGraphController implements TabController {
     let fieldList = {
       left: this.leftFields,
       discrete: this.discreteFields,
-      right: this.rightFields,
+      right: this.rightFields
     }[legend];
 
     // Create element
     let isFound = window.log.getFieldKeys().includes(key);
     let itemElement = this.LEGEND_ITEM_TEMPLATE.cloneNode(true) as HTMLElement;
-    let splotchElement = itemElement.getElementsByClassName(
-      "legend-splotch"
-    )[0] as HTMLElement;
-    let keyElement = itemElement.getElementsByClassName(
-      "legend-key"
-    )[0] as HTMLElement;
-    let removeElement = itemElement.getElementsByClassName(
-      "legend-edit"
-    )[0] as HTMLElement;
+    let splotchElement = itemElement.getElementsByClassName("legend-splotch")[0] as HTMLElement;
+    let keyElement = itemElement.getElementsByClassName("legend-key")[0] as HTMLElement;
+    let removeElement = itemElement.getElementsByClassName("legend-edit")[0] as HTMLElement;
 
     itemElement.title = key;
     keyElement.innerText = key;
     if (!isFound) keyElement.style.textDecoration = "line-through";
 
     splotchElement.style.fill = color;
-    itemElement
-      .getElementsByClassName("legend-splotch")[0]
-      .addEventListener("click", () => {
-        if (!itemElement.parentElement) return;
-        let index =
-          Array.from(itemElement.parentElement.children).indexOf(itemElement) -
-          1;
-        let show = !fieldList[index].show;
-        fieldList[index].show = show;
-        splotchElement.style.fill = show ? (color as string) : "transparent";
-      });
+    itemElement.getElementsByClassName("legend-splotch")[0].addEventListener("click", () => {
+      if (!itemElement.parentElement) return;
+      let index = Array.from(itemElement.parentElement.children).indexOf(itemElement) - 1;
+      let show = !fieldList[index].show;
+      fieldList[index].show = show;
+      splotchElement.style.fill = show ? (color as string) : "transparent";
+    });
     splotchElement.style.fill = show ? color : "transparent";
 
     removeElement.title = "";
     removeElement.addEventListener("click", () => {
       if (!itemElement.parentElement) return;
-      let index =
-        Array.from(itemElement.parentElement.children).indexOf(itemElement) - 1;
+      let index = Array.from(itemElement.parentElement.children).indexOf(itemElement) - 1;
       itemElement.parentElement.removeChild(itemElement);
       fieldList.splice(index, 1);
     });
@@ -532,7 +448,7 @@ export default class LineGraphController implements TabController {
     fieldList.push({
       key: key,
       color: color,
-      show: show,
+      show: show
     });
     switch (legend) {
       case "left":
@@ -567,9 +483,7 @@ export default class LineGraphController implements TabController {
       this.timestampRange[1] = availableRange[1];
       if (dx < 0) window.selection.unlock(); // Unlock if attempting to scroll away
     } else if (dx != 0) {
-      let secsPerPixel =
-        (this.timestampRange[1] - this.timestampRange[0]) /
-        this.SCROLL_OVERLAY.clientWidth;
+      let secsPerPixel = (this.timestampRange[1] - this.timestampRange[0]) / this.SCROLL_OVERLAY.clientWidth;
       this.timestampRange[0] += dx * secsPerPixel;
       this.timestampRange[1] += dx * secsPerPixel;
     }
@@ -577,17 +491,13 @@ export default class LineGraphController implements TabController {
     // Apply vertical scroll
     if (dy != 0) {
       let zoomPercent = Math.pow(this.ZOOM_BASE, dy);
-      let newZoom =
-        (this.timestampRange[1] - this.timestampRange[0]) * zoomPercent;
+      let newZoom = (this.timestampRange[1] - this.timestampRange[0]) * zoomPercent;
       if (newZoom < this.MIN_ZOOM_TIME) newZoom = this.MIN_ZOOM_TIME;
-      if (newZoom > availableRange[1] - availableRange[0])
-        newZoom = availableRange[1] - availableRange[0];
+      if (newZoom > availableRange[1] - availableRange[0]) newZoom = availableRange[1] - availableRange[0];
 
       let hoveredTime = window.selection.getHoveredTime();
       if (hoveredTime != null) {
-        let hoveredPercent =
-          (hoveredTime - this.timestampRange[0]) /
-          (this.timestampRange[1] - this.timestampRange[0]);
+        let hoveredPercent = (hoveredTime - this.timestampRange[0]) / (this.timestampRange[1] - this.timestampRange[0]);
         this.timestampRange[0] = hoveredTime - newZoom * hoveredPercent;
         this.timestampRange[1] = hoveredTime + newZoom * (1 - hoveredPercent);
       }
@@ -596,15 +506,10 @@ export default class LineGraphController implements TabController {
     }
 
     // Enforce max range
-    if (
-      this.timestampRange[1] - this.timestampRange[0] >
-      availableRange[1] - availableRange[0]
-    ) {
+    if (this.timestampRange[1] - this.timestampRange[0] > availableRange[1] - availableRange[0]) {
       this.timestampRange = availableRange;
     }
-    this.maxZoom =
-      this.timestampRange[1] - this.timestampRange[0] ==
-      availableRange[1] - availableRange[0];
+    this.maxZoom = this.timestampRange[1] - this.timestampRange[0] == availableRange[1] - availableRange[0];
 
     // Enforce left limit
     if (this.timestampRange[0] < availableRange[0]) {
@@ -671,8 +576,7 @@ export default class LineGraphController implements TabController {
     let useCustomUnit = customUnit != null && stepValueApprox > customUnit;
     let roundBase = 1;
     if (useCustomUnit) {
-      roundBase =
-        customUnit * 10 ** Math.floor(Math.log10(stepValueApprox / customUnit));
+      roundBase = customUnit * 10 ** Math.floor(Math.log10(stepValueApprox / customUnit));
     } else {
       roundBase = 10 ** Math.floor(Math.log10(stepValueApprox));
     }
@@ -682,36 +586,29 @@ export default class LineGraphController implements TabController {
     } else {
       multiplierLookup = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // Use all numbers to get a better fit
     }
-    let stepValue =
-      roundBase * multiplierLookup[Math.round(stepValueApprox / roundBase)];
+    let stepValue = roundBase * multiplierLookup[Math.round(stepValueApprox / roundBase)];
 
     // Adjust to match primary gridlines
     if (primaryAxis != null) {
       let midPrimary = (primaryAxis.min + primaryAxis.max) / 2;
       let midSecondary = (targetRange[0] + targetRange[1]) / 2;
-      let midStepPrimary =
-        Math.ceil(cleanFloat(midPrimary / primaryAxis.step)) * primaryAxis.step;
-      let midStepSecondary =
-        Math.ceil(cleanFloat(midSecondary / stepValue)) * stepValue;
+      let midStepPrimary = Math.ceil(cleanFloat(midPrimary / primaryAxis.step)) * primaryAxis.step;
+      let midStepSecondary = Math.ceil(cleanFloat(midSecondary / stepValue)) * stepValue;
 
-      let newMin =
-        ((primaryAxis.min - midStepPrimary) / primaryAxis.step) * stepValue +
-        midStepSecondary;
-      let newMax =
-        ((primaryAxis.max - midStepPrimary) / primaryAxis.step) * stepValue +
-        midStepSecondary;
+      let newMin = ((primaryAxis.min - midStepPrimary) / primaryAxis.step) * stepValue + midStepSecondary;
+      let newMax = ((primaryAxis.max - midStepPrimary) / primaryAxis.step) * stepValue + midStepSecondary;
       return {
         min: newMin,
         max: newMax,
         step: stepValue,
-        unit: useCustomUnit ? customUnit : 1,
+        unit: useCustomUnit ? customUnit : 1
       };
     } else {
       return {
         min: targetRange[0],
         max: targetRange[1],
         step: stepValue,
-        unit: useCustomUnit ? customUnit : 1,
+        unit: useCustomUnit ? customUnit : 1
       };
     }
   }
@@ -744,8 +641,7 @@ export default class LineGraphController implements TabController {
     this.CANVAS.height = height * devicePixelRatio;
     context.scale(devicePixelRatio, devicePixelRatio);
     context.clearRect(0, 0, width, height);
-    context.font =
-      "12px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont";
+    context.font = "12px ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont";
 
     // Cache data for all fields
     let dataCache: { [id: string]: LogValueSetAny } = {};
@@ -754,57 +650,47 @@ export default class LineGraphController implements TabController {
     let rightRange: [number, number] = [-1, 1];
 
     let availableKeys = window.log.getFieldKeys();
-    [this.leftFields, this.discreteFields, this.rightFields].forEach(
-      (array, legendIndex) => {
-        let range: [number, number] = [Infinity, -Infinity];
-        array.forEach((field, fieldIndex) => {
-          if (!field.show || !availableKeys.includes(field.key)) return;
+    [this.leftFields, this.discreteFields, this.rightFields].forEach((array, legendIndex) => {
+      let range: [number, number] = [Infinity, -Infinity];
+      array.forEach((field, fieldIndex) => {
+        if (!field.show || !availableKeys.includes(field.key)) return;
 
-          // Read data for field
-          if (!Object.keys(dataCache).includes(field.key)) {
-            dataCache[field.key] = window.log.getRange(
-              field.key,
-              this.timestampRange[0],
-              this.timestampRange[1]
-            ) as LogValueSetAny;
-            typeCache[field.key] = window.log.getType(
-              field.key
-            ) as LoggableType;
+        // Read data for field
+        if (!Object.keys(dataCache).includes(field.key)) {
+          dataCache[field.key] = window.log.getRange(
+            field.key,
+            this.timestampRange[0],
+            this.timestampRange[1]
+          ) as LogValueSetAny;
+          typeCache[field.key] = window.log.getType(field.key) as LoggableType;
+        }
+
+        // Update range for left & right legends
+        if (legendIndex != 1 && typeCache[field.key] == LoggableType.Number) {
+          if (
+            dataCache[field.key].timestamps.length == 1 &&
+            dataCache[field.key].timestamps[0] > this.timestampRange[1]
+          ) {
+            return; // Not displayed
           }
 
-          // Update range for left & right legends
-          if (legendIndex != 1 && typeCache[field.key] == LoggableType.Number) {
-            if (
-              dataCache[field.key].timestamps.length == 1 &&
-              dataCache[field.key].timestamps[0] > this.timestampRange[1]
-            ) {
-              return; // Not displayed
-            }
+          (dataCache[field.key] as LogValueSetNumber).values.forEach((value) => {
+            if (legendIndex == 0) value = convertWithPreset(value, this.leftUnitConversion);
+            if (legendIndex == 2) value = convertWithPreset(value, this.rightUnitConversion);
+            if (value < range[0]) range[0] = value;
+            if (value > range[1]) range[1] = value;
+          });
+        }
+      });
 
-            (dataCache[field.key] as LogValueSetNumber).values.forEach(
-              (value) => {
-                if (legendIndex == 0)
-                  value = convertWithPreset(value, this.leftUnitConversion);
-                if (legendIndex == 2)
-                  value = convertWithPreset(value, this.rightUnitConversion);
-                if (value < range[0]) range[0] = value;
-                if (value > range[1]) range[1] = value;
-              }
-            );
-          }
-        });
+      // Save range
+      if (!isFinite(range[0])) range[0] = -1;
+      if (!isFinite(range[1])) range[1] = 1;
+      if (legendIndex == 0) leftRange = range;
+      if (legendIndex == 2) rightRange = range;
+    });
 
-        // Save range
-        if (!isFinite(range[0])) range[0] = -1;
-        if (!isFinite(range[1])) range[1] = 1;
-        if (legendIndex == 0) leftRange = range;
-        if (legendIndex == 2) rightRange = range;
-      }
-    );
-
-    let visibleFieldsLeft = this.leftFields.filter(
-      (field) => field.show && Object.keys(dataCache).includes(field.key)
-    );
+    let visibleFieldsLeft = this.leftFields.filter((field) => field.show && Object.keys(dataCache).includes(field.key));
     let visibleFieldsDiscrete = this.discreteFields.filter(
       (field) => field.show && Object.keys(dataCache).includes(field.key)
     );
@@ -816,20 +702,15 @@ export default class LineGraphController implements TabController {
     let graphTop = 8;
     let graphHeight = height - graphTop - 50;
     if (graphHeight < 1) graphHeight = 1;
-    let graphHeightOpen =
-      graphHeight -
-      visibleFieldsDiscrete.length * 20 -
-      (visibleFieldsDiscrete.length > 0 ? 5 : 0);
+    let graphHeightOpen = graphHeight - visibleFieldsDiscrete.length * 20 - (visibleFieldsDiscrete.length > 0 ? 5 : 0);
     if (graphHeightOpen < 1) graphHeightOpen = 1;
 
     // Calculate axes
     const TARGET_STEP_PX = 50;
     const PRIMARY_MARGIN = 0.05;
     const SECONDARY_MARGIN = 0.3;
-    let showLeftAxis =
-      visibleFieldsLeft.length > 0 || this.leftLockedRange != null;
-    let showRightAxis =
-      visibleFieldsRight.length > 0 || this.rightLockedRange != null;
+    let showLeftAxis = visibleFieldsLeft.length > 0 || this.leftLockedRange != null;
+    let showRightAxis = visibleFieldsRight.length > 0 || this.rightLockedRange != null;
     if (!showLeftAxis && !showRightAxis) showLeftAxis = true;
     let leftIsPrimary = this.leftLockedRange != null;
     let rightIsPrimary = this.rightLockedRange != null;
@@ -868,14 +749,7 @@ export default class LineGraphController implements TabController {
         leftRange,
         PRIMARY_MARGIN
       );
-      rightAxis = this.calcAutoAxis(
-        leftAxis,
-        null,
-        null,
-        this.rightLockedRange,
-        rightRange,
-        SECONDARY_MARGIN
-      );
+      rightAxis = this.calcAutoAxis(leftAxis, null, null, this.rightLockedRange, rightRange, SECONDARY_MARGIN);
     } else {
       rightAxis = this.calcAutoAxis(
         null,
@@ -885,14 +759,7 @@ export default class LineGraphController implements TabController {
         rightRange,
         PRIMARY_MARGIN
       );
-      leftAxis = this.calcAutoAxis(
-        rightAxis,
-        null,
-        null,
-        this.leftLockedRange,
-        leftRange,
-        SECONDARY_MARGIN
-      );
+      leftAxis = this.calcAutoAxis(rightAxis, null, null, this.leftLockedRange, leftRange, SECONDARY_MARGIN);
     }
     this.leftRenderedRange = [leftAxis.min, leftAxis.max];
     this.rightRenderedRange = [rightAxis.min, rightAxis.max];
@@ -902,10 +769,7 @@ export default class LineGraphController implements TabController {
       let length = 0;
       let value = Math.floor(config.max / config.step) * config.step;
       while (value > config.min) {
-        length = Math.max(
-          length,
-          context.measureText(cleanFloat(value).toString()).width
-        );
+        length = Math.max(length, context.measureText(cleanFloat(value).toString()).width);
         value -= config.step;
       }
       return Math.ceil(length / 10) * 10;
@@ -927,22 +791,14 @@ export default class LineGraphController implements TabController {
       let type = typeCache[field.key];
       let data = dataCache[field.key];
 
-      let isDark =
-        window.log.getTimestamps([field.key]).indexOf(data.timestamps[0]) % 2 ==
-        0;
+      let isDark = window.log.getTimestamps([field.key]).indexOf(data.timestamps[0]) % 2 == 0;
       for (let i = 0; i < data.timestamps.length; i++) {
-        let startX = scaleValue(data.timestamps[i], this.timestampRange, [
-          graphLeft,
-          graphLeft + graphWidth,
-        ]);
+        let startX = scaleValue(data.timestamps[i], this.timestampRange, [graphLeft, graphLeft + graphWidth]);
         let endX: number;
         if (i == data.timestamps.length - 1) {
           endX = graphLeft + graphWidth;
         } else {
-          endX = scaleValue(data.timestamps[i + 1], this.timestampRange, [
-            graphLeft,
-            graphLeft + graphWidth,
-          ]);
+          endX = scaleValue(data.timestamps[i + 1], this.timestampRange, [graphLeft, graphLeft + graphWidth]);
         }
         if (endX > graphLeft + graphWidth) endX = graphLeft + graphWidth;
         let topY = graphTop + graphHeight - 20 - renderIndex * 20;
@@ -950,24 +806,15 @@ export default class LineGraphController implements TabController {
         // Draw rectangle
         isDark = !isDark;
         if (type == LoggableType.Boolean) isDark = data.values[i];
-        context.fillStyle = isDark
-          ? shiftColor(field.color, -30)
-          : shiftColor(field.color, 30);
+        context.fillStyle = isDark ? shiftColor(field.color, -30) : shiftColor(field.color, 30);
         context.fillRect(startX, topY, endX - startX, 15);
 
         // Draw text
         let adjustedStartX = startX < graphLeft ? graphLeft : startX;
         if (endX - adjustedStartX > 10) {
           let text = getLogValueText(data.values[i], type);
-          context.fillStyle = isDark
-            ? shiftColor(field.color, 130)
-            : shiftColor(field.color, -130);
-          context.fillText(
-            text,
-            adjustedStartX + 5,
-            topY + 15 / 2,
-            endX - adjustedStartX - 10
-          );
+          context.fillStyle = isDark ? shiftColor(field.color, 130) : shiftColor(field.color, -130);
+          context.fillText(text, adjustedStartX + 5, topY + 15 / 2, endX - adjustedStartX - 10);
         }
       }
     });
@@ -977,13 +824,13 @@ export default class LineGraphController implements TabController {
       {
         fields: visibleFieldsLeft,
         axis: leftAxis,
-        unitConversion: this.leftUnitConversion,
+        unitConversion: this.leftUnitConversion
       },
       {
         fields: visibleFieldsRight,
         axis: rightAxis,
-        unitConversion: this.rightUnitConversion,
-      },
+        unitConversion: this.rightUnitConversion
+      }
     ].forEach((set) => {
       set.fields.forEach((field) => {
         let data: LogValueSetNumber = dataCache[field.key];
@@ -997,10 +844,7 @@ export default class LineGraphController implements TabController {
         context.moveTo(
           graphLeft + graphWidth,
           scaleValue(
-            convertWithPreset(
-              data.values[data.values.length - 1],
-              unitConversion
-            ),
+            convertWithPreset(data.values[data.values.length - 1], unitConversion),
             [axis.min, axis.max],
             [graphTop + graphHeightOpen, graphTop]
           )
@@ -1009,24 +853,11 @@ export default class LineGraphController implements TabController {
         // Render main data
         let i = data.values.length - 1;
         while (true) {
-          let x = scaleValue(data.timestamps[i], this.timestampRange, [
-            graphLeft,
-            graphLeft + graphWidth,
-          ]);
+          let x = scaleValue(data.timestamps[i], this.timestampRange, [graphLeft, graphLeft + graphWidth]);
 
           // Render start of current data point
-          let convertedValue = convertWithPreset(
-            data.values[i],
-            unitConversion
-          );
-          context.lineTo(
-            x,
-            scaleValue(
-              convertedValue,
-              [axis.min, axis.max],
-              [graphTop + graphHeightOpen, graphTop]
-            )
-          );
+          let convertedValue = convertWithPreset(data.values[i], unitConversion);
+          context.lineTo(x, scaleValue(convertedValue, [axis.min, axis.max], [graphTop + graphHeightOpen, graphTop]));
 
           // Find previous data point and vertical range
           let currentX = Math.floor(x * devicePixelRatio);
@@ -1034,38 +865,19 @@ export default class LineGraphController implements TabController {
           let vertRange = [convertedValue, convertedValue];
           do {
             i--;
-            let convertedValue = convertWithPreset(
-              data.values[i],
-              unitConversion
-            );
+            let convertedValue = convertWithPreset(data.values[i], unitConversion);
             if (convertedValue < vertRange[0]) vertRange[0] = convertedValue;
             if (convertedValue > vertRange[1]) vertRange[1] = convertedValue;
             newX = Math.floor(
-              scaleValue(data.timestamps[i], this.timestampRange, [
-                graphLeft,
-                graphLeft + graphWidth,
-              ]) * devicePixelRatio
+              scaleValue(data.timestamps[i], this.timestampRange, [graphLeft, graphLeft + graphWidth]) *
+                devicePixelRatio
             );
           } while (i >= 0 && newX >= currentX); // Compile values to vertical range until the pixel changes
           if (i < 0) break;
 
           // Render vertical range
-          context.moveTo(
-            x,
-            scaleValue(
-              vertRange[0],
-              [axis.min, axis.max],
-              [graphTop + graphHeightOpen, graphTop]
-            )
-          );
-          context.lineTo(
-            x,
-            scaleValue(
-              vertRange[1],
-              [axis.min, axis.max],
-              [graphTop + graphHeightOpen, graphTop]
-            )
-          );
+          context.moveTo(x, scaleValue(vertRange[0], [axis.min, axis.max], [graphTop + graphHeightOpen, graphTop]));
+          context.lineTo(x, scaleValue(vertRange[1], [axis.min, axis.max], [graphTop + graphHeightOpen, graphTop]));
 
           // Move to end of previous data point
           context.moveTo(
@@ -1089,10 +901,7 @@ export default class LineGraphController implements TabController {
         context.setLineDash([5, 5]);
         context.strokeStyle = light ? "#222" : "#eee";
 
-        let x = scaleValue(time, this.timestampRange, [
-          graphLeft,
-          graphLeft + graphWidth,
-        ]);
+        let x = scaleValue(time, this.timestampRange, [graphLeft, graphLeft + graphWidth]);
         context.beginPath();
         context.moveTo(x, graphTop);
         context.lineTo(x, graphTop + graphHeight);
@@ -1102,10 +911,7 @@ export default class LineGraphController implements TabController {
       }
     };
     let selectionMode = window.selection.getMode();
-    if (
-      selectionMode == SelectionMode.Static ||
-      selectionMode == SelectionMode.Playback
-    ) {
+    if (selectionMode == SelectionMode.Static || selectionMode == SelectionMode.Playback) {
       markTime(window.selection.getSelectedTime() as number, 1);
     }
     let hoveredTime = window.selection.getHoveredTime();
@@ -1115,19 +921,9 @@ export default class LineGraphController implements TabController {
     context.lineWidth = 1;
     context.strokeStyle = light ? "#222" : "#eee";
     context.clearRect(0, 0, width, graphTop);
-    context.clearRect(
-      0,
-      graphTop + graphHeight,
-      width,
-      height - graphTop - graphHeight
-    );
+    context.clearRect(0, graphTop + graphHeight, width, height - graphTop - graphHeight);
     context.clearRect(0, graphTop, graphLeft, graphHeight);
-    context.clearRect(
-      graphLeft + graphWidth,
-      graphTop,
-      width - graphLeft - graphWidth,
-      graphHeight
-    );
+    context.clearRect(graphLeft + graphWidth, graphTop, width - graphLeft - graphWidth, graphHeight);
     context.strokeRect(graphLeft, graphTop, graphWidth, graphHeight);
 
     // Render y axes
@@ -1140,11 +936,7 @@ export default class LineGraphController implements TabController {
       context.textAlign = "right";
       let stepPos = Math.floor(leftAxis.max / leftAxis.step) * leftAxis.step;
       while (true) {
-        let y = scaleValue(
-          stepPos,
-          [leftAxis.min, leftAxis.max],
-          [graphTop + graphHeightOpen, graphTop]
-        );
+        let y = scaleValue(stepPos, [leftAxis.min, leftAxis.max], [graphTop + graphHeightOpen, graphTop]);
         if (y > graphTop + graphHeight) break;
 
         context.globalAlpha = 1;
@@ -1170,19 +962,11 @@ export default class LineGraphController implements TabController {
       context.textAlign = "left";
       let stepPos = Math.floor(rightAxis.max / rightAxis.step) * rightAxis.step;
       while (true) {
-        let y = scaleValue(
-          stepPos,
-          [rightAxis.min, rightAxis.max],
-          [graphTop + graphHeightOpen, graphTop]
-        );
+        let y = scaleValue(stepPos, [rightAxis.min, rightAxis.max], [graphTop + graphHeightOpen, graphTop]);
         if (y > graphTop + graphHeight) break;
 
         context.globalAlpha = 1;
-        context.fillText(
-          cleanFloat(stepPos).toString(),
-          graphLeft + graphWidth + 15,
-          y
-        );
+        context.fillText(cleanFloat(stepPos).toString(), graphLeft + graphWidth + 15, y);
         context.beginPath();
         context.moveTo(graphLeft + graphWidth, y);
         context.lineTo(graphLeft + graphWidth + 5, y);
@@ -1201,23 +985,11 @@ export default class LineGraphController implements TabController {
     }
 
     // Render x axis
-    let axis = this.calcAutoAxis(
-      null,
-      graphWidth,
-      100,
-      null,
-      this.timestampRange,
-      0,
-      60
-    );
+    let axis = this.calcAutoAxis(null, graphWidth, 100, null, this.timestampRange, 0, 60);
     context.textAlign = "center";
     let stepPos = Math.ceil(cleanFloat(axis.min / axis.step)) * axis.step;
     while (true) {
-      let x = scaleValue(
-        stepPos,
-        [axis.min, axis.max],
-        [graphLeft, graphLeft + graphWidth]
-      );
+      let x = scaleValue(stepPos, [axis.min, axis.max], [graphLeft, graphLeft + graphWidth]);
 
       // Clean up final x (scroll can cause rounding problems)
       if (x - graphLeft - graphWidth > 1) {
@@ -1226,9 +998,7 @@ export default class LineGraphController implements TabController {
         x = graphLeft + graphWidth;
       }
 
-      let text =
-        cleanFloat(stepPos / axis.unit).toString() +
-        (axis.unit == 60 ? "m" : "s");
+      let text = cleanFloat(stepPos / axis.unit).toString() + (axis.unit == 60 ? "m" : "s");
 
       context.globalAlpha = 1;
       context.fillText(text, x, graphTop + graphHeight + 15);
@@ -1251,7 +1021,7 @@ export default class LineGraphController implements TabController {
     [
       [this.LEFT_LIST, this.leftFields],
       [this.DISCRETE_LIST, this.discreteFields],
-      [this.RIGHT_LIST, this.rightFields],
+      [this.RIGHT_LIST, this.rightFields]
     ].forEach((fieldData, legendIndex) => {
       let parentElement = fieldData[0] as HTMLElement;
       let fieldList = fieldData[1] as {
@@ -1261,27 +1031,19 @@ export default class LineGraphController implements TabController {
       }[];
       Array.from(parentElement.children).forEach((itemElement, index) => {
         if (index == 0) return;
-        let valueElement = itemElement.getElementsByClassName(
-          "legend-value"
-        )[0] as HTMLElement;
+        let valueElement = itemElement.getElementsByClassName("legend-value")[0] as HTMLElement;
         let key = fieldList[index - 1].key;
         let hasValue = false;
         if (selectedTime !== null && availableKeys.includes(key)) {
-          let currentData = window.log.getRange(
-            key,
-            selectedTime as number,
-            selectedTime as number
-          );
+          let currentData = window.log.getRange(key, selectedTime as number, selectedTime as number);
           if (
             currentData &&
             currentData.timestamps.length > 0 &&
             currentData.timestamps[0] <= (selectedTime as number)
           ) {
             let value = currentData.values[0];
-            if (legendIndex == 0)
-              value = convertWithPreset(value, this.leftUnitConversion);
-            if (legendIndex == 2)
-              value = convertWithPreset(value, this.rightUnitConversion);
+            if (legendIndex == 0) value = convertWithPreset(value, this.leftUnitConversion);
+            if (legendIndex == 2) value = convertWithPreset(value, this.rightUnitConversion);
             let text = getLogValueText(value, window.log.getType(key)!);
             if (text !== valueElement.innerText) valueElement.innerText = text;
             hasValue = true;

@@ -39,19 +39,10 @@ export default class PointsVisualizer implements Visualizer {
     }
 
     // Render new points
-    for (
-      let i = 0;
-      i < Math.min(command.data.x.length, command.data.y.length);
-      i++
-    ) {
+    for (let i = 0; i < Math.min(command.data.x.length, command.data.y.length); i++) {
       let position = [command.data.x[i], command.data.y[i]];
       let dimensions = [command.options.width, command.options.height];
-      if (
-        position[0] < 0 ||
-        position[0] > dimensions[0] ||
-        position[1] < 0 ||
-        position[1] > dimensions[1]
-      ) {
+      if (position[0] < 0 || position[0] > dimensions[0] || position[1] < 0 || position[1] > dimensions[1]) {
         continue;
       }
       position[0] = (position[0] / dimensions[0]) * finalWidth;
@@ -86,12 +77,9 @@ export default class PointsVisualizer implements Visualizer {
       // Set color
       let color = "";
       if (command.options.group < 1) {
-        color = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "white"
-          : "black";
+        color = window.matchMedia("(prefers-color-scheme: dark)").matches ? "white" : "black";
       } else {
-        color =
-          AllColors[Math.floor(i / command.options.group) % AllColors.length];
+        color = AllColors[Math.floor(i / command.options.group) % AllColors.length];
       }
       point.style.fill = color;
       point.style.stroke = color;

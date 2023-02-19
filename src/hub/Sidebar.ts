@@ -4,22 +4,12 @@ import { getMechanismKeys } from "../packages/log/LogUtil";
 import { arraysEqual, setsEqual, smartSort } from "../packages/utils/util";
 
 export default class Sidebar {
-  private SIDEBAR = document.getElementsByClassName(
-    "side-bar"
-  )[0] as HTMLElement;
-  private SIDEBAR_HANDLE = document.getElementsByClassName(
-    "side-bar-handle"
-  )[0] as HTMLElement;
-  private SIDEBAR_SHADOW = document.getElementsByClassName(
-    "side-bar-shadow"
-  )[0] as HTMLElement;
-  private SIDEBAR_TITLE = document.getElementsByClassName(
-    "side-bar-title"
-  )[0] as HTMLElement;
+  private SIDEBAR = document.getElementsByClassName("side-bar")[0] as HTMLElement;
+  private SIDEBAR_HANDLE = document.getElementsByClassName("side-bar-handle")[0] as HTMLElement;
+  private SIDEBAR_SHADOW = document.getElementsByClassName("side-bar-shadow")[0] as HTMLElement;
+  private SIDEBAR_TITLE = document.getElementsByClassName("side-bar-title")[0] as HTMLElement;
   private FIELD_LIST = document.getElementById("fieldList") as HTMLElement;
-  private ICON_TEMPLATES = document.getElementById(
-    "fieldItemIconTemplates"
-  ) as HTMLElement;
+  private ICON_TEMPLATES = document.getElementById("fieldItemIconTemplates") as HTMLElement;
   private DRAG_ITEM = document.getElementById("dragItem") as HTMLElement;
 
   private KNOWN_KEYS = [
@@ -38,7 +28,7 @@ export default class Sidebar {
     "messages",
     "systemTime",
     "DSLog",
-    "DSEvents",
+    "DSEvents"
   ];
   private HIDDEN_KEYS = ["RealMetadata", "ReplayMetadata"];
   private INDENT_SIZE_PX = 20;
@@ -75,8 +65,7 @@ export default class Sidebar {
 
     // Set up shadow when scrolling
     this.SIDEBAR.addEventListener("scroll", () => {
-      this.SIDEBAR_SHADOW.style.opacity =
-        this.SIDEBAR.scrollTop == 0 ? "0" : "1";
+      this.SIDEBAR_SHADOW.style.opacity = this.SIDEBAR.scrollTop == 0 ? "0" : "1";
     });
   }
 
@@ -84,7 +73,7 @@ export default class Sidebar {
   saveState(): SidebarState {
     return {
       width: this.sidebarWidth,
-      expanded: [...this.expandedFields],
+      expanded: [...this.expandedFields]
     };
   }
 
@@ -101,21 +90,13 @@ export default class Sidebar {
 
   /** Updates the displayed width based on the current state. */
   private updateWidth() {
-    document.documentElement.style.setProperty(
-      "--side-bar-width",
-      this.sidebarWidth.toString() + "px"
-    );
-    document.documentElement.style.setProperty(
-      "--show-side-bar",
-      this.sidebarWidth > 0 ? "1" : "0"
-    );
+    document.documentElement.style.setProperty("--side-bar-width", this.sidebarWidth.toString() + "px");
+    document.documentElement.style.setProperty("--show-side-bar", this.sidebarWidth > 0 ? "1" : "0");
   }
 
   /** Refresh based on new log data or expanded field list. */
   refresh(forceRefresh: boolean = false) {
-    let fieldsChanged =
-      forceRefresh ||
-      !arraysEqual(window.log.getFieldKeys(), this.lastFieldKeys);
+    let fieldsChanged = forceRefresh || !arraysEqual(window.log.getFieldKeys(), this.lastFieldKeys);
     this.lastFieldKeys = window.log.getFieldKeys();
 
     if (fieldsChanged) {
@@ -163,13 +144,7 @@ export default class Sidebar {
   }
 
   /** Recursively adds a set of fields. */
-  private addFields(
-    title: string,
-    fullTitle: string,
-    field: LogFieldTree,
-    parentElement: HTMLElement,
-    indent: number
-  ) {
+  private addFields(title: string, fullTitle: string, field: LogFieldTree, parentElement: HTMLElement, indent: number) {
     let hasChildren = Object.keys(field.children).length > 0;
 
     // Create element
@@ -178,15 +153,9 @@ export default class Sidebar {
     fieldElement.classList.add("field-item");
 
     // Add icons
-    let closedIcon = this.ICON_TEMPLATES.children[0].cloneNode(
-      true
-    ) as HTMLElement;
-    let openIcon = this.ICON_TEMPLATES.children[1].cloneNode(
-      true
-    ) as HTMLElement;
-    let neutralIcon = this.ICON_TEMPLATES.children[2].cloneNode(
-      true
-    ) as HTMLElement;
+    let closedIcon = this.ICON_TEMPLATES.children[0].cloneNode(true) as HTMLElement;
+    let openIcon = this.ICON_TEMPLATES.children[1].cloneNode(true) as HTMLElement;
+    let neutralIcon = this.ICON_TEMPLATES.children[2].cloneNode(true) as HTMLElement;
     fieldElement.append(closedIcon, openIcon, neutralIcon);
     closedIcon.style.display = hasChildren ? "initial" : "none";
     openIcon.style.display = "none";
@@ -204,9 +173,7 @@ export default class Sidebar {
     fieldElement.appendChild(label);
     label.classList.add("field-item-label");
     if (
-      (indent == 0 ||
-        (indent == this.INDENT_SIZE_PX &&
-          fullTitle.startsWith("/AdvantageKit"))) &&
+      (indent == 0 || (indent == this.INDENT_SIZE_PX && fullTitle.startsWith("/AdvantageKit"))) &&
       this.KNOWN_KEYS.includes(title)
     ) {
       label.classList.add("known");
@@ -217,22 +184,13 @@ export default class Sidebar {
 
     // Dragging support
     if (field.fullKey !== null) {
-      let dragEvent = (
-        x: number,
-        y: number,
-        offsetX: number,
-        offsetY: number
-      ) => {
-        let isGroup = this.selectGroup.includes(
-          field.fullKey !== null ? field.fullKey : ""
-        );
+      let dragEvent = (x: number, y: number, offsetX: number, offsetY: number) => {
+        let isGroup = this.selectGroup.includes(field.fullKey !== null ? field.fullKey : "");
         this.DRAG_ITEM.innerText = title + (isGroup ? "..." : "");
         this.DRAG_ITEM.style.fontWeight = isGroup ? "bolder" : "initial";
         window.startDrag(x, y, offsetX, offsetY, {
           fields: isGroup ? this.selectGroup : [field.fullKey],
-          children: isGroup
-            ? []
-            : Object.values(field.children).map((x) => x.fullKey),
+          children: isGroup ? [] : Object.values(field.children).map((x) => x.fullKey)
         });
         if (isGroup) {
           this.selectGroup = [];
@@ -242,27 +200,15 @@ export default class Sidebar {
 
       let mouseDownInfo: [number, number, number, number] | null = null;
       label.addEventListener("mousedown", (event) => {
-        mouseDownInfo = [
-          event.clientX,
-          event.clientY,
-          event.offsetX,
-          event.offsetY,
-        ];
+        mouseDownInfo = [event.clientX, event.clientY, event.offsetX, event.offsetY];
       });
       window.addEventListener("mousemove", (event) => {
         if (mouseDownInfo != null) {
           if (
-            Math.abs(event.clientX - mouseDownInfo[0]) >=
-              this.FIELD_DRAG_THRESHOLD_PX ||
-            Math.abs(event.clientY - mouseDownInfo[1]) >=
-              this.FIELD_DRAG_THRESHOLD_PX
+            Math.abs(event.clientX - mouseDownInfo[0]) >= this.FIELD_DRAG_THRESHOLD_PX ||
+            Math.abs(event.clientY - mouseDownInfo[1]) >= this.FIELD_DRAG_THRESHOLD_PX
           ) {
-            dragEvent(
-              mouseDownInfo[0],
-              mouseDownInfo[1],
-              mouseDownInfo[2],
-              mouseDownInfo[3]
-            );
+            dragEvent(mouseDownInfo[0], mouseDownInfo[1], mouseDownInfo[2], mouseDownInfo[3]);
             mouseDownInfo = null;
           }
         }
@@ -271,18 +217,12 @@ export default class Sidebar {
         if (mouseDownInfo != null) {
           if (
             (event.ctrlKey || event.metaKey) &&
-            Math.abs(event.clientX - mouseDownInfo[0]) <
-              this.FIELD_DRAG_THRESHOLD_PX &&
-            Math.abs(event.clientY - mouseDownInfo[1]) <
-              this.FIELD_DRAG_THRESHOLD_PX
+            Math.abs(event.clientX - mouseDownInfo[0]) < this.FIELD_DRAG_THRESHOLD_PX &&
+            Math.abs(event.clientY - mouseDownInfo[1]) < this.FIELD_DRAG_THRESHOLD_PX
           ) {
-            let index = this.selectGroup.indexOf(
-              field.fullKey !== null ? field.fullKey : ""
-            );
+            let index = this.selectGroup.indexOf(field.fullKey !== null ? field.fullKey : "");
             if (index == -1) {
-              this.selectGroup.push(
-                field.fullKey !== null ? field.fullKey : ""
-              );
+              this.selectGroup.push(field.fullKey !== null ? field.fullKey : "");
               label.style.fontWeight = "bolder";
             } else {
               this.selectGroup.splice(index, 1);
@@ -312,10 +252,7 @@ export default class Sidebar {
     if (hasChildren) {
       let childSpan = document.createElement("span");
       parentElement.appendChild(childSpan);
-      childSpan.style.setProperty(
-        "--indent",
-        (indent + this.INDENT_SIZE_PX).toString() + "px"
-      );
+      childSpan.style.setProperty("--indent", (indent + this.INDENT_SIZE_PX).toString() + "px");
       childSpan.hidden = true;
 
       let setExpanded = (expanded: boolean) => {
@@ -343,13 +280,7 @@ export default class Sidebar {
         childKeys = childKeys.sort((a, b) => this.sortKeys(a, b));
       }
       childKeys.forEach((key) => {
-        this.addFields(
-          key,
-          fullTitle + "/" + key,
-          field.children[key],
-          childSpan,
-          indent + this.INDENT_SIZE_PX
-        );
+        this.addFields(key, fullTitle + "/" + key, field.children[key], childSpan, indent + this.INDENT_SIZE_PX);
       });
     }
   }
@@ -359,8 +290,7 @@ export default class Sidebar {
     // Check for known keys
     if (useKnown) {
       if (this.KNOWN_KEYS.includes(a) && !this.KNOWN_KEYS.includes(b)) return 1;
-      if (!this.KNOWN_KEYS.includes(a) && this.KNOWN_KEYS.includes(b))
-        return -1;
+      if (!this.KNOWN_KEYS.includes(a) && this.KNOWN_KEYS.includes(b)) return -1;
     }
 
     return smartSort(a, b);

@@ -26,7 +26,7 @@ export default class RLOGServerSource extends LiveDataSource {
       window.sendMainMessage("live-rlog-start", {
         uuid: this.UUID,
         address: address,
-        port: window.preferences.rlogPort,
+        port: window.preferences.rlogPort
       });
     }
   }
@@ -55,12 +55,8 @@ export default class RLOGServerSource extends LiveDataSource {
         // Update time sync
         if (this.log.getFieldKeys().length > 0) {
           let logRange = window.log.getTimestampRange();
-          let newLiveZeroTime =
-            new Date().getTime() / 1000 - (logRange[1] - logRange[0]);
-          if (
-            Math.abs(this.liveZeroTime - newLiveZeroTime) >
-            this.MIN_LIVE_RESYNC_SECS
-          ) {
+          let newLiveZeroTime = new Date().getTime() / 1000 - (logRange[1] - logRange[0]);
+          if (Math.abs(this.liveZeroTime - newLiveZeroTime) > this.MIN_LIVE_RESYNC_SECS) {
             this.liveZeroTime = newLiveZeroTime;
           }
         }
@@ -69,11 +65,7 @@ export default class RLOGServerSource extends LiveDataSource {
         if (this.outputCallback != null)
           this.outputCallback(this.log, () => {
             if (this.log) {
-              return (
-                new Date().getTime() / 1000 -
-                this.liveZeroTime +
-                this.log.getTimestampRange()[0]
-              );
+              return new Date().getTime() / 1000 - this.liveZeroTime + this.log.getTimestampRange()[0];
             } else {
               return 0;
             }
@@ -103,7 +95,7 @@ export default class RLOGServerSource extends LiveDataSource {
         window.sendMainMessage("live-rlog-start", {
           uuid: this.UUID,
           address: this.address,
-          port: window.preferences.rlogPort,
+          port: window.preferences.rlogPort
         });
       }
     }, this.RECONNECT_DELAY_MS);

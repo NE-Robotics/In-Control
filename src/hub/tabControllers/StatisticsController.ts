@@ -1,11 +1,4 @@
-import {
-  Chart,
-  ChartDataset,
-  LegendOptions,
-  LinearScaleOptions,
-  registerables,
-  TooltipCallbacks,
-} from "chart.js";
+import { Chart, ChartDataset, LegendOptions, LinearScaleOptions, registerables, TooltipCallbacks } from "chart.js";
 import * as stats from "simple-statistics";
 import { SimpleColors } from "../../packages/utils/Colors";
 import { StatisticsState } from "../../packages/utils/HubState";
@@ -46,55 +39,32 @@ export default class StatisticsController implements TabController {
 
   constructor(content: HTMLElement) {
     this.CONTENT = content;
-    this.CONFIG_TABLE = content.getElementsByClassName(
-      "stats-config"
-    )[0] as HTMLElement;
-    this.VALUES_TABLE_CONTAINER = content.getElementsByClassName(
-      "stats-values-container"
-    )[0] as HTMLElement;
-    this.VALUES_TABLE_BODY = this.VALUES_TABLE_CONTAINER.firstElementChild
-      ?.firstElementChild as HTMLElement;
-    this.HISTOGRAM_CONTAINER = content.getElementsByClassName(
-      "stats-histogram-container"
-    )[0] as HTMLElement;
-    this.DRAG_HIGHLIGHT = content.getElementsByClassName(
-      "stats-drag-highlight"
-    )[0] as HTMLElement;
+    this.CONFIG_TABLE = content.getElementsByClassName("stats-config")[0] as HTMLElement;
+    this.VALUES_TABLE_CONTAINER = content.getElementsByClassName("stats-values-container")[0] as HTMLElement;
+    this.VALUES_TABLE_BODY = this.VALUES_TABLE_CONTAINER.firstElementChild?.firstElementChild as HTMLElement;
+    this.HISTOGRAM_CONTAINER = content.getElementsByClassName("stats-histogram-container")[0] as HTMLElement;
+    this.DRAG_HIGHLIGHT = content.getElementsByClassName("stats-drag-highlight")[0] as HTMLElement;
 
     let configBody = this.CONFIG_TABLE.firstElementChild as HTMLElement;
-    this.FIELD_CELLS = Array.from(configBody.firstElementChild?.children!).map(
-      (cell) => cell as HTMLElement
-    );
-    this.SELECTION_TYPE = configBody.lastElementChild?.children[0]
-      .children[2] as HTMLInputElement;
-    this.SELECTION_RANGE_MIN = configBody.lastElementChild?.children[0]
-      .children[3] as HTMLInputElement;
-    this.SELECTION_RANGE_MAX = configBody.lastElementChild?.children[0]
-      .children[4] as HTMLInputElement;
-    this.MEASUREMENT_TYPE = configBody.lastElementChild?.children[1]
-      .children[2] as HTMLInputElement;
-    this.MEASUREMENT_SAMPLING = configBody.lastElementChild?.children[1]
-      .children[4] as HTMLInputElement;
-    this.MEASUREMENT_SAMPLING_PERIOD = configBody.lastElementChild?.children[1]
-      .children[6] as HTMLInputElement;
-    this.HISTOGRAM_MIN = configBody.lastElementChild?.children[2]
-      .children[2] as HTMLInputElement;
-    this.HISTOGRAM_MAX = configBody.lastElementChild?.children[2]
-      .children[3] as HTMLInputElement;
-    this.HISTOGRAM_STEP = configBody.lastElementChild?.children[2]
-      .children[4] as HTMLInputElement;
+    this.FIELD_CELLS = Array.from(configBody.firstElementChild?.children!).map((cell) => cell as HTMLElement);
+    this.SELECTION_TYPE = configBody.lastElementChild?.children[0].children[2] as HTMLInputElement;
+    this.SELECTION_RANGE_MIN = configBody.lastElementChild?.children[0].children[3] as HTMLInputElement;
+    this.SELECTION_RANGE_MAX = configBody.lastElementChild?.children[0].children[4] as HTMLInputElement;
+    this.MEASUREMENT_TYPE = configBody.lastElementChild?.children[1].children[2] as HTMLInputElement;
+    this.MEASUREMENT_SAMPLING = configBody.lastElementChild?.children[1].children[4] as HTMLInputElement;
+    this.MEASUREMENT_SAMPLING_PERIOD = configBody.lastElementChild?.children[1].children[6] as HTMLInputElement;
+    this.HISTOGRAM_MIN = configBody.lastElementChild?.children[2].children[2] as HTMLInputElement;
+    this.HISTOGRAM_MAX = configBody.lastElementChild?.children[2].children[3] as HTMLInputElement;
+    this.HISTOGRAM_STEP = configBody.lastElementChild?.children[2].children[4] as HTMLInputElement;
 
     // Bind help link
-    configBody.lastElementChild?.children[1].children[5].addEventListener(
-      "click",
-      () => {
-        window.sendMainMessage("alert", {
-          title: "About sampling",
-          content:
-            "Fixed sampling reads data at the specified interval and is recommended in most cases. Auto sampling reads data whenever any field is updated and is recommended for timestamp synchronized logs (like those produced by AdvantageKit).",
-        });
-      }
-    );
+    configBody.lastElementChild?.children[1].children[5].addEventListener("click", () => {
+      window.sendMainMessage("alert", {
+        title: "About sampling",
+        content:
+          "Fixed sampling reads data at the specified interval and is recommended in most cases. Auto sampling reads data whenever any field is updated and is recommended for timestamp synchronized logs (like those produced by AdvantageKit)."
+      });
+    });
 
     // Bind input disabling
     this.SELECTION_TYPE.addEventListener("change", () => {
@@ -103,8 +73,7 @@ export default class StatisticsController implements TabController {
       this.SELECTION_RANGE_MAX.disabled = disabled;
     });
     this.MEASUREMENT_SAMPLING.addEventListener("change", () => {
-      this.MEASUREMENT_SAMPLING_PERIOD.disabled =
-        this.MEASUREMENT_SAMPLING.value != "fixed";
+      this.MEASUREMENT_SAMPLING_PERIOD.disabled = this.MEASUREMENT_SAMPLING.value != "fixed";
     });
 
     // Drag handling
@@ -126,10 +95,7 @@ export default class StatisticsController implements TabController {
       if (Number(this.SELECTION_RANGE_MIN.value) < 0) {
         this.SELECTION_RANGE_MIN.value = "0";
       }
-      if (
-        Number(this.SELECTION_RANGE_MAX.value) <
-        Number(this.SELECTION_RANGE_MIN.value)
-      ) {
+      if (Number(this.SELECTION_RANGE_MAX.value) < Number(this.SELECTION_RANGE_MIN.value)) {
         this.SELECTION_RANGE_MAX.value = this.SELECTION_RANGE_MIN.value;
       }
     });
@@ -137,10 +103,7 @@ export default class StatisticsController implements TabController {
       if (Number(this.SELECTION_RANGE_MAX.value) < 0) {
         this.SELECTION_RANGE_MAX.value = "0";
       }
-      if (
-        Number(this.SELECTION_RANGE_MAX.value) <
-        Number(this.SELECTION_RANGE_MIN.value)
-      ) {
+      if (Number(this.SELECTION_RANGE_MAX.value) < Number(this.SELECTION_RANGE_MIN.value)) {
         this.SELECTION_RANGE_MAX.value = this.SELECTION_RANGE_MIN.value;
       }
     });
@@ -154,42 +117,18 @@ export default class StatisticsController implements TabController {
     });
 
     // Schedule update when config changes
-    this.SELECTION_TYPE.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.SELECTION_RANGE_MIN.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.SELECTION_RANGE_MAX.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
+    this.SELECTION_TYPE.addEventListener("change", () => (this.shouldUpdate = true));
+    this.SELECTION_RANGE_MIN.addEventListener("change", () => (this.shouldUpdate = true));
+    this.SELECTION_RANGE_MAX.addEventListener("change", () => (this.shouldUpdate = true));
     this.MEASUREMENT_TYPE.addEventListener("change", () => {
       this.shouldUpdate = true;
       this.updateFields();
     });
-    this.MEASUREMENT_SAMPLING.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.MEASUREMENT_SAMPLING_PERIOD.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.HISTOGRAM_MIN.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.HISTOGRAM_MAX.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
-    this.HISTOGRAM_STEP.addEventListener(
-      "change",
-      () => (this.shouldUpdate = true)
-    );
+    this.MEASUREMENT_SAMPLING.addEventListener("change", () => (this.shouldUpdate = true));
+    this.MEASUREMENT_SAMPLING_PERIOD.addEventListener("change", () => (this.shouldUpdate = true));
+    this.HISTOGRAM_MIN.addEventListener("change", () => (this.shouldUpdate = true));
+    this.HISTOGRAM_MAX.addEventListener("change", () => (this.shouldUpdate = true));
+    this.HISTOGRAM_STEP.addEventListener("change", () => (this.shouldUpdate = true));
 
     // Set initial values for histogram inputs
     this.HISTOGRAM_MIN.value = "0";
@@ -199,40 +138,37 @@ export default class StatisticsController implements TabController {
 
     // Create chart
     StatisticsController.registerChart();
-    this.histogram = new Chart(
-      this.HISTOGRAM_CONTAINER.firstElementChild as HTMLCanvasElement,
-      {
-        type: "bar",
-        data: {
-          labels: [],
-          datasets: [],
+    this.histogram = new Chart(this.HISTOGRAM_CONTAINER.firstElementChild as HTMLCanvasElement, {
+      type: "bar",
+      data: {
+        labels: [],
+        datasets: []
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: {
+          duration: 0
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: {
-            duration: 0,
-          },
-          scales: {
-            x: {
-              type: "linear",
-              stacked: true,
-              offset: false,
-              grid: {
-                offset: false,
-              },
-              ticks: {
-                stepSize: 1,
-              },
+        scales: {
+          x: {
+            type: "linear",
+            stacked: true,
+            offset: false,
+            grid: {
+              offset: false
             },
-            y: {
-              stacked: true,
-              grace: 0.1,
-            },
+            ticks: {
+              stepSize: 1
+            }
           },
-        },
+          y: {
+            stacked: true,
+            grace: 0.1
+          }
+        }
       }
-    );
+    });
   }
 
   /** Registers all Chart.js elements. */
@@ -246,20 +182,12 @@ export default class StatisticsController implements TabController {
   /** Updates the step size for each histogram input. */
   private updateHistogramInputs() {
     if (Number(this.HISTOGRAM_STEP.value) <= 0) {
-      this.HISTOGRAM_STEP.value = cleanFloat(
-        Number(this.HISTOGRAM_STEP.step) * 0.9
-      ).toString();
+      this.HISTOGRAM_STEP.value = cleanFloat(Number(this.HISTOGRAM_STEP.step) * 0.9).toString();
     }
-    let step = Math.pow(
-      10,
-      Math.floor(Math.log10(Number(this.HISTOGRAM_STEP.value)))
-    );
+    let step = Math.pow(10, Math.floor(Math.log10(Number(this.HISTOGRAM_STEP.value))));
     this.HISTOGRAM_STEP.step = step.toString();
 
-    let minMaxStep = Math.pow(
-      10,
-      Math.ceil(Math.log10(Number(this.HISTOGRAM_STEP.value)))
-    );
+    let minMaxStep = Math.pow(10, Math.ceil(Math.log10(Number(this.HISTOGRAM_STEP.value))));
     this.HISTOGRAM_MIN.step = minMaxStep.toString();
     this.HISTOGRAM_MAX.step = minMaxStep.toString();
   }
@@ -276,7 +204,7 @@ export default class StatisticsController implements TabController {
       measurementSamplingPeriod: Number(this.MEASUREMENT_SAMPLING_PERIOD.value),
       histogramMin: Number(this.HISTOGRAM_MIN.value),
       histogramMax: Number(this.HISTOGRAM_MAX.value),
-      histogramStep: Number(this.HISTOGRAM_STEP.value),
+      histogramStep: Number(this.HISTOGRAM_STEP.value)
     };
   }
 
@@ -286,8 +214,7 @@ export default class StatisticsController implements TabController {
     this.SELECTION_RANGE_MAX.value = state.selectionRangeMax.toString();
     this.MEASUREMENT_TYPE.value = state.measurementType;
     this.MEASUREMENT_SAMPLING.value = state.measurementSampling;
-    this.MEASUREMENT_SAMPLING_PERIOD.value =
-      state.measurementSamplingPeriod.toString();
+    this.MEASUREMENT_SAMPLING_PERIOD.value = state.measurementSamplingPeriod.toString();
     this.HISTOGRAM_MIN.value = state.histogramMin.toString();
     this.HISTOGRAM_MAX.value = state.histogramMax.toString();
     this.HISTOGRAM_STEP.value = state.histogramStep.toString();
@@ -295,8 +222,7 @@ export default class StatisticsController implements TabController {
 
     this.SELECTION_RANGE_MIN.disabled = state.selectionType != "range";
     this.SELECTION_RANGE_MAX.disabled = state.selectionType != "range";
-    this.MEASUREMENT_SAMPLING_PERIOD.disabled =
-      state.measurementSampling != "fixed";
+    this.MEASUREMENT_SAMPLING_PERIOD.disabled = state.measurementSampling != "fixed";
 
     this.fields = state.fields;
     this.updateFields();
@@ -310,10 +236,7 @@ export default class StatisticsController implements TabController {
     Object.values(this.FIELD_CELLS).forEach((cell, index) => {
       let rect = cell.getBoundingClientRect();
       let active =
-        dragData.x > rect.left &&
-        dragData.x < rect.right &&
-        dragData.y > rect.top &&
-        dragData.y < rect.bottom;
+        dragData.x > rect.left && dragData.x < rect.right && dragData.y > rect.top && dragData.y < rect.bottom;
       let type = window.log.getType(dragData.data.fields[0]);
       let validType = type == LoggableType.Number;
 
@@ -324,10 +247,8 @@ export default class StatisticsController implements TabController {
           this.updateFields();
         } else {
           let contentRect = this.CONTENT.getBoundingClientRect();
-          this.DRAG_HIGHLIGHT.style.left =
-            (rect.left - contentRect.left).toString() + "px";
-          this.DRAG_HIGHLIGHT.style.top =
-            (rect.top - contentRect.top).toString() + "px";
+          this.DRAG_HIGHLIGHT.style.left = (rect.left - contentRect.left).toString() + "px";
+          this.DRAG_HIGHLIGHT.style.top = (rect.top - contentRect.top).toString() + "px";
           this.DRAG_HIGHLIGHT.style.width = rect.width.toString() + "px";
           this.DRAG_HIGHLIGHT.style.height = rect.height.toString() + "px";
           this.DRAG_HIGHLIGHT.hidden = false;
@@ -370,20 +291,15 @@ export default class StatisticsController implements TabController {
 
   periodic() {
     // Update histogram layout
-    this.VALUES_TABLE_CONTAINER.style.top =
-      (this.CONFIG_TABLE.clientHeight + 10).toString() + "px";
-    this.HISTOGRAM_CONTAINER.style.top =
-      (this.CONFIG_TABLE.clientHeight + 20).toString() + "px";
-    this.HISTOGRAM_CONTAINER.style.left =
-      (this.VALUES_TABLE_CONTAINER.clientWidth + 20).toString() + "px";
+    this.VALUES_TABLE_CONTAINER.style.top = (this.CONFIG_TABLE.clientHeight + 10).toString() + "px";
+    this.HISTOGRAM_CONTAINER.style.top = (this.CONFIG_TABLE.clientHeight + 20).toString() + "px";
+    this.HISTOGRAM_CONTAINER.style.left = (this.VALUES_TABLE_CONTAINER.clientWidth + 20).toString() + "px";
 
     // Update histogram colors
     const isLight = !window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (isLight !== this.lastIsLight) {
       this.lastIsLight = isLight;
-      (
-        this.histogram.options.plugins!.legend as LegendOptions<"bar">
-      ).labels.color = isLight ? "#222" : "#eee";
+      (this.histogram.options.plugins!.legend as LegendOptions<"bar">).labels.color = isLight ? "#222" : "#eee";
       let xAxisOptions = this.histogram.options.scales!.x as LinearScaleOptions;
       let yAxisOptions = this.histogram.options.scales!.y as LinearScaleOptions;
       xAxisOptions.ticks.color = isLight ? "#222" : "#eee";
@@ -395,10 +311,7 @@ export default class StatisticsController implements TabController {
 
     // Check if data should be updated
     let currentTime = new Date().getTime();
-    if (
-      this.shouldUpdate &&
-      currentTime - this.lastUpdateTime > this.UPDATE_PERIOD_MS
-    ) {
+    if (this.shouldUpdate && currentTime - this.lastUpdateTime > this.UPDATE_PERIOD_MS) {
       this.shouldUpdate = false;
       this.lastUpdateTime = currentTime;
 
@@ -424,10 +337,7 @@ export default class StatisticsController implements TabController {
           }
           break;
         case "range":
-          sampleRanges.push([
-            Number(this.SELECTION_RANGE_MIN.value),
-            Number(this.SELECTION_RANGE_MAX.value),
-          ]);
+          sampleRanges.push([Number(this.SELECTION_RANGE_MIN.value), Number(this.SELECTION_RANGE_MAX.value)]);
           break;
       }
 
@@ -443,15 +353,10 @@ export default class StatisticsController implements TabController {
           });
           break;
         case "auto":
-          let allTimestamps = window.log.getTimestamps(
-            window.log.getFieldKeys(),
-            this.UUID
-          );
+          let allTimestamps = window.log.getTimestamps(window.log.getFieldKeys(), this.UUID);
           sampleRanges.forEach((range) => {
             sampleTimes = sampleTimes.concat(
-              allTimestamps.filter(
-                (timestamp) => timestamp >= range[0] && timestamp <= range[1]
-              )
+              allTimestamps.filter((timestamp) => timestamp >= range[0] && timestamp <= range[1])
             );
           });
           break;
@@ -470,10 +375,7 @@ export default class StatisticsController implements TabController {
           if (!logData) {
             return 0.0;
           }
-          while (
-            index < logData.timestamps.length &&
-            logData.timestamps[index + 1] < sampleTime
-          ) {
+          while (index < logData.timestamps.length && logData.timestamps[index + 1] < sampleTime) {
             index++;
           }
           return logData.values[index];
@@ -484,11 +386,7 @@ export default class StatisticsController implements TabController {
       // Calculate errors if using reference
       if (this.MEASUREMENT_TYPE.value != "independent") {
         let isAbsolute = this.MEASUREMENT_TYPE.value == "absolute";
-        for (
-          let valueIndex = 0;
-          valueIndex < sampleTimes.length;
-          valueIndex++
-        ) {
+        for (let valueIndex = 0; valueIndex < sampleTimes.length; valueIndex++) {
           let reference = sampleData[0][valueIndex];
           for (let fieldIndex = 1; fieldIndex < 3; fieldIndex++) {
             let measurement = sampleData[fieldIndex][valueIndex];
@@ -496,9 +394,7 @@ export default class StatisticsController implements TabController {
               sampleData[fieldIndex][valueIndex] = null;
             } else {
               let error = measurement - reference;
-              sampleData[fieldIndex][valueIndex] = isAbsolute
-                ? Math.abs(error)
-                : error;
+              sampleData[fieldIndex][valueIndex] = isAbsolute ? Math.abs(error) : error;
             }
           }
         }
@@ -509,9 +405,7 @@ export default class StatisticsController implements TabController {
       let fieldsHaveData = sampleData.map((data) => {
         return data.length > 0 && !data.every((value) => value == null);
       });
-      let fieldHavaDataCount = fieldsHaveData.filter(
-        (hasData) => hasData
-      ).length;
+      let fieldHavaDataCount = fieldsHaveData.filter((hasData) => hasData).length;
 
       // Sort sample data
       sampleData.forEach((data) => {
@@ -538,10 +432,7 @@ export default class StatisticsController implements TabController {
         let cell = document.createElement("td");
         row.appendChild(cell);
         titles.forEach((title, index) => {
-          if (
-            fieldsHaveData[index] ||
-            (fieldHavaDataCount == 0 && index == 0)
-          ) {
+          if (fieldsHaveData[index] || (fieldHavaDataCount == 0 && index == 0)) {
             let cell = document.createElement("td");
             row.appendChild(cell);
             cell.innerText = title;
@@ -561,11 +452,7 @@ export default class StatisticsController implements TabController {
       };
 
       // Add a new row with data
-      let addValues = (
-        title: string,
-        digits: number,
-        calcFunction: (data: number[]) => number
-      ) => {
+      let addValues = (title: string, digits: number, calcFunction: (data: number[]) => number) => {
         let row = document.createElement("tr");
         this.VALUES_TABLE_BODY.appendChild(row);
         row.classList.add("values");
@@ -578,9 +465,7 @@ export default class StatisticsController implements TabController {
             row.appendChild(valueCell);
             valueCell.innerText = "-";
             try {
-              let value = calcFunction(
-                sampleData[i].filter((value) => value != null) as number[]
-              );
+              let value = calcFunction(sampleData[i].filter((value) => value != null) as number[]);
               if (!isNaN(value) && isFinite(value)) {
                 valueCell.innerText = value.toFixed(digits);
               }
@@ -599,12 +484,8 @@ export default class StatisticsController implements TabController {
       addValues("Mean", 3, stats.mean);
       addValues("Median", 3, stats.medianSorted);
       addValues("Mode", 3, stats.modeSorted);
-      addValues("Geometric Mean", 3, (data) =>
-        this.logAverage(data.filter((value) => value > 0))
-      );
-      addValues("Harmonic Mean", 3, (data) =>
-        stats.harmonicMean(data.filter((value) => value > 0))
-      );
+      addValues("Geometric Mean", 3, (data) => this.logAverage(data.filter((value) => value > 0)));
+      addValues("Harmonic Mean", 3, (data) => stats.harmonicMean(data.filter((value) => value > 0)));
       addValues("Quadratic Mean", 3, stats.rootMeanSquare);
       addSection("Spread");
       addValues("Standard Deviation", 3, stats.sampleStandardDeviation);
@@ -612,33 +493,15 @@ export default class StatisticsController implements TabController {
       addValues("Interquartile Range", 3, stats.interquartileRange);
       addValues("Skewness", 3, stats.sampleSkewness);
       addSection("Percentiles");
-      addValues("1st Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.01)
-      );
-      addValues("5th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.05)
-      );
-      addValues("10th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.1)
-      );
-      addValues("25th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.25)
-      );
-      addValues("50th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.5)
-      );
-      addValues("75th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.75)
-      );
-      addValues("90th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.9)
-      );
-      addValues("95th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.95)
-      );
-      addValues("99th Percentile", 3, (data) =>
-        stats.quantileSorted(data, 0.99)
-      );
+      addValues("1st Percentile", 3, (data) => stats.quantileSorted(data, 0.01));
+      addValues("5th Percentile", 3, (data) => stats.quantileSorted(data, 0.05));
+      addValues("10th Percentile", 3, (data) => stats.quantileSorted(data, 0.1));
+      addValues("25th Percentile", 3, (data) => stats.quantileSorted(data, 0.25));
+      addValues("50th Percentile", 3, (data) => stats.quantileSorted(data, 0.5));
+      addValues("75th Percentile", 3, (data) => stats.quantileSorted(data, 0.75));
+      addValues("90th Percentile", 3, (data) => stats.quantileSorted(data, 0.9));
+      addValues("95th Percentile", 3, (data) => stats.quantileSorted(data, 0.95));
+      addValues("99th Percentile", 3, (data) => stats.quantileSorted(data, 0.99));
 
       // Get histogram data
       let min = Number(this.HISTOGRAM_MIN.value);
@@ -665,23 +528,16 @@ export default class StatisticsController implements TabController {
       this.histogram.data.labels = bins.map((value) => value + step / 2);
       this.histogram.data.datasets = counts.map((data, index) => {
         const dataset: ChartDataset = {
-          label:
-            (this.MEASUREMENT_TYPE.value == "independent" ? "Field" : "Error") +
-            " #" +
-            (index + 1).toString(),
+          label: (this.MEASUREMENT_TYPE.value == "independent" ? "Field" : "Error") + " #" + (index + 1).toString(),
           data: data,
           backgroundColor: SimpleColors[index],
           barPercentage: 1,
-          categoryPercentage: 1,
+          categoryPercentage: 1
         };
         return dataset;
       });
-      (this.histogram.options.scales!.x as LinearScaleOptions).ticks.stepSize =
-        step;
-      (
-        this.histogram.options.plugins!.tooltip!
-          .callbacks as TooltipCallbacks<"bar">
-      ).title = (items) => {
+      (this.histogram.options.scales!.x as LinearScaleOptions).ticks.stepSize = step;
+      (this.histogram.options.plugins!.tooltip!.callbacks as TooltipCallbacks<"bar">).title = (items) => {
         if (items.length < 1) {
           return "";
         }
@@ -716,9 +572,7 @@ export default class StatisticsController implements TabController {
     let value = 0;
     for (let i = 0; i < x.length; i++) {
       if (x[i] < 0) {
-        throw new Error(
-          "logAverage requires only non-negative numbers as input"
-        );
+        throw new Error("logAverage requires only non-negative numbers as input");
       }
       value += Math.log(x[i]);
     }

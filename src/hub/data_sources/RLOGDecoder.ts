@@ -65,9 +65,7 @@ export default class RLOGDecoder {
             case 1: // New key ID
               let keyID = dataBuffer.getInt16(shiftOffset(2));
               let length = dataBuffer.getInt16(shiftOffset(2));
-              let newKey = this.STRING_DECODER.decode(
-                dataArray.subarray(offset, offset + length)
-              );
+              let newKey = this.STRING_DECODER.decode(dataArray.subarray(offset, offset + length));
               offset += length;
               this.keyIDs[keyID] = newKey;
               break;
@@ -103,38 +101,20 @@ export default class RLOGDecoder {
                   }
                   break;
                 case 1: // Boolean
-                  log.putBoolean(
-                    key,
-                    timestamp,
-                    dataArray[shiftOffset(1)] != 0
-                  );
+                  log.putBoolean(key, timestamp, dataArray[shiftOffset(1)] != 0);
                   break;
                 case 9: // Byte
-                  log.putRaw(
-                    key,
-                    timestamp,
-                    new Uint8Array([dataArray[shiftOffset(1)]])
-                  );
+                  log.putRaw(key, timestamp, new Uint8Array([dataArray[shiftOffset(1)]]));
                   break;
                 case 3: // Integer
-                  log.putNumber(
-                    key,
-                    timestamp,
-                    dataBuffer.getInt32(shiftOffset(4))
-                  );
+                  log.putNumber(key, timestamp, dataBuffer.getInt32(shiftOffset(4)));
                   break;
                 case 5: // Double
-                  log.putNumber(
-                    key,
-                    timestamp,
-                    dataBuffer.getFloat64(shiftOffset(8))
-                  );
+                  log.putNumber(key, timestamp, dataBuffer.getFloat64(shiftOffset(8)));
                   break;
                 case 7: // String
                   let stringLength = dataBuffer.getInt16(shiftOffset(2));
-                  let string = this.STRING_DECODER.decode(
-                    dataArray.subarray(offset, offset + stringLength)
-                  );
+                  let string = this.STRING_DECODER.decode(dataArray.subarray(offset, offset + stringLength));
                   offset += stringLength;
                   log.putString(key, timestamp, string);
                   break;
@@ -175,11 +155,7 @@ export default class RLOGDecoder {
                   let stringArray: string[] = [];
                   for (let i = 0; i < stringArraylength; i++) {
                     let stringLength = dataBuffer.getInt16(shiftOffset(2));
-                    stringArray.push(
-                      this.STRING_DECODER.decode(
-                        dataArray.subarray(offset, offset + stringLength)
-                      )
-                    );
+                    stringArray.push(this.STRING_DECODER.decode(dataArray.subarray(offset, offset + stringLength)));
                     offset += stringLength;
                   }
                   log.putStringArray(key, timestamp, stringArray);

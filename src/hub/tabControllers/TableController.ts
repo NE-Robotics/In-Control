@@ -3,11 +3,7 @@ import LoggableType from "../../packages/log/LoggableType";
 import { getLogValueText } from "../../packages/log/LogUtil";
 import { LogValueSetAny } from "../../packages/log/LogValueSets";
 import TabType from "../../packages/utils/TabType";
-import {
-  arraysEqual,
-  createUUID,
-  formatTimeWithMS,
-} from "../../packages/utils/util";
+import { arraysEqual, createUUID, formatTimeWithMS } from "../../packages/utils/util";
 import { SelectionMode } from "../Selection";
 import TabController from "../TabController";
 
@@ -32,23 +28,12 @@ export default class TableController implements TabController {
 
   constructor(content: HTMLElement) {
     this.CONTENT = content;
-    this.NO_DATA_ALERT = content.getElementsByClassName(
-      "tab-centered"
-    )[0] as HTMLElement;
-    this.HEADER_TEMPLATE = content.getElementsByClassName(
-      "data-table-header-template"
-    )[0] as HTMLElement;
-    this.TABLE_CONTAINER = content.getElementsByClassName(
-      "data-table-container"
-    )[0] as HTMLElement;
-    this.TABLE_BODY = content.getElementsByClassName("data-table")[0]
-      .firstElementChild as HTMLElement;
-    this.DRAG_HIGHLIGHT = content.getElementsByClassName(
-      "data-table-drag-highlight"
-    )[0] as HTMLElement;
-    this.INPUT_FIELD = content.getElementsByClassName(
-      "data-table-jump-input"
-    )[0] as HTMLInputElement;
+    this.NO_DATA_ALERT = content.getElementsByClassName("tab-centered")[0] as HTMLElement;
+    this.HEADER_TEMPLATE = content.getElementsByClassName("data-table-header-template")[0] as HTMLElement;
+    this.TABLE_CONTAINER = content.getElementsByClassName("data-table-container")[0] as HTMLElement;
+    this.TABLE_BODY = content.getElementsByClassName("data-table")[0].firstElementChild as HTMLElement;
+    this.DRAG_HIGHLIGHT = content.getElementsByClassName("data-table-drag-highlight")[0] as HTMLElement;
+    this.INPUT_FIELD = content.getElementsByClassName("data-table-jump-input")[0] as HTMLInputElement;
 
     // Drag handling
     window.addEventListener("drag-update", (event) => {
@@ -72,9 +57,7 @@ export default class TableController implements TabController {
     this.INPUT_FIELD.addEventListener("keydown", (event) => {
       if (event.code == "Enter") jump();
     });
-    content
-      .getElementsByClassName("data-table-jump-button")[0]
-      .addEventListener("click", jump);
+    content.getElementsByClassName("data-table-jump-button")[0].addEventListener("click", jump);
   }
 
   saveState(): TableState {
@@ -91,12 +74,7 @@ export default class TableController implements TabController {
     let fullRefresh = true;
     let newTimestamps = window.log.getTimestamps(this.fields, this.UUID);
     if (newTimestamps.length >= this.timestamps.length) {
-      if (
-        arraysEqual(
-          this.timestamps.slice(0, newTimestamps.length),
-          this.timestamps
-        )
-      ) {
+      if (arraysEqual(this.timestamps.slice(0, newTimestamps.length), this.timestamps)) {
         fullRefresh = false;
       }
     }
@@ -105,10 +83,7 @@ export default class TableController implements TabController {
       let offsetPx = 0;
       if (this.timestamps.length > 0) {
         targetTime =
-          this.timestamps[
-            Math.floor(this.TABLE_CONTAINER.scrollTop / this.ROW_HEIGHT_PX) +
-              this.currentRange[0]
-          ];
+          this.timestamps[Math.floor(this.TABLE_CONTAINER.scrollTop / this.ROW_HEIGHT_PX) + this.currentRange[0]];
         offsetPx = this.TABLE_CONTAINER.scrollTop % this.ROW_HEIGHT_PX;
       }
       this.timestamps = newTimestamps;
@@ -141,21 +116,12 @@ export default class TableController implements TabController {
         } else {
           targetX = header.children[i].getBoundingClientRect().right;
         }
-        if (
-          targetX <
-          (header.firstElementChild as HTMLElement).getBoundingClientRect()
-            .right
-        )
-          continue;
-        let leftBound =
-          i == 0
-            ? tableBox.x
-            : targetX - header.children[i].getBoundingClientRect().width / 2;
+        if (targetX < (header.firstElementChild as HTMLElement).getBoundingClientRect().right) continue;
+        let leftBound = i == 0 ? tableBox.x : targetX - header.children[i].getBoundingClientRect().width / 2;
         let rightBound =
           i == header.childElementCount - 1
             ? Infinity
-            : targetX +
-              header.children[i + 1].getBoundingClientRect().width / 2;
+            : targetX + header.children[i + 1].getBoundingClientRect().width / 2;
         if (leftBound < dragData.x && rightBound > dragData.x) {
           selected = i;
           selectedX = targetX;
@@ -173,8 +139,7 @@ export default class TableController implements TabController {
     } else {
       this.DRAG_HIGHLIGHT.hidden = selected == null;
       if (selected != null && selectedX != null) {
-        this.DRAG_HIGHLIGHT.style.left =
-          (selectedX - tableBox.x - 12.5).toString() + "px";
+        this.DRAG_HIGHLIGHT.style.left = (selectedX - tableBox.x - 12.5).toString() + "px";
       }
     }
   }
@@ -197,21 +162,16 @@ export default class TableController implements TabController {
     if (this.timestamps.length < this.MAX_ROWS) {
       this.currentRange = [0, this.timestamps.length - 1];
     } else {
-      this.currentRange = [
-        target - this.MAX_ROWS / 2,
-        target + this.MAX_ROWS / 2 - 1,
-      ];
+      this.currentRange = [target - this.MAX_ROWS / 2, target + this.MAX_ROWS / 2 - 1];
       let offset = 0;
       if (this.currentRange[0] < 0) offset = this.currentRange[0] * -1;
-      if (this.currentRange[1] > this.timestamps.length - 1)
-        offset = this.timestamps.length - 1 - this.currentRange[1];
+      if (this.currentRange[1] > this.timestamps.length - 1) offset = this.timestamps.length - 1 - this.currentRange[1];
       this.currentRange[0] += offset;
       this.currentRange[1] += offset;
     }
     this.clearTable();
     this.fillRange(this.currentRange, false);
-    this.TABLE_CONTAINER.scrollTop =
-      (target - this.currentRange[0]) * this.ROW_HEIGHT_PX + offsetPx;
+    this.TABLE_CONTAINER.scrollTop = (target - this.currentRange[0]) * this.ROW_HEIGHT_PX + offsetPx;
   }
 
   /** Updates the table based on the current field list */
@@ -233,8 +193,7 @@ export default class TableController implements TabController {
       });
       header.appendChild(cell);
 
-      let textElement = (cell.firstElementChild as HTMLElement)
-        .firstElementChild as HTMLElement;
+      let textElement = (cell.firstElementChild as HTMLElement).firstElementChild as HTMLElement;
       let closeButton = cell.lastElementChild as HTMLElement;
       if (!window.log.getFieldKeys().includes(field)) {
         textElement.style.textDecoration = "line-through";
@@ -254,10 +213,7 @@ export default class TableController implements TabController {
       let offsetPx = 0;
       if (this.timestamps.length > 0) {
         targetTime =
-          this.timestamps[
-            Math.floor(this.TABLE_CONTAINER.scrollTop / this.ROW_HEIGHT_PX) +
-              this.currentRange[0]
-          ];
+          this.timestamps[Math.floor(this.TABLE_CONTAINER.scrollTop / this.ROW_HEIGHT_PX) + this.currentRange[0]];
         offsetPx = this.TABLE_CONTAINER.scrollTop % this.ROW_HEIGHT_PX;
       }
       this.timestamps = window.log.getTimestamps(this.fields, this.UUID);
@@ -279,18 +235,14 @@ export default class TableController implements TabController {
   private updateHighlights() {
     if (this.timestamps.length == 0) return;
     let highlight = (time: number | null, className: string) => {
-      Array.from(this.TABLE_BODY.children).forEach((row) =>
-        row.classList.remove(className)
-      );
+      Array.from(this.TABLE_BODY.children).forEach((row) => row.classList.remove(className));
       if (time) {
         let target = this.timestamps.findIndex((value) => value > time);
         if (target == -1) target = this.timestamps.length;
         if (target < 1) target = 1;
         target -= 1;
         if (target >= this.currentRange[0] && target <= this.currentRange[1]) {
-          this.TABLE_BODY.children[
-            target - this.currentRange[0] + 1
-          ].classList.add(className);
+          this.TABLE_BODY.children[target - this.currentRange[0] + 1].classList.add(className);
         }
       }
     };
@@ -305,15 +257,9 @@ export default class TableController implements TabController {
         highlight(window.selection.getHoveredTime(), "hovered");
         break;
       case SelectionMode.Locked:
-        Array.from(this.TABLE_BODY.children).forEach((row) =>
-          row.classList.remove("selected")
-        );
-        Array.from(this.TABLE_BODY.children).forEach((row) =>
-          row.classList.remove("hovered")
-        );
-        (this.TABLE_BODY.lastElementChild as HTMLElement).classList.add(
-          "selected"
-        );
+        Array.from(this.TABLE_BODY.children).forEach((row) => row.classList.remove("selected"));
+        Array.from(this.TABLE_BODY.children).forEach((row) => row.classList.remove("hovered"));
+        (this.TABLE_BODY.lastElementChild as HTMLElement).classList.add("selected");
         break;
     }
   }
@@ -330,16 +276,10 @@ export default class TableController implements TabController {
     let availableFields = window.log.getFieldKeys();
     this.fields.forEach((field) => {
       if (!availableFields.includes(field)) return;
-      let data = window.log.getRange(
-        field,
-        this.timestamps[range[0]],
-        this.timestamps[range[1]]
-      ) as LogValueSetAny;
+      let data = window.log.getRange(field, this.timestamps[range[0]], this.timestamps[range[1]]) as LogValueSetAny;
       let fullData = [];
       for (let i = range[0]; i < range[1] + 1; i++) {
-        let nextIndex = data.timestamps.findIndex(
-          (value) => value > this.timestamps[i]
-        );
+        let nextIndex = data.timestamps.findIndex((value) => value > this.timestamps[i]);
         if (nextIndex == -1) nextIndex = data?.timestamps.length;
         if (nextIndex == 0) {
           fullData.push(null);
@@ -396,8 +336,7 @@ export default class TableController implements TabController {
 
     // Update row height (not all platforms render the same way)
     let rowHeight = this.TABLE_BODY.children[1].getBoundingClientRect().height;
-    if (rowHeight > 0 && rowHeight != this.ROW_HEIGHT_PX)
-      this.ROW_HEIGHT_PX = rowHeight;
+    if (rowHeight > 0 && rowHeight != this.ROW_HEIGHT_PX) this.ROW_HEIGHT_PX = rowHeight;
   }
 
   periodic() {
@@ -410,8 +349,7 @@ export default class TableController implements TabController {
     // Stop if no data
     if (this.timestamps.length == 0) return;
 
-    let atMaxRows =
-      this.currentRange[1] - this.currentRange[0] + 1 >= this.MAX_ROWS;
+    let atMaxRows = this.currentRange[1] - this.currentRange[0] + 1 >= this.MAX_ROWS;
     let rowOffset = 0;
     if (!atMaxRows) {
       // If not enough rows, add any that are missing
@@ -424,32 +362,24 @@ export default class TableController implements TabController {
     } else {
       // Determine if rows need to be updated based on scroll
       let offsetPx = 0;
-      if (
-        this.TABLE_CONTAINER.scrollTop < this.SCROLL_MARGIN_PX &&
-        this.currentRange[0] > 0
-      ) {
+      if (this.TABLE_CONTAINER.scrollTop < this.SCROLL_MARGIN_PX && this.currentRange[0] > 0) {
         offsetPx = this.TABLE_CONTAINER.scrollTop - this.SCROLL_MARGIN_PX;
       }
       if (
-        this.TABLE_CONTAINER.scrollHeight -
-          this.TABLE_CONTAINER.clientHeight -
-          this.TABLE_CONTAINER.scrollTop <
+        this.TABLE_CONTAINER.scrollHeight - this.TABLE_CONTAINER.clientHeight - this.TABLE_CONTAINER.scrollTop <
           this.SCROLL_MARGIN_PX &&
         this.currentRange[1] < this.timestamps.length - 1
       ) {
         offsetPx =
           this.SCROLL_MARGIN_PX -
-          (this.TABLE_CONTAINER.scrollHeight -
-            this.TABLE_CONTAINER.clientHeight -
-            this.TABLE_CONTAINER.scrollTop);
+          (this.TABLE_CONTAINER.scrollHeight - this.TABLE_CONTAINER.clientHeight - this.TABLE_CONTAINER.scrollTop);
       }
       rowOffset = Math.floor(offsetPx / this.ROW_HEIGHT_PX);
     }
 
     // Update rows
     if (rowOffset != 0) {
-      if (this.currentRange[0] + rowOffset < 0)
-        rowOffset = -this.currentRange[0];
+      if (this.currentRange[0] + rowOffset < 0) rowOffset = -this.currentRange[0];
       if (this.currentRange[1] + rowOffset > this.timestamps.length - 1) {
         rowOffset = this.timestamps.length - 1 - this.currentRange[1];
       }
@@ -465,39 +395,28 @@ export default class TableController implements TabController {
         this.currentRange[1] += rowOffset;
       }
       if (rowOffset < 0) {
-        let limitedRowOffset =
-          rowOffset < -this.MAX_ROWS ? -this.MAX_ROWS : rowOffset;
+        let limitedRowOffset = rowOffset < -this.MAX_ROWS ? -this.MAX_ROWS : rowOffset;
         if (atMaxRows) {
           for (let i = 0; i < limitedRowOffset * -1; i++) {
-            this.TABLE_BODY.removeChild(
-              this.TABLE_BODY.lastElementChild as HTMLElement
-            );
+            this.TABLE_BODY.removeChild(this.TABLE_BODY.lastElementChild as HTMLElement);
           }
         }
-        this.fillRange(
-          [this.currentRange[0], this.currentRange[0] - limitedRowOffset - 1],
-          true
-        );
+        this.fillRange([this.currentRange[0], this.currentRange[0] - limitedRowOffset - 1], true);
       }
       if (rowOffset > 0) {
-        let limitedRowOffset =
-          rowOffset > this.MAX_ROWS ? this.MAX_ROWS : rowOffset;
+        let limitedRowOffset = rowOffset > this.MAX_ROWS ? this.MAX_ROWS : rowOffset;
         if (atMaxRows) {
           for (let i = 0; i < limitedRowOffset; i++) {
             this.TABLE_BODY.removeChild(this.TABLE_BODY.children[1]);
           }
         }
-        this.fillRange(
-          [this.currentRange[1] - limitedRowOffset + 1, this.currentRange[1]],
-          false
-        );
+        this.fillRange([this.currentRange[1] - limitedRowOffset + 1, this.currentRange[1]], false);
       }
     }
 
     // Scroll to bottom if locked
     if (window.selection.getMode() == SelectionMode.Locked) {
-      this.TABLE_CONTAINER.scrollTop =
-        this.TABLE_CONTAINER.scrollHeight - this.TABLE_CONTAINER.clientHeight;
+      this.TABLE_CONTAINER.scrollTop = this.TABLE_CONTAINER.scrollHeight - this.TABLE_CONTAINER.clientHeight;
     }
   }
 }

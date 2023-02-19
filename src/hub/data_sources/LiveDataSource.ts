@@ -7,11 +7,8 @@ export abstract class LiveDataSource {
   protected status: LiveDataSourceStatus = LiveDataSourceStatus.Waiting;
 
   protected address: string | null = null;
-  protected statusCallback: ((status: LiveDataSourceStatus) => void) | null =
-    null;
-  protected outputCallback:
-    | ((log: Log, timeSupplier: () => number) => void)
-    | null = null;
+  protected statusCallback: ((status: LiveDataSourceStatus) => void) | null = null;
+  protected outputCallback: ((log: Log, timeSupplier: () => number) => void) | null = null;
 
   /**
    * Generates log data from a live source.
@@ -52,5 +49,5 @@ export enum LiveDataSourceStatus {
   Connecting,
   Active,
   Error,
-  Stopped,
+  Stopped
 }

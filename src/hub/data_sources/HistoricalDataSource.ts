@@ -7,13 +7,12 @@ export class HistorialDataSource {
     ".rlog": "hub$rlogWorker.js",
     ".wpilog": "hub$wpilogWorker.js",
     ".dslog": "hub$dsLogWorker.js",
-    ".dsevents": "hub$dsLogWorker.js",
+    ".dsevents": "hub$dsLogWorker.js"
   };
 
   private path: string | null = null;
   private status: HistorialDataSourceStatus = HistorialDataSourceStatus.Waiting;
-  private statusCallback: ((status: HistorialDataSourceStatus) => void) | null =
-    null;
+  private statusCallback: ((status: HistorialDataSourceStatus) => void) | null = null;
   private outputCallback: ((log: Log) => void) | null = null;
 
   /**
@@ -72,13 +71,8 @@ export class HistorialDataSource {
     }
     WorkerManager.request("../bundles/" + selectedWorkerName, fileContents)
       .then((response: any) => {
-        if (
-          this.status == HistorialDataSourceStatus.Error ||
-          this.status == HistorialDataSourceStatus.Stopped
-        )
-          return;
-        if (this.outputCallback != null)
-          this.outputCallback(Log.fromSerialized(response));
+        if (this.status == HistorialDataSourceStatus.Error || this.status == HistorialDataSourceStatus.Stopped) return;
+        if (this.outputCallback != null) this.outputCallback(Log.fromSerialized(response));
         this.setStatus(HistorialDataSourceStatus.Ready);
       })
       .catch(() => {
@@ -88,10 +82,7 @@ export class HistorialDataSource {
 
   /** Updates the current status and triggers the callback if necessary. */
   private setStatus(status: HistorialDataSourceStatus) {
-    if (
-      status != this.status &&
-      this.status != HistorialDataSourceStatus.Stopped
-    ) {
+    if (status != this.status && this.status != HistorialDataSourceStatus.Stopped) {
       this.status = status;
       if (this.statusCallback != null) this.statusCallback(status);
     }
@@ -104,5 +95,5 @@ export enum HistorialDataSourceStatus {
   Decoding,
   Ready,
   Error,
-  Stopped,
+  Stopped
 }

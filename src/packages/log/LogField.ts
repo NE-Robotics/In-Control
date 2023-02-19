@@ -8,7 +8,7 @@ import {
   LogValueSetNumberArray,
   LogValueSetRaw,
   LogValueSetString,
-  LogValueSetStringArray,
+  LogValueSetStringArray
 } from "./LogValueSets";
 
 /** A full log field that contains data. */
@@ -43,18 +43,12 @@ export default class LogField {
     }
 
     let endValueIndex = this.data.timestamps.findIndex((x) => x >= end);
-    if (
-      endValueIndex == -1 ||
-      endValueIndex == this.data.timestamps.length - 1
-    ) {
+    if (endValueIndex == -1 || endValueIndex == this.data.timestamps.length - 1) {
       // Extend to end of timestamps
       timestamps = this.data.timestamps.slice(startValueIndex);
       values = this.data.values.slice(startValueIndex);
     } else {
-      timestamps = this.data.timestamps.slice(
-        startValueIndex,
-        endValueIndex + 1
-      );
+      timestamps = this.data.timestamps.slice(startValueIndex, endValueIndex + 1);
       values = this.data.values.slice(startValueIndex, endValueIndex + 1);
     }
     return { timestamps: timestamps, values: values };
@@ -81,27 +75,17 @@ export default class LogField {
   }
 
   /** Reads a set of BooleanArray values from the field. */
-  getBooleanArray(
-    start: number,
-    end: number
-  ): LogValueSetBooleanArray | undefined {
-    if (this.type == LoggableType.BooleanArray)
-      return this.getRange(start, end);
+  getBooleanArray(start: number, end: number): LogValueSetBooleanArray | undefined {
+    if (this.type == LoggableType.BooleanArray) return this.getRange(start, end);
   }
 
   /** Reads a set of NumberArray values from the field. */
-  getNumberArray(
-    start: number,
-    end: number
-  ): LogValueSetNumberArray | undefined {
+  getNumberArray(start: number, end: number): LogValueSetNumberArray | undefined {
     if (this.type == LoggableType.NumberArray) return this.getRange(start, end);
   }
 
   /** Reads a set of StringArray values from the field. */
-  getStringArray(
-    start: number,
-    end: number
-  ): LogValueSetStringArray | undefined {
+  getStringArray(start: number, end: number): LogValueSetStringArray | undefined {
     if (this.type == LoggableType.StringArray) return this.getRange(start, end);
   }
 
@@ -117,10 +101,7 @@ export default class LogField {
       case LoggableType.StringArray:
         return arraysEqual(a, b);
       case LoggableType.Raw:
-        return arraysEqual(
-          Array.from(a as Uint8Array),
-          Array.from(b as Uint8Array)
-        );
+        return arraysEqual(Array.from(a as Uint8Array), Array.from(b as Uint8Array));
     }
   }
 
@@ -128,10 +109,7 @@ export default class LogField {
   private putData(timestamp: number, value: any) {
     if (this.data.timestamps.includes(timestamp)) return;
     let insertIndex: number;
-    if (
-      this.data.timestamps.length > 0 &&
-      timestamp > this.data.timestamps[this.data.timestamps.length - 1]
-    ) {
+    if (this.data.timestamps.length > 0 && timestamp > this.data.timestamps[this.data.timestamps.length - 1]) {
       // There's a good chance this data is at the end of the log, so check that first
       insertIndex = this.data.timestamps.length;
     } else {
@@ -142,10 +120,7 @@ export default class LogField {
       }
     }
 
-    if (
-      insertIndex > 0 &&
-      this.areEqual(this.type, value, this.data.values[insertIndex - 1])
-    ) {
+    if (insertIndex > 0 && this.areEqual(this.type, value, this.data.values[insertIndex - 1])) {
       // Same as the previous value
     } else if (
       insertIndex < this.data.values.length &&
@@ -200,7 +175,7 @@ export default class LogField {
     return {
       type: this.type,
       timestamps: this.data.timestamps,
-      values: this.data.values,
+      values: this.data.values
     };
   }
 
@@ -209,7 +184,7 @@ export default class LogField {
     let field = new LogField(serializedData.type);
     field.data = {
       timestamps: serializedData.timestamps,
-      values: serializedData.values,
+      values: serializedData.values
     };
     return field;
   }

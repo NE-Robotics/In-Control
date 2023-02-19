@@ -32,49 +32,25 @@ export default class VideoController extends TimelineVizController {
       TabType.Video,
       [],
       [],
-      new VideoVisualizer(
-        content.getElementsByClassName("video-container")[0]
-          .firstElementChild as HTMLImageElement
-      )
+      new VideoVisualizer(content.getElementsByClassName("video-container")[0].firstElementChild as HTMLImageElement)
     );
 
     // Get elements
-    this.SOURCE_CELL = content.getElementsByClassName(
-      "video-source"
-    )[0] as HTMLElement;
-    let configTable = content.getElementsByClassName(
-      "timeline-viz-config"
-    )[0] as HTMLElement;
-    this.LOCK_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[0] as HTMLButtonElement;
-    this.UNLOCK_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[1] as HTMLButtonElement;
-    this.PLAY_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[4] as HTMLButtonElement;
-    this.PAUSE_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[5] as HTMLButtonElement;
-    this.FRAME_BACK_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[3] as HTMLButtonElement;
-    this.FRAME_FORWARD_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[6] as HTMLButtonElement;
-    this.SKIP_BACK_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[2] as HTMLButtonElement;
-    this.SKIP_FORWARD_BUTTON = configTable.getElementsByTagName(
-      "button"
-    )[7] as HTMLButtonElement;
+    this.SOURCE_CELL = content.getElementsByClassName("video-source")[0] as HTMLElement;
+    let configTable = content.getElementsByClassName("timeline-viz-config")[0] as HTMLElement;
+    this.LOCK_BUTTON = configTable.getElementsByTagName("button")[0] as HTMLButtonElement;
+    this.UNLOCK_BUTTON = configTable.getElementsByTagName("button")[1] as HTMLButtonElement;
+    this.PLAY_BUTTON = configTable.getElementsByTagName("button")[4] as HTMLButtonElement;
+    this.PAUSE_BUTTON = configTable.getElementsByTagName("button")[5] as HTMLButtonElement;
+    this.FRAME_BACK_BUTTON = configTable.getElementsByTagName("button")[3] as HTMLButtonElement;
+    this.FRAME_FORWARD_BUTTON = configTable.getElementsByTagName("button")[6] as HTMLButtonElement;
+    this.SKIP_BACK_BUTTON = configTable.getElementsByTagName("button")[2] as HTMLButtonElement;
+    this.SKIP_FORWARD_BUTTON = configTable.getElementsByTagName("button")[7] as HTMLButtonElement;
     this.VIDEO_TIMELINE_INPUT = configTable.getElementsByClassName(
       "timeline-viz-timeline-slider"
     )[0] as HTMLInputElement;
-    this.VIDEO_TIMELINE_PROGRESS = configTable.getElementsByClassName(
-      "timeline-viz-timeline-marker-container"
-    )[0].firstElementChild as HTMLElement;
+    this.VIDEO_TIMELINE_PROGRESS = configTable.getElementsByClassName("timeline-viz-timeline-marker-container")[0]
+      .firstElementChild as HTMLElement;
 
     // Source selection
     this.SOURCE_CELL.addEventListener("click", () => {
@@ -89,9 +65,7 @@ export default class VideoController extends TimelineVizController {
         this.playing = false;
         let selectedTime = window.selection.getSelectedTime();
         if (selectedTime == null) selectedTime = 0;
-        this.lockedStartLog =
-          selectedTime -
-          (Number(this.VIDEO_TIMELINE_INPUT.value) - 1) / this.fps!;
+        this.lockedStartLog = selectedTime - (Number(this.VIDEO_TIMELINE_INPUT.value) - 1) / this.fps!;
       }
       this.updateButtons();
     };
@@ -110,17 +84,12 @@ export default class VideoController extends TimelineVizController {
     };
     let changeFrame = (delta: number) => {
       if (this.locked || !this.hasData() || this.playing) return;
-      this.VIDEO_TIMELINE_INPUT.value = (
-        Number(this.VIDEO_TIMELINE_INPUT.value) + delta
-      ).toString();
+      this.VIDEO_TIMELINE_INPUT.value = (Number(this.VIDEO_TIMELINE_INPUT.value) + delta).toString();
     };
     let skipTime = (delta: number) => {
       if (this.locked || !this.hasData()) return;
       if (this.fps) {
-        this.VIDEO_TIMELINE_INPUT.value = (
-          Number(this.VIDEO_TIMELINE_INPUT.value) +
-          delta * this.fps
-        ).toString();
+        this.VIDEO_TIMELINE_INPUT.value = (Number(this.VIDEO_TIMELINE_INPUT.value) + delta * this.fps).toString();
         if (this.playing) {
           this.playStartFrame = Number(this.VIDEO_TIMELINE_INPUT.value);
           this.playStartReal = new Date().getTime() / 1000;
@@ -140,13 +109,7 @@ export default class VideoController extends TimelineVizController {
     this.SKIP_BACK_BUTTON.addEventListener("click", () => skipTime(-5));
     this.SKIP_FORWARD_BUTTON.addEventListener("click", () => skipTime(5));
     window.addEventListener("keydown", (event) => {
-      if (
-        content.parentElement == null ||
-        content.hidden ||
-        event.target != document.body ||
-        event.metaKey
-      )
-        return;
+      if (content.parentElement == null || content.hidden || event.target != document.body || event.metaKey) return;
       switch (event.code) {
         case "ArrowUp":
         case "ArrowDown":
@@ -172,12 +135,7 @@ export default class VideoController extends TimelineVizController {
   }
 
   private hasData(): boolean {
-    return (
-      this.imgFolder != null &&
-      this.fps != null &&
-      this.totalFrames != null &&
-      this.completedFrames != null
-    );
+    return this.imgFolder != null && this.fps != null && this.totalFrames != null && this.completedFrames != null;
   }
 
   private updateButtons() {
@@ -215,8 +173,7 @@ export default class VideoController extends TimelineVizController {
       this.completedFrames = data.completedFrames;
 
       if (this.totalFrames == null || this.completedFrames == null) return;
-      this.VIDEO_TIMELINE_PROGRESS.style.width =
-        ((this.completedFrames / this.totalFrames) * 100).toString() + "%";
+      this.VIDEO_TIMELINE_PROGRESS.style.width = ((this.completedFrames / this.totalFrames) * 100).toString() + "%";
       this.VIDEO_TIMELINE_INPUT.max = this.totalFrames.toString();
     }
   }
@@ -231,9 +188,7 @@ export default class VideoController extends TimelineVizController {
     if (this.hasData()) {
       // Set time if locked
       if (this.locked) {
-        this.VIDEO_TIMELINE_INPUT.value = (
-          Math.floor((time - this.lockedStartLog) * this.fps!) + 1
-        ).toString();
+        this.VIDEO_TIMELINE_INPUT.value = (Math.floor((time - this.lockedStartLog) * this.fps!) + 1).toString();
       }
 
       // Set time if playing

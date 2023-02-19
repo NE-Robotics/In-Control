@@ -56,31 +56,23 @@ export default abstract class TimelineVizController implements TabController {
     this.listConfig = listConfig;
     this.visualizer = visualizer;
 
-    this.TIMELINE_INPUT = content.getElementsByClassName(
-      "timeline-viz-timeline-slider"
-    )[0] as HTMLInputElement;
+    this.TIMELINE_INPUT = content.getElementsByClassName("timeline-viz-timeline-slider")[0] as HTMLInputElement;
     this.TIMELINE_MARKER_CONTAINER = content.getElementsByClassName(
       "timeline-viz-timeline-marker-container"
     )[0] as HTMLElement;
-    this.DRAG_HIGHLIGHT = content.getElementsByClassName(
-      "timeline-viz-drag-highlight"
-    )[0] as HTMLElement;
-    this.CONFIG_TABLE = content.getElementsByClassName(
-      "timeline-viz-config"
-    )[0] as HTMLElement;
+    this.DRAG_HIGHLIGHT = content.getElementsByClassName("timeline-viz-drag-highlight")[0] as HTMLElement;
+    this.CONFIG_TABLE = content.getElementsByClassName("timeline-viz-config")[0] as HTMLElement;
 
     // Timeline controls
     this.TIMELINE_INPUT.addEventListener("input", () => {
       window.selection.setSelectedTime(Number(this.TIMELINE_INPUT.value));
     });
-    content
-      .getElementsByClassName("timeline-viz-popup-button")[0]
-      .addEventListener("click", () => {
-        window.sendMainMessage("create-satellite", {
-          uuid: this.UUID,
-          type: this.type,
-        });
+    content.getElementsByClassName("timeline-viz-popup-button")[0].addEventListener("click", () => {
+      window.sendMainMessage("create-satellite", {
+        uuid: this.UUID,
+        type: this.type
       });
+    });
 
     // Drag handling
     window.addEventListener("drag-update", (event) => {
@@ -114,7 +106,7 @@ export default abstract class TimelineVizController implements TabController {
       type: type,
       fields: this.fields,
       listFields: this.listFields,
-      options: this.options,
+      options: this.options
     };
   }
 
@@ -131,60 +123,47 @@ export default abstract class TimelineVizController implements TabController {
     if (this.CONTENT.hidden) return;
 
     this.DRAG_HIGHLIGHT.hidden = true;
-    [Object.values(this.fieldConfig), Object.values(this.listConfig)].forEach(
-      (configList, configIndex) => {
-        configList.forEach((field, index) => {
-          let rect = field.element.getBoundingClientRect();
-          let active =
-            dragData.x > rect.left &&
-            dragData.x < rect.right &&
-            dragData.y > rect.top &&
-            dragData.y < rect.bottom;
-          let rawType = window.log.getType(dragData.data.fields[0]);
-          let type: LoggableType | "mechanism" =
-            rawType === undefined ? "mechanism" : rawType!;
-          let validType = field.types.includes(type);
+    [Object.values(this.fieldConfig), Object.values(this.listConfig)].forEach((configList, configIndex) => {
+      configList.forEach((field, index) => {
+        let rect = field.element.getBoundingClientRect();
+        let active =
+          dragData.x > rect.left && dragData.x < rect.right && dragData.y > rect.top && dragData.y < rect.bottom;
+        let rawType = window.log.getType(dragData.data.fields[0]);
+        let type: LoggableType | "mechanism" = rawType === undefined ? "mechanism" : rawType!;
+        let validType = field.types.includes(type);
 
-          if (active && validType) {
-            if (dragData.end) {
-              let key = dragData.data.fields[0];
-              if (configIndex == 0) {
-                // Single field
-                this.fields[index] = key;
-              } else {
-                // List field
-                let selectedOptions = this.listFields[index].map(
-                  (field) => field.type
-                );
-                let typeIndex = this.listConfig[index].types.indexOf(type);
-                let availableOptions = this.listConfig[index].options[
-                  typeIndex
-                ].filter((option) => !selectedOptions.includes(option));
-                if (availableOptions.length == 0)
-                  availableOptions.push(
-                    this.listConfig[index].options[typeIndex][0]
-                  );
-                this.listFields[index].push({
-                  type: availableOptions[0],
-                  key: key,
-                  fieldTypeIndex: typeIndex,
-                });
-              }
-              this.updateFields();
+        if (active && validType) {
+          if (dragData.end) {
+            let key = dragData.data.fields[0];
+            if (configIndex == 0) {
+              // Single field
+              this.fields[index] = key;
             } else {
-              let contentRect = this.CONTENT.getBoundingClientRect();
-              this.DRAG_HIGHLIGHT.style.left =
-                (rect.left - contentRect.left).toString() + "px";
-              this.DRAG_HIGHLIGHT.style.top =
-                (rect.top - contentRect.top).toString() + "px";
-              this.DRAG_HIGHLIGHT.style.width = rect.width.toString() + "px";
-              this.DRAG_HIGHLIGHT.style.height = rect.height.toString() + "px";
-              this.DRAG_HIGHLIGHT.hidden = false;
+              // List field
+              let selectedOptions = this.listFields[index].map((field) => field.type);
+              let typeIndex = this.listConfig[index].types.indexOf(type);
+              let availableOptions = this.listConfig[index].options[typeIndex].filter(
+                (option) => !selectedOptions.includes(option)
+              );
+              if (availableOptions.length == 0) availableOptions.push(this.listConfig[index].options[typeIndex][0]);
+              this.listFields[index].push({
+                type: availableOptions[0],
+                key: key,
+                fieldTypeIndex: typeIndex
+              });
             }
+            this.updateFields();
+          } else {
+            let contentRect = this.CONTENT.getBoundingClientRect();
+            this.DRAG_HIGHLIGHT.style.left = (rect.left - contentRect.left).toString() + "px";
+            this.DRAG_HIGHLIGHT.style.top = (rect.top - contentRect.top).toString() + "px";
+            this.DRAG_HIGHLIGHT.style.width = rect.width.toString() + "px";
+            this.DRAG_HIGHLIGHT.style.height = rect.height.toString() + "px";
+            this.DRAG_HIGHLIGHT.hidden = false;
           }
-        });
-      }
-    );
+        }
+      });
+    });
   }
 
   /** Checks if a key or its children are available. */
@@ -221,10 +200,7 @@ export default abstract class TimelineVizController implements TabController {
 
     // Exit if list fields and available fields have not changed
     let listFieldsStr = JSON.stringify(this.listFields);
-    if (
-      arraysEqual(allKeys, this.lastAllKeys) &&
-      listFieldsStr == this.lastListFieldsStr
-    ) {
+    if (arraysEqual(allKeys, this.lastAllKeys) && listFieldsStr == this.lastListFieldsStr) {
       return;
     }
     this.lastAllKeys = allKeys;
@@ -274,9 +250,7 @@ export default abstract class TimelineVizController implements TabController {
         let fieldNameElement = document.createElement("span");
         fieldNameElement.classList.add("field-name");
         fieldNameElement.innerText = field.key;
-        fieldNameElement.style.textDecoration = this.keyAvailable(field.key)
-          ? ""
-          : "line-through";
+        fieldNameElement.style.textDecoration = this.keyAvailable(field.key) ? "" : "line-through";
         itemElement.appendChild(fieldNameElement);
       });
     });
@@ -302,10 +276,7 @@ export default abstract class TimelineVizController implements TabController {
     let selectionMode = window.selection.getMode();
     let hoveredTime = window.selection.getHoveredTime();
     let selectedTime = window.selection.getSelectedTime();
-    if (
-      selectionMode == SelectionMode.Playback ||
-      selectionMode == SelectionMode.Locked
-    ) {
+    if (selectionMode == SelectionMode.Playback || selectionMode == SelectionMode.Locked) {
       time = selectedTime as number;
     } else if (hoveredTime !== null) {
       time = hoveredTime;
@@ -317,9 +288,7 @@ export default abstract class TimelineVizController implements TabController {
 
     // Render timeline sections
     while (this.TIMELINE_MARKER_CONTAINER.firstChild) {
-      this.TIMELINE_MARKER_CONTAINER.removeChild(
-        this.TIMELINE_MARKER_CONTAINER.firstChild
-      );
+      this.TIMELINE_MARKER_CONTAINER.removeChild(this.TIMELINE_MARKER_CONTAINER.firstChild);
     }
     let isLocked = window.selection.getMode() == SelectionMode.Locked;
     if (isLocked) range[1] = selectedTime as number;
@@ -333,16 +302,9 @@ export default abstract class TimelineVizController implements TabController {
         if (enabledData.values[i]) {
           let div = document.createElement("div");
           this.TIMELINE_MARKER_CONTAINER.appendChild(div);
-          let leftPercent =
-            ((enabledData.timestamps[i] - range[0]) / (range[1] - range[0])) *
-            100;
-          let nextTime =
-            i == enabledData.values.length - 1
-              ? range[1]
-              : enabledData.timestamps[i + 1];
-          let widthPercent =
-            ((nextTime - enabledData.timestamps[i]) / (range[1] - range[0])) *
-            100;
+          let leftPercent = ((enabledData.timestamps[i] - range[0]) / (range[1] - range[0])) * 100;
+          let nextTime = i == enabledData.values.length - 1 ? range[1] : enabledData.timestamps[i + 1];
+          let widthPercent = ((nextTime - enabledData.timestamps[i]) / (range[1] - range[0])) * 100;
           div.style.left = leftPercent.toString() + "%";
           div.style.width = widthPercent.toString() + "%";
         }
@@ -370,7 +332,7 @@ export default abstract class TimelineVizController implements TabController {
     window.sendMainMessage("update-satellite", {
       uuid: this.UUID,
       command: command,
-      title: this.title,
+      title: this.title
     });
   }
 

@@ -2,11 +2,7 @@ import * as THREE from "three";
 import { MeshStandardMaterial } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import {
-  Config3dField,
-  Config3dRobot,
-  Config3d_Rotation,
-} from "../FRC/FRCData";
+import { Config3dField, Config3dRobot, Config3d_Rotation } from "../FRC/FRCData";
 import { AprilTag, Pose3d, rotation3dToQuaternion } from "../utils/geometry";
 import { MechanismState } from "../log/LogUtil";
 import { convert } from "../utils/units";
@@ -26,22 +22,22 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   private WPILIB_ROTATION = getQuaternionFromRotSeq([
     {
       axis: "x",
-      degrees: -90,
+      degrees: -90
     },
     {
       axis: "y",
-      degrees: 180,
-    },
+      degrees: 180
+    }
   ]);
   private CAMERA_ROTATION = getQuaternionFromRotSeq([
     {
       axis: "z",
-      degrees: -90,
+      degrees: -90
     },
     {
       axis: "y",
-      degrees: -90,
-    },
+      degrees: -90
+    }
   ]);
 
   private content: HTMLElement;
@@ -91,11 +87,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   private lastFieldTitle: string = "";
   private lastRobotTitle: string = "";
 
-  constructor(
-    content: HTMLElement,
-    canvas: HTMLCanvasElement,
-    alert: HTMLElement
-  ) {
+  constructor(content: HTMLElement, canvas: HTMLCanvasElement, alert: HTMLElement) {
     this.content = content;
     this.canvas = canvas;
     this.alert = alert;
@@ -113,16 +105,11 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       if (startPx && event.x == startPx[0] && event.y == startPx[1]) {
         if (!this.command) return;
         let robotTitle = this.command.options.robot;
-        let robotConfig = window.frcData?.robots.find(
-          (robotData) => robotData.title === robotTitle
-        );
+        let robotConfig = window.frcData?.robots.find((robotData) => robotData.title === robotTitle);
         if (robotConfig == undefined) return;
         window.sendMainMessage("ask-3d-camera", {
           options: robotConfig.cameras.map((camera) => camera.name),
-          selectedIndex:
-            this.cameraIndex >= robotConfig.cameras.length
-              ? -1
-              : this.cameraIndex,
+          selectedIndex: this.cameraIndex >= robotConfig.cameras.length ? -1 : this.cameraIndex
         });
       }
       startPx = null;
@@ -176,10 +163,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       this.fixedCameraObj = new THREE.Object3D();
       this.fixedCameraGroup = new THREE.Group().add(this.fixedCameraObj);
       this.fixedCameraOverrideObj = new THREE.Object3D();
-      this.wpilibFieldCoordinateGroup.add(
-        this.fixedCameraGroup,
-        this.fixedCameraOverrideObj
-      );
+      this.wpilibFieldCoordinateGroup.add(this.fixedCameraGroup, this.fixedCameraOverrideObj);
     }
 
     // Set up object sets
@@ -238,23 +222,18 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     const loader = new THREE.TextureLoader();
     {
       let coneTextureBlue = loader.load("../www/textures/cone-blue.png");
-      let coneTextureBlueBase = loader.load(
-        "../www/textures/cone-blue-base.png"
-      );
+      let coneTextureBlueBase = loader.load("../www/textures/cone-blue-base.png");
       coneTextureBlue.offset.set(0.25, 0);
 
-      let coneMesh = new THREE.Mesh(
-        new THREE.ConeGeometry(0.06, 0.25, 16, 32),
-        [
-          new THREE.MeshPhongMaterial({
-            map: coneTextureBlue,
-          }),
-          new THREE.MeshPhongMaterial(),
-          new THREE.MeshPhongMaterial({
-            map: coneTextureBlueBase,
-          }),
-        ]
-      );
+      let coneMesh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.25, 16, 32), [
+        new THREE.MeshPhongMaterial({
+          map: coneTextureBlue
+        }),
+        new THREE.MeshPhongMaterial(),
+        new THREE.MeshPhongMaterial({
+          map: coneTextureBlueBase
+        })
+      ]);
       coneMesh.rotateZ(-Math.PI / 2);
       coneMesh.rotateY(-Math.PI / 2);
 
@@ -268,23 +247,18 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     }
     {
       let coneTextureYellow = loader.load("../www/textures/cone-yellow.png");
-      let coneTextureYellowBase = loader.load(
-        "../www/textures/cone-yellow-base.png"
-      );
+      let coneTextureYellowBase = loader.load("../www/textures/cone-yellow-base.png");
       coneTextureYellow.offset.set(0.25, 0);
 
-      let coneMesh = new THREE.Mesh(
-        new THREE.ConeGeometry(0.06, 0.25, 16, 32),
-        [
-          new THREE.MeshPhongMaterial({
-            map: coneTextureYellow,
-          }),
-          new THREE.MeshPhongMaterial(),
-          new THREE.MeshPhongMaterial({
-            map: coneTextureYellowBase,
-          }),
-        ]
-      );
+      let coneMesh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.25, 16, 32), [
+        new THREE.MeshPhongMaterial({
+          map: coneTextureYellow
+        }),
+        new THREE.MeshPhongMaterial(),
+        new THREE.MeshPhongMaterial({
+          map: coneTextureYellowBase
+        })
+      ]);
       coneMesh.rotateZ(-Math.PI / 2);
       coneMesh.rotateY(-Math.PI / 2);
 
@@ -299,27 +273,19 @@ export default class ThreeDimensionVisualizer implements Visualizer {
 
     // Create AprilTag models
     [null, ...Array(30).keys()].forEach((id) => {
-      let aprilTagTexture = loader.load(
-        "../www/textures/apriltag/" +
-          (id === null ? "smile" : id.toString()) +
-          ".png"
-      );
+      let aprilTagTexture = loader.load("../www/textures/apriltag/" + (id === null ? "smile" : id.toString()) + ".png");
       aprilTagTexture.minFilter = THREE.NearestFilter;
       aprilTagTexture.magFilter = THREE.NearestFilter;
       let whiteMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
       let mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(
-          0.02,
-          convert(8, "inches", "meters"),
-          convert(8, "inches", "meters")
-        ),
+        new THREE.BoxGeometry(0.02, convert(8, "inches", "meters"), convert(8, "inches", "meters")),
         [
           new THREE.MeshPhongMaterial({ map: aprilTagTexture }),
           whiteMaterial,
           whiteMaterial,
           whiteMaterial,
           whiteMaterial,
-          whiteMaterial,
+          whiteMaterial
         ]
       );
       mesh.rotateX(Math.PI / 2);
@@ -382,10 +348,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   private renderFrame() {
     // Check for new render mode
     if (window.preferences) {
-      if (
-        window.preferences.threeDimensionMode != this.lastPrefsMode ||
-        window.isBattery != this.lastIsBattery
-      ) {
+      if (window.preferences.threeDimensionMode != this.lastPrefsMode || window.isBattery != this.lastIsBattery) {
         this.shouldRender = true;
         this.lastPrefsMode = window.preferences.threeDimensionMode;
         this.lastIsBattery = window.isBattery;
@@ -422,10 +385,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       window.preferences?.threeDimensionMode == "efficiency" ||
       (window.preferences?.threeDimensionMode == "auto" && window.isBattery);
     let now = new Date().getTime();
-    if (
-      isEfficiency &&
-      now - this.lastFrameTime < 1000 / this.EFFICIENCY_MAX_FPS
-    ) {
+    if (isEfficiency && now - this.lastFrameTime < 1000 / this.EFFICIENCY_MAX_FPS) {
       return; // Continue trying to render
     }
 
@@ -447,19 +407,15 @@ export default class ThreeDimensionVisualizer implements Visualizer {
         path: "",
         rotations: [],
         widthInches: 0.0,
-        heightInches: 0.0,
+        heightInches: 0.0
       };
     } else {
-      let fieldConfigTmp = window.frcData?.field3ds.find(
-        (fieldData) => fieldData.title === fieldTitle
-      );
+      let fieldConfigTmp = window.frcData?.field3ds.find((fieldData) => fieldData.title === fieldTitle);
       if (fieldConfigTmp == undefined) return;
       fieldConfig = fieldConfigTmp;
     }
     {
-      let robotConfigTmp = window.frcData?.robots.find(
-        (robotData) => robotData.title === robotTitle
-      );
+      let robotConfigTmp = window.frcData?.robots.find((robotData) => robotData.title === robotTitle);
       if (robotConfigTmp == undefined) return;
       robotConfig = robotConfigTmp;
     }
@@ -484,7 +440,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
             new THREE.Vector3(this.AXES_FIELD_LENGTH, 0, 0),
             new THREE.Vector3(this.AXES_FIELD_LENGTH, this.AXES_FIELD_WIDTH, 0),
             new THREE.Vector3(0, this.AXES_FIELD_WIDTH, 0),
-            new THREE.Vector3(),
+            new THREE.Vector3()
           ]),
           new THREE.LineBasicMaterial({ color: 0x444444 })
         );
@@ -509,9 +465,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
               material.roughness = 1;
             }
           });
-          this.field.rotation.setFromQuaternion(
-            getQuaternionFromRotSeq(fieldConfig.rotations)
-          );
+          this.field.rotation.setFromQuaternion(getQuaternionFromRotSeq(fieldConfig.rotations));
           this.wpilibCoordinateGroup.add(this.field);
 
           // Render new frame
@@ -532,12 +486,9 @@ export default class ThreeDimensionVisualizer implements Visualizer {
         ...robotConfig.components.map(
           (_, index) =>
             new Promise((resolve) => {
-              loader.load(
-                robotConfig.path.slice(0, -4) + "_" + index.toString() + ".glb",
-                resolve
-              );
+              loader.load(robotConfig.path.slice(0, -4) + "_" + index.toString() + ".glb", resolve);
             })
-        ),
+        )
       ]).then((gltfs) => {
         let gltfScenes = (gltfs as GLTF[]).map((gltf) => gltf.scene);
         if (robotConfig == undefined) return;
@@ -573,15 +524,12 @@ export default class ThreeDimensionVisualizer implements Visualizer {
               } else {
                 ghostGroup.add(scene);
               }
-              scene.rotation.setFromQuaternion(
-                getQuaternionFromRotSeq(robotConfig.rotations)
-              );
+              scene.rotation.setFromQuaternion(getQuaternionFromRotSeq(robotConfig.rotations));
               scene.position.set(...robotConfig.position);
             } else {
               // Component model, add name and store in group
               let componentGroup = new THREE.Group();
-              componentGroup.name =
-                "AdvantageScope_Component" + (index - 1).toString();
+              componentGroup.name = "AdvantageScope_Component" + (index - 1).toString();
               componentGroup.add(scene);
               if (isOriginal) {
                 robotGroup.add(componentGroup);
@@ -612,15 +560,10 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     // Update field coordinates
     if (fieldConfig) {
       let isBlue = !this.command.allianceRedOrigin;
-      this.wpilibFieldCoordinateGroup.setRotationFromAxisAngle(
-        new THREE.Vector3(0, 0, 1),
-        isBlue ? 0 : Math.PI
-      );
+      this.wpilibFieldCoordinateGroup.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), isBlue ? 0 : Math.PI);
       this.wpilibFieldCoordinateGroup.position.set(
-        convert(fieldConfig.widthInches / 2, "inches", "meters") *
-          (isBlue ? -1 : 1),
-        convert(fieldConfig.heightInches / 2, "inches", "meters") *
-          (isBlue ? -1 : 1),
+        convert(fieldConfig.widthInches / 2, "inches", "meters") * (isBlue ? -1 : 1),
+        convert(fieldConfig.heightInches / 2, "inches", "meters") * (isBlue ? -1 : 1),
         0
       );
     }
@@ -632,140 +575,98 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     // Update robot components
     if (robotConfig && robotConfig.components.length > 0) {
       [true, false].forEach((isOriginal) => {
-        (isOriginal ? this.robotSet : this.ghostSet)
-          .getChildren()
-          .forEach((childRobot) => {
-            for (let i = 0; i < robotConfig.components.length; i++) {
-              let componentGroup = childRobot.getObjectByName(
-                "AdvantageScope_Component" + i.toString()
+        (isOriginal ? this.robotSet : this.ghostSet).getChildren().forEach((childRobot) => {
+          for (let i = 0; i < robotConfig.components.length; i++) {
+            let componentGroup = childRobot.getObjectByName("AdvantageScope_Component" + i.toString());
+            if (componentGroup === undefined) continue;
+            let componentModel = componentGroup?.children[0];
+
+            // Use component data or reset to default position
+            if (
+              i < (isOriginal ? this.command.poses.componentRobot.length : this.command.poses.componentGhost.length)
+            ) {
+              let componentPose = (
+                isOriginal ? this.command.poses.componentRobot[i] : this.command.poses.componentGhost[i]
+              ) as Pose3d;
+
+              // The group has the user's pose
+              componentGroup?.rotation.setFromQuaternion(rotation3dToQuaternion(componentPose.rotation));
+              componentGroup?.position.set(...componentPose.translation);
+
+              // The model should use the component's zeroed pose offset
+              componentModel?.rotation.setFromQuaternion(
+                getQuaternionFromRotSeq(robotConfig.components[i].zeroedRotations)
               );
-              if (componentGroup === undefined) continue;
-              let componentModel = componentGroup?.children[0];
+              componentModel?.position.set(...robotConfig.components[i].zeroedPosition);
+            } else {
+              // The group has the user's pose, reset to origin
+              componentGroup?.rotation.set(0, 0, 0);
+              componentGroup?.position.set(0, 0, 0);
 
-              // Use component data or reset to default position
-              if (
-                i <
-                (isOriginal
-                  ? this.command.poses.componentRobot.length
-                  : this.command.poses.componentGhost.length)
-              ) {
-                let componentPose = (
-                  isOriginal
-                    ? this.command.poses.componentRobot[i]
-                    : this.command.poses.componentGhost[i]
-                ) as Pose3d;
-
-                // The group has the user's pose
-                componentGroup?.rotation.setFromQuaternion(
-                  rotation3dToQuaternion(componentPose.rotation)
-                );
-                componentGroup?.position.set(...componentPose.translation);
-
-                // The model should use the component's zeroed pose offset
-                componentModel?.rotation.setFromQuaternion(
-                  getQuaternionFromRotSeq(
-                    robotConfig.components[i].zeroedRotations
-                  )
-                );
-                componentModel?.position.set(
-                  ...robotConfig.components[i].zeroedPosition
-                );
-              } else {
-                // The group has the user's pose, reset to origin
-                componentGroup?.rotation.set(0, 0, 0);
-                componentGroup?.position.set(0, 0, 0);
-
-                // The model should use the robot's default pose offset
-                componentModel?.rotation.setFromQuaternion(
-                  getQuaternionFromRotSeq(robotConfig.rotations)
-                );
-                componentModel?.position.set(...robotConfig.position);
-              }
+              // The model should use the robot's default pose offset
+              componentModel?.rotation.setFromQuaternion(getQuaternionFromRotSeq(robotConfig.rotations));
+              componentModel?.position.set(...robotConfig.position);
             }
-          });
+          }
+        });
       });
     }
 
     // Update mechanisms
     [true, false].forEach((isOriginal) => {
-      (isOriginal ? this.robotSet : this.ghostSet)
-        .getChildren()
-        .forEach((childRobot) => {
-          let mechanismRoot = childRobot.getObjectByName(
-            "AdvantageScope_MechanismRoot"
-          );
-          if (mechanismRoot === undefined) return;
-          let state: MechanismState | null = isOriginal
-            ? this.command.poses.mechanismRobot
-            : this.command.poses.mechanismGhost;
+      (isOriginal ? this.robotSet : this.ghostSet).getChildren().forEach((childRobot) => {
+        let mechanismRoot = childRobot.getObjectByName("AdvantageScope_MechanismRoot");
+        if (mechanismRoot === undefined) return;
+        let state: MechanismState | null = isOriginal
+          ? this.command.poses.mechanismRobot
+          : this.command.poses.mechanismGhost;
 
-          if (state === null) {
-            // No mechanism data, remove all children
-            while (mechanismRoot.children.length > 0) {
-              mechanismRoot.remove(mechanismRoot.children[0]);
-            }
-          } else {
-            // Remove extra children
-            while (mechanismRoot.children.length > state.lines.length) {
-              mechanismRoot.remove(mechanismRoot.children[0]);
-            }
+        if (state === null) {
+          // No mechanism data, remove all children
+          while (mechanismRoot.children.length > 0) {
+            mechanismRoot.remove(mechanismRoot.children[0]);
+          }
+        } else {
+          // Remove extra children
+          while (mechanismRoot.children.length > state.lines.length) {
+            mechanismRoot.remove(mechanismRoot.children[0]);
+          }
 
-            // Add new children
-            while (mechanismRoot.children.length < state.lines.length) {
-              const lineObject = new THREE.Mesh(
-                new THREE.BoxGeometry(0.0, 0.0, 0.0),
-                isOriginal ? new THREE.MeshPhongMaterial() : this.ghostMaterial
-              );
-              const lineGroup = new THREE.Group().add(lineObject);
-              mechanismRoot.add(lineGroup);
-            }
+          // Add new children
+          while (mechanismRoot.children.length < state.lines.length) {
+            const lineObject = new THREE.Mesh(
+              new THREE.BoxGeometry(0.0, 0.0, 0.0),
+              isOriginal ? new THREE.MeshPhongMaterial() : this.ghostMaterial
+            );
+            const lineGroup = new THREE.Group().add(lineObject);
+            mechanismRoot.add(lineGroup);
+          }
 
-            // Update children
-            for (let i = 0; i < mechanismRoot.children.length; i++) {
-              const line = state.lines[i];
-              const lineGroup = mechanismRoot.children[i];
-              const lineObject = lineGroup.children[0] as THREE.Mesh<
-                THREE.BoxGeometry,
-                THREE.MeshPhongMaterial
-              >;
+          // Update children
+          for (let i = 0; i < mechanismRoot.children.length; i++) {
+            const line = state.lines[i];
+            const lineGroup = mechanismRoot.children[i];
+            const lineObject = lineGroup.children[0] as THREE.Mesh<THREE.BoxGeometry, THREE.MeshPhongMaterial>;
 
-              const length = Math.hypot(
-                line.end[1] - line.start[1],
-                line.end[0] - line.start[0]
-              );
-              const angle = Math.atan2(
-                line.end[1] - line.start[1],
-                line.end[0] - line.start[0]
-              );
+            const length = Math.hypot(line.end[1] - line.start[1], line.end[0] - line.start[0]);
+            const angle = Math.atan2(line.end[1] - line.start[1], line.end[0] - line.start[0]);
 
-              lineGroup.position.set(
-                line.start[0] - state!.dimensions[0] / 2,
-                0.0,
-                line.start[1]
-              );
-              lineGroup.rotation.set(0.0, -angle, 0.0);
-              lineObject.position.set(length / 2, 0.0, 0.0);
-              lineObject.geometry = new THREE.BoxGeometry(
-                length,
-                line.weight * 0.01,
-                line.weight * 0.01
-              );
-              if (isOriginal) {
-                lineObject.material.color = new THREE.Color(line.color);
-              }
+            lineGroup.position.set(line.start[0] - state!.dimensions[0] / 2, 0.0, line.start[1]);
+            lineGroup.rotation.set(0.0, -angle, 0.0);
+            lineObject.position.set(length / 2, 0.0, 0.0);
+            lineObject.geometry = new THREE.BoxGeometry(length, line.weight * 0.01, line.weight * 0.01);
+            if (isOriginal) {
+              lineObject.material.color = new THREE.Color(line.color);
             }
           }
-        });
+        }
+      });
     });
 
     // Update AprilTag poses
     let aprilTags: AprilTag[] = this.command.poses.aprilTag;
     [null, ...Array(30).keys()].forEach((id) => {
-      this.aprilTagSets
-        .get(id)
-        ?.setPoses(
-          aprilTags.filter((tag) => tag.id === id).map((tag) => tag.pose)
-        );
+      this.aprilTagSets.get(id)?.setPoses(aprilTags.filter((tag) => tag.id === id).map((tag) => tag.pose));
     });
 
     // Update vision target lines
@@ -777,16 +678,12 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       }
     } else {
       let material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
-      while (
-        this.visionTargets.length > this.command.poses.visionTarget.length
-      ) {
+      while (this.visionTargets.length > this.command.poses.visionTarget.length) {
         // Remove extra lines
         this.wpilibFieldCoordinateGroup.remove(this.visionTargets[0]);
         this.visionTargets.shift();
       }
-      while (
-        this.visionTargets.length < this.command.poses.visionTarget.length
-      ) {
+      while (this.visionTargets.length < this.command.poses.visionTarget.length) {
         // Add new lines
         let line = new THREE.Line(new THREE.BufferGeometry(), material);
         this.visionTargets.push(line);
@@ -795,10 +692,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       for (let i = 0; i < this.visionTargets.length; i++) {
         // Update poses
         this.visionTargets[i].geometry.setFromPoints([
-          new THREE.Vector3(...this.command.poses.robot[0].translation).add(
-            new THREE.Vector3(0, 0, 0.75)
-          ),
-          new THREE.Vector3(...this.command.poses.visionTarget[i].translation),
+          new THREE.Vector3(...this.command.poses.robot[0].translation).add(new THREE.Vector3(0, 0, 0.75)),
+          new THREE.Vector3(...this.command.poses.visionTarget[i].translation)
         ]);
       }
     }
@@ -812,19 +707,14 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       }
       while (this.trajectories.length < this.command.poses.trajectory.length) {
         // Add new lines
-        let line = new THREE.Line(
-          new THREE.BufferGeometry(),
-          new THREE.LineBasicMaterial({ color: 0xffa500 })
-        );
+        let line = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: 0xffa500 }));
         this.trajectories.push(line);
         this.wpilibFieldCoordinateGroup.add(line);
       }
       for (let i = 0; i < this.trajectories.length; i++) {
         // Update poses
         this.trajectories[i].geometry.setFromPoints(
-          this.command.poses.trajectory[i].map(
-            (pose: Pose3d) => new THREE.Vector3(...pose.translation)
-          )
+          this.command.poses.trajectory[i].map((pose: Pose3d) => new THREE.Vector3(...pose.translation))
         );
       }
     }
@@ -859,25 +749,17 @@ export default class ThreeDimensionVisualizer implements Visualizer {
         if (this.cameraIndex == -1) {
           // Reset to default origin
           this.wpilibCoordinateGroup.position.set(0, 0, 0);
-          this.wpilibCoordinateGroup.rotation.setFromQuaternion(
-            this.WPILIB_ROTATION
-          );
+          this.wpilibCoordinateGroup.rotation.setFromQuaternion(this.WPILIB_ROTATION);
         } else if (this.command.poses.robot.length > 0) {
           // Shift based on robot location
           this.wpilibCoordinateGroup.position.set(0, 0, 0);
-          this.wpilibCoordinateGroup.rotation.setFromQuaternion(
-            new THREE.Quaternion()
-          );
+          this.wpilibCoordinateGroup.rotation.setFromQuaternion(new THREE.Quaternion());
           let robotObj = this.robotSet.getChildren()[0];
           let position = robotObj.getWorldPosition(new THREE.Vector3());
-          let rotation = robotObj
-            .getWorldQuaternion(new THREE.Quaternion())
-            .multiply(this.WPILIB_ROTATION);
+          let rotation = robotObj.getWorldQuaternion(new THREE.Quaternion()).multiply(this.WPILIB_ROTATION);
           position.negate();
           rotation.invert();
-          this.wpilibCoordinateGroup.position.copy(
-            position.clone().applyQuaternion(rotation)
-          );
+          this.wpilibCoordinateGroup.position.copy(position.clone().applyQuaternion(rotation));
           this.wpilibCoordinateGroup.rotation.setFromQuaternion(rotation);
         }
         if (this.cameraIndex != this.lastCameraIndex) {
@@ -900,32 +782,22 @@ export default class ThreeDimensionVisualizer implements Visualizer {
             let cameraPose: Pose3d = this.command.poses.cameraOverride[0];
             this.fixedCameraOverrideObj.position.set(...cameraPose.translation);
             this.fixedCameraOverrideObj.rotation.setFromQuaternion(
-              rotation3dToQuaternion(cameraPose.rotation).multiply(
-                this.CAMERA_ROTATION
-              )
+              rotation3dToQuaternion(cameraPose.rotation).multiply(this.CAMERA_ROTATION)
             );
             referenceObj = this.fixedCameraOverrideObj;
           } else if (this.command.poses.robot.length > 0) {
             let robotPose: Pose3d = this.command.poses.robot[0];
             this.fixedCameraGroup.position.set(...robotPose.translation);
-            this.fixedCameraGroup.rotation.setFromQuaternion(
-              rotation3dToQuaternion(robotPose.rotation)
-            );
+            this.fixedCameraGroup.rotation.setFromQuaternion(rotation3dToQuaternion(robotPose.rotation));
             this.fixedCameraObj.position.set(...cameraConfig.position);
             this.fixedCameraObj.rotation.setFromQuaternion(
-              getQuaternionFromRotSeq(cameraConfig.rotations).multiply(
-                this.CAMERA_ROTATION
-              )
+              getQuaternionFromRotSeq(cameraConfig.rotations).multiply(this.CAMERA_ROTATION)
             );
             referenceObj = this.fixedCameraObj;
           }
           if (referenceObj) {
-            this.camera.position.copy(
-              referenceObj.getWorldPosition(new THREE.Vector3())
-            );
-            this.camera.rotation.setFromQuaternion(
-              referenceObj.getWorldQuaternion(new THREE.Quaternion())
-            );
+            this.camera.position.copy(referenceObj.getWorldPosition(new THREE.Vector3()));
+            this.camera.rotation.setFromQuaternion(referenceObj.getWorldQuaternion(new THREE.Quaternion()));
           }
         }
       }
@@ -937,12 +809,9 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       } else if (this.cameraIndex == -1) {
         this.alert.hidden = true;
       } else {
-        this.alert.hidden =
-          this.command.poses.robot.length > 0 ||
-          this.command.poses.cameraOverride.length > 0;
+        this.alert.hidden = this.command.poses.robot.length > 0 || this.command.poses.cameraOverride.length > 0;
         if (robotConfig) {
-          this.alertCamera.innerText =
-            robotConfig.cameras[this.cameraIndex].name;
+          this.alertCamera.innerText = robotConfig.cameras[this.cameraIndex].name;
         } else {
           this.alertCamera.innerText = "???";
         }
@@ -962,17 +831,12 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     const canvas = this.renderer.domElement;
     const clientWidth = canvas.clientWidth;
     const clientHeight = canvas.clientHeight;
-    if (
-      canvas.width / devicePixelRatio != clientWidth ||
-      canvas.height / devicePixelRatio != clientHeight
-    ) {
+    if (canvas.width / devicePixelRatio != clientWidth || canvas.height / devicePixelRatio != clientHeight) {
       this.renderer.setSize(clientWidth, clientHeight, false);
       this.camera.aspect = clientWidth / clientHeight;
       this.camera.updateProjectionMatrix();
     }
-    this.scene.background = isDark
-      ? new THREE.Color("#222222")
-      : new THREE.Color("#ffffff");
+    this.scene.background = isDark ? new THREE.Color("#222222") : new THREE.Color("#ffffff");
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.render(this.scene, this.camera);
   }
@@ -1029,9 +893,7 @@ class ObjectSet {
     // Update poses
     for (let i = 0; i < this.poses.length; i++) {
       this.children[i].position.set(...poses[i].translation);
-      this.children[i].rotation.setFromQuaternion(
-        rotation3dToQuaternion(poses[i].rotation)
-      );
+      this.children[i].rotation.setFromQuaternion(rotation3dToQuaternion(poses[i].rotation));
     }
   }
 
@@ -1042,9 +904,7 @@ class ObjectSet {
 }
 
 /** Converts a rotation sequence to a quaternion. */
-function getQuaternionFromRotSeq(
-  rotations: Config3d_Rotation[]
-): THREE.Quaternion {
+function getQuaternionFromRotSeq(rotations: Config3d_Rotation[]): THREE.Quaternion {
   let quaternion = new THREE.Quaternion();
   rotations.forEach((rotation) => {
     let axis = new THREE.Vector3(0, 0, 0);
@@ -1052,10 +912,7 @@ function getQuaternionFromRotSeq(
     if (rotation.axis == "y") axis.setY(1);
     if (rotation.axis == "z") axis.setZ(1);
     quaternion.premultiply(
-      new THREE.Quaternion().setFromAxisAngle(
-        axis,
-        convert(rotation.degrees, "degrees", "radians")
-      )
+      new THREE.Quaternion().setFromAxisAngle(axis, convert(rotation.degrees, "degrees", "radians"))
     );
   });
   return quaternion;

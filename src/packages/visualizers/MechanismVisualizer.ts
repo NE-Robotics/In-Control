@@ -18,17 +18,12 @@ export default class MechanismVisualizer implements Visualizer {
     // Update svg size and background
     let renderWidth = 0;
     let renderHeight = 0;
-    if (
-      this.CONTAINER.clientWidth / this.CONTAINER.clientHeight >
-      command.dimensions[0] / command.dimensions[1]
-    ) {
+    if (this.CONTAINER.clientWidth / this.CONTAINER.clientHeight > command.dimensions[0] / command.dimensions[1]) {
       renderHeight = this.CONTAINER.clientHeight;
-      renderWidth =
-        renderHeight * (command.dimensions[0] / command.dimensions[1]);
+      renderWidth = renderHeight * (command.dimensions[0] / command.dimensions[1]);
     } else {
       renderWidth = this.CONTAINER.clientWidth;
-      renderHeight =
-        renderWidth * (command.dimensions[1] / command.dimensions[0]);
+      renderHeight = renderWidth * (command.dimensions[1] / command.dimensions[0]);
     }
     this.SVG.setAttribute("width", renderWidth.toString());
     this.SVG.setAttribute("height", renderHeight.toString());
@@ -43,12 +38,11 @@ export default class MechanismVisualizer implements Visualizer {
     command.lines.forEach((lineData) => {
       let startCoordinates: Translation2d = [
         (lineData.start[0] / command.dimensions[0]) * renderWidth,
-        renderHeight -
-          (lineData.start[1] / command.dimensions[1]) * renderHeight,
+        renderHeight - (lineData.start[1] / command.dimensions[1]) * renderHeight
       ];
       let endCoordinates: Translation2d = [
         (lineData.end[0] / command.dimensions[0]) * renderWidth,
-        renderHeight - (lineData.end[1] / command.dimensions[1]) * renderHeight,
+        renderHeight - (lineData.end[1] / command.dimensions[1]) * renderHeight
       ];
 
       let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -61,10 +55,7 @@ export default class MechanismVisualizer implements Visualizer {
       line.style.strokeWidth = lineData.weight.toString();
 
       [startCoordinates, endCoordinates].forEach((coordinates) => {
-        let circle = document.createElementNS(
-          "http://www.w3.org/2000/svg",
-          "circle"
-        );
+        let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         this.SVG.appendChild(circle);
         circle.setAttribute("cx", coordinates[0].toString());
         circle.setAttribute("cy", coordinates[1].toString());

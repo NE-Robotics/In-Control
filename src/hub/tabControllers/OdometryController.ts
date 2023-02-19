@@ -23,8 +23,7 @@ export default class OdometryController extends TimelineVizController {
   private lastOptions: { [id: string]: any } | null = null;
 
   constructor(content: HTMLElement) {
-    let configBody = content.getElementsByClassName("timeline-viz-config")[0]
-      .firstElementChild as HTMLElement;
+    let configBody = content.getElementsByClassName("timeline-viz-config")[0].firstElementChild as HTMLElement;
     super(
       content,
       TabType.Odometry,
@@ -34,46 +33,24 @@ export default class OdometryController extends TimelineVizController {
           element: configBody.children[1].firstElementChild as HTMLElement,
           types: [LoggableType.NumberArray],
           options: [
-            [
-              "Robot",
-              "Ghost",
-              "Trajectory",
-              "Vision Target",
-              "Arrow (Front)",
-              "Arrow (Center)",
-              "Arrow (Back)",
-            ],
-          ],
-        },
+            ["Robot", "Ghost", "Trajectory", "Vision Target", "Arrow (Front)", "Arrow (Center)", "Arrow (Back)"]
+          ]
+        }
       ],
-      new OdometryVisualizer(
-        content.getElementsByClassName(
-          "odometry-canvas-container"
-        )[0] as HTMLElement
-      )
+      new OdometryVisualizer(content.getElementsByClassName("odometry-canvas-container")[0] as HTMLElement)
     );
 
     // Get option inputs
-    this.GAME = configBody.children[1].children[1]
-      .children[1] as HTMLInputElement;
-    this.GAME_SOURCE_LINK = configBody.children[1].children[1]
-      .children[2] as HTMLElement;
-    this.UNIT_DISTANCE = configBody.children[2].children[0]
-      .children[1] as HTMLInputElement;
-    this.UNIT_ROTATION = configBody.children[2].children[0]
-      .children[2] as HTMLInputElement;
-    this.ORIGIN = configBody.children[3].children[0]
-      .lastElementChild as HTMLInputElement;
-    this.SIZE = configBody.children[1].lastElementChild
-      ?.children[1] as HTMLInputElement;
-    this.SIZE_TEXT = configBody.children[1].lastElementChild
-      ?.lastElementChild as HTMLElement;
-    this.ALLIANCE_BUMPERS = configBody.children[2].lastElementChild
-      ?.children[1] as HTMLInputElement;
-    this.ALLIANCE_ORIGIN = configBody.children[2].lastElementChild
-      ?.children[2] as HTMLInputElement;
-    this.ORIENTATION = configBody.children[3].lastElementChild
-      ?.lastElementChild as HTMLInputElement;
+    this.GAME = configBody.children[1].children[1].children[1] as HTMLInputElement;
+    this.GAME_SOURCE_LINK = configBody.children[1].children[1].children[2] as HTMLElement;
+    this.UNIT_DISTANCE = configBody.children[2].children[0].children[1] as HTMLInputElement;
+    this.UNIT_ROTATION = configBody.children[2].children[0].children[2] as HTMLInputElement;
+    this.ORIGIN = configBody.children[3].children[0].lastElementChild as HTMLInputElement;
+    this.SIZE = configBody.children[1].lastElementChild?.children[1] as HTMLInputElement;
+    this.SIZE_TEXT = configBody.children[1].lastElementChild?.lastElementChild as HTMLElement;
+    this.ALLIANCE_BUMPERS = configBody.children[2].lastElementChild?.children[1] as HTMLInputElement;
+    this.ALLIANCE_ORIGIN = configBody.children[2].lastElementChild?.children[2] as HTMLInputElement;
+    this.ORIENTATION = configBody.children[3].lastElementChild?.lastElementChild as HTMLInputElement;
 
     // Set default alliance values
     this.ALLIANCE_BUMPERS.value = "auto";
@@ -85,14 +62,10 @@ export default class OdometryController extends TimelineVizController {
       if (newUnit != this.lastUnitDistance) {
         let oldSize = Number(this.SIZE.value);
         if (newUnit == "meters") {
-          this.SIZE.value = (
-            Math.round(convert(oldSize, "inches", "meters") * 1000) / 1000
-          ).toString();
+          this.SIZE.value = (Math.round(convert(oldSize, "inches", "meters") * 1000) / 1000).toString();
           this.SIZE.step = "0.01";
         } else {
-          this.SIZE.value = (
-            Math.round(convert(oldSize, "meters", "inches") * 100) / 100
-          ).toString();
+          this.SIZE.value = (Math.round(convert(oldSize, "meters", "inches") * 100) / 100).toString();
           this.SIZE.step = "1";
         }
         this.SIZE_TEXT.innerText = newUnit;
@@ -102,17 +75,13 @@ export default class OdometryController extends TimelineVizController {
 
     // Bind source link
     this.GAME.addEventListener("change", () => {
-      let config = window.frcData?.field2ds.find(
-        (game) => game.title == this.GAME.value
-      );
-      this.GAME_SOURCE_LINK.hidden =
-        config != undefined && config.sourceUrl == undefined;
+      let config = window.frcData?.field2ds.find((game) => game.title == this.GAME.value);
+      this.GAME_SOURCE_LINK.hidden = config != undefined && config.sourceUrl == undefined;
     });
     this.GAME_SOURCE_LINK.addEventListener("click", () => {
       window.sendMainMessage(
         "open-link",
-        window.frcData?.field2ds.find((game) => game.title == this.GAME.value)
-          ?.sourceUrl
+        window.frcData?.field2ds.find((game) => game.title == this.GAME.value)?.sourceUrl
       );
     });
 
@@ -132,7 +101,7 @@ export default class OdometryController extends TimelineVizController {
       size: Number(this.SIZE.value),
       allianceBumpers: this.ALLIANCE_BUMPERS.value,
       allianceOrigin: this.ALLIANCE_ORIGIN.value,
-      orientation: this.ORIENTATION.value,
+      orientation: this.ORIENTATION.value
     };
   }
 
@@ -150,11 +119,8 @@ export default class OdometryController extends TimelineVizController {
     this.ORIENTATION.value = options.orientation;
 
     // Set whether source link is hidden
-    let fieldConfig = window.frcData?.field2ds.find(
-      (game) => game.title == this.GAME.value
-    );
-    this.GAME_SOURCE_LINK.hidden =
-      fieldConfig != undefined && fieldConfig.sourceUrl == undefined;
+    let fieldConfig = window.frcData?.field2ds.find((game) => game.title == this.GAME.value);
+    this.GAME_SOURCE_LINK.hidden = fieldConfig != undefined && fieldConfig.sourceUrl == undefined;
   }
 
   getCommand(time: number) {
@@ -183,30 +149,18 @@ export default class OdometryController extends TimelineVizController {
           poses.push({
             translation: [
               convert(logData.values[0][0], this.UNIT_DISTANCE.value, "meters"),
-              convert(logData.values[0][1], this.UNIT_DISTANCE.value, "meters"),
+              convert(logData.values[0][1], this.UNIT_DISTANCE.value, "meters")
             ],
-            rotation: 0,
+            rotation: 0
           });
         } else {
           for (let i = 0; i < logData.values[0].length; i += 3) {
             poses.push({
               translation: [
-                convert(
-                  logData.values[0][i],
-                  this.UNIT_DISTANCE.value,
-                  "meters"
-                ),
-                convert(
-                  logData.values[0][i + 1],
-                  this.UNIT_DISTANCE.value,
-                  "meters"
-                ),
+                convert(logData.values[0][i], this.UNIT_DISTANCE.value, "meters"),
+                convert(logData.values[0][i + 1], this.UNIT_DISTANCE.value, "meters")
               ],
-              rotation: convert(
-                logData.values[0][i + 2],
-                this.UNIT_ROTATION.value,
-                "radians"
-              ),
+              rotation: convert(logData.values[0][i + 2], this.UNIT_ROTATION.value, "radians")
             });
           }
         }
@@ -243,11 +197,7 @@ export default class OdometryController extends TimelineVizController {
               trailLogData.timestamps.shift();
               trailLogData.values.shift();
             }
-            if (
-              trailLogData.timestamps[trailLogData.timestamps.length - 1] -
-                time >
-              this.TRAIL_LENGTH_SECS
-            ) {
+            if (trailLogData.timestamps[trailLogData.timestamps.length - 1] - time > this.TRAIL_LENGTH_SECS) {
               trailLogData.timestamps.pop();
               trailLogData.values.pop();
             }
@@ -257,11 +207,7 @@ export default class OdometryController extends TimelineVizController {
                   if (i >= trailsTemp.length) continue;
                   trailsTemp[i].push([
                     convert(value[i * 3], this.UNIT_DISTANCE.value, "meters"),
-                    convert(
-                      value[i * 3 + 1],
-                      this.UNIT_DISTANCE.value,
-                      "meters"
-                    ),
+                    convert(value[i * 3 + 1], this.UNIT_DISTANCE.value, "meters")
                   ]);
                 }
               }
@@ -276,9 +222,7 @@ export default class OdometryController extends TimelineVizController {
           trajectoryData.push(getCurrentValue(field.key));
           break;
         case "Vision Target":
-          visionTargetData = visionTargetData.concat(
-            getCurrentValue(field.key)
-          );
+          visionTargetData = visionTargetData.concat(getCurrentValue(field.key));
           break;
         case "Arrow (Front)":
           arrowFrontData = arrowFrontData.concat(getCurrentValue(field.key));
@@ -329,11 +273,11 @@ export default class OdometryController extends TimelineVizController {
         visionTarget: visionTargetData,
         arrowFront: arrowFrontData,
         arrowCenter: arrowCenterData,
-        arrowBack: arrowBackData,
+        arrowBack: arrowBackData
       },
       options: this.options,
       allianceRedBumpers: allianceRedBumpers,
-      allianceRedOrigin: allianceRedOrigin,
+      allianceRedOrigin: allianceRedOrigin
     };
   }
 }

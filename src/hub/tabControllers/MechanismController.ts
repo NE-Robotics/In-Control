@@ -1,39 +1,30 @@
-import {
-  getMechanismState,
-  MechanismState,
-  mergeMechanismStates,
-} from "../../packages/log/LogUtil";
+import { getMechanismState, MechanismState, mergeMechanismStates } from "../../packages/log/LogUtil";
 import TabType from "../../packages/utils/TabType";
 import MechanismVisualizer from "../../packages/visualizers/MechanismVisualizer";
 import TimelineVizController from "./TimelineVizController";
 
 export default class MechanismController extends TimelineVizController {
   constructor(content: HTMLElement) {
-    let configBody = content.getElementsByClassName("timeline-viz-config")[0]
-      .firstElementChild as HTMLElement;
+    let configBody = content.getElementsByClassName("timeline-viz-config")[0].firstElementChild as HTMLElement;
     super(
       content,
       TabType.Mechanism,
       [
         {
           element: configBody.children[1].children[0] as HTMLElement,
-          types: ["mechanism"],
+          types: ["mechanism"]
         },
         {
           element: configBody.children[1].children[1] as HTMLElement,
-          types: ["mechanism"],
+          types: ["mechanism"]
         },
         {
           element: configBody.children[1].children[2] as HTMLElement,
-          types: ["mechanism"],
-        },
+          types: ["mechanism"]
+        }
       ],
       [],
-      new MechanismVisualizer(
-        content.getElementsByClassName(
-          "mechanism-svg-container"
-        )[0] as HTMLElement
-      )
+      new MechanismVisualizer(content.getElementsByClassName("mechanism-svg-container")[0] as HTMLElement)
     );
   }
 

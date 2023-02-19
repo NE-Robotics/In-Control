@@ -11,8 +11,7 @@ export default class PointsController extends TimelineVizController {
   private POINT_SIZE: HTMLInputElement;
 
   constructor(content: HTMLElement) {
-    let configBody = content.getElementsByClassName("timeline-viz-config")[0]
-      .firstElementChild as HTMLElement;
+    let configBody = content.getElementsByClassName("timeline-viz-config")[0].firstElementChild as HTMLElement;
     super(
       content,
       TabType.Points,
@@ -20,40 +19,30 @@ export default class PointsController extends TimelineVizController {
         // X
         {
           element: configBody.children[1].firstElementChild as HTMLElement,
-          types: [LoggableType.NumberArray],
+          types: [LoggableType.NumberArray]
         },
 
         // Y
         {
           element: configBody.children[2].firstElementChild as HTMLElement,
-          types: [LoggableType.NumberArray],
-        },
+          types: [LoggableType.NumberArray]
+        }
       ],
       [],
-      new PointsVisualizer(
-        content.getElementsByClassName(
-          "points-background-container"
-        )[0] as HTMLElement
-      )
+      new PointsVisualizer(content.getElementsByClassName("points-background-container")[0] as HTMLElement)
     );
 
     // Get option inputs
-    this.WIDTH = configBody.children[1].children[1]
-      .children[1] as HTMLInputElement;
-    this.HEIGHT = configBody.children[1].children[1]
-      .children[3] as HTMLInputElement;
-    this.GROUP = configBody.children[2].children[1]
-      .children[1] as HTMLInputElement;
-    this.POINT_SHAPE = configBody.children[1].children[2]
-      .children[1] as HTMLInputElement;
-    this.POINT_SIZE = configBody.children[2].children[2]
-      .children[1] as HTMLInputElement;
+    this.WIDTH = configBody.children[1].children[1].children[1] as HTMLInputElement;
+    this.HEIGHT = configBody.children[1].children[1].children[3] as HTMLInputElement;
+    this.GROUP = configBody.children[2].children[1].children[1] as HTMLInputElement;
+    this.POINT_SHAPE = configBody.children[1].children[2].children[1] as HTMLInputElement;
+    this.POINT_SIZE = configBody.children[2].children[2].children[1] as HTMLInputElement;
 
     // Enforce range
     [this.WIDTH, this.HEIGHT, this.GROUP].forEach((input, index) => {
       input.addEventListener("change", () => {
-        if (Number(input.value) % 1 != 0)
-          input.value = Math.round(Number(input.value)).toString();
+        if (Number(input.value) % 1 != 0) input.value = Math.round(Number(input.value)).toString();
         if (index == 2) {
           if (Number(input.value) < 0) input.value = "0";
         } else {
@@ -69,7 +58,7 @@ export default class PointsController extends TimelineVizController {
       height: Number(this.HEIGHT.value),
       group: Number(this.GROUP.value),
       pointShape: this.POINT_SHAPE.value,
-      pointSize: this.POINT_SIZE.value,
+      pointSize: this.POINT_SIZE.value
     };
   }
 
@@ -105,9 +94,9 @@ export default class PointsController extends TimelineVizController {
     return {
       data: {
         x: xData,
-        y: yData,
+        y: yData
       },
-      options: this.options,
+      options: this.options
     };
   }
 }

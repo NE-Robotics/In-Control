@@ -15,20 +15,12 @@ export default class JoysticksController extends TimelineVizController {
       TabType.Joysticks,
       [],
       [],
-      new JoysticksVisualizer(
-        content.getElementsByClassName(
-          "joysticks-canvas"
-        )[0] as HTMLCanvasElement
-      )
+      new JoysticksVisualizer(content.getElementsByClassName("joysticks-canvas")[0] as HTMLCanvasElement)
     );
 
     // Get option inputs
-    let cells =
-      content.getElementsByClassName("joysticks-config")[0].firstElementChild
-        ?.lastElementChild?.children;
-    this.CONFIG_IDS = Array.from(cells == null ? [] : cells).map(
-      (cell) => cell.firstElementChild as HTMLInputElement
-    );
+    let cells = content.getElementsByClassName("joysticks-config")[0].firstElementChild?.lastElementChild?.children;
+    this.CONFIG_IDS = Array.from(cells == null ? [] : cells).map((cell) => cell.firstElementChild as HTMLInputElement);
     this.CONFIG_LAYOUTS = Array.from(cells == null ? [] : cells).map(
       (cell) => cell.lastElementChild as HTMLInputElement
     );
@@ -38,8 +30,7 @@ export default class JoysticksController extends TimelineVizController {
       input.addEventListener("change", () => {
         if (Number(input.value) < 0) input.value = "0";
         if (Number(input.value) > 5) input.value = "5";
-        if (Number(input.value) % 1 != 0)
-          input.value = Math.round(Number(input.value)).toString();
+        if (Number(input.value) % 1 != 0) input.value = Math.round(Number(input.value)).toString();
       });
     });
   }
@@ -47,7 +38,7 @@ export default class JoysticksController extends TimelineVizController {
   get options(): { [id: string]: any } {
     return {
       ids: this.CONFIG_IDS.map((input) => Number(input.value)),
-      layouts: this.CONFIG_LAYOUTS.map((input) => input.value),
+      layouts: this.CONFIG_LAYOUTS.map((input) => input.value)
     };
   }
 
@@ -67,11 +58,7 @@ export default class JoysticksController extends TimelineVizController {
     this.CONFIG_LAYOUTS.forEach((input) => {
       if (input.children.length == 0 && window.frcData) {
         newLayouts = true;
-        [
-          "None",
-          "Generic Joystick",
-          ...window.frcData.joysticks.map((joystick) => joystick.title),
-        ].forEach((title) => {
+        ["None", "Generic Joystick", ...window.frcData.joysticks.map((joystick) => joystick.title)].forEach((title) => {
           let option = document.createElement("option");
           option.innerText = title;
           input.appendChild(option);
@@ -87,7 +74,7 @@ export default class JoysticksController extends TimelineVizController {
         let joystickId = Number(this.CONFIG_IDS[index].value);
         command.push({
           layoutTitle: layoutInput.value,
-          state: getJoystickState(window.log, joystickId, time),
+          state: getJoystickState(window.log, joystickId, time)
         });
       }
     });

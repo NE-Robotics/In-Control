@@ -11,7 +11,7 @@ import {
   ConfigJoystick_Axis,
   ConfigJoystick_Button,
   ConfigJoystick_Joystick,
-  FRCData,
+  FRCData
 } from "./FRCData";
 import { checkArrayType, smartSort } from "../utils/util";
 import { EXTRA_FRC_DATA } from "../../main/Constants";
@@ -21,10 +21,7 @@ export function createExtraFRCDataFolder() {
   if (!fs.existsSync(EXTRA_FRC_DATA)) {
     fs.mkdirSync(EXTRA_FRC_DATA);
   }
-  fs.copyFileSync(
-    path.join(__dirname, "..", "frcData", "extra-readme.txt"),
-    path.join(EXTRA_FRC_DATA, "README.txt")
-  );
+  fs.copyFileSync(path.join(__dirname, "..", "frcData", "extra-readme.txt"), path.join(EXTRA_FRC_DATA, "README.txt"));
 }
 
 /** Loads all current FRC data (bundled and extra). */
@@ -33,19 +30,13 @@ export function loadFRCData(): FRCData {
     field2ds: [],
     field3ds: [],
     robots: [],
-    joysticks: [],
+    joysticks: []
   };
 
   [path.join(__dirname, "..", "frcData"), EXTRA_FRC_DATA].forEach((folder) => {
     fs.readdirSync(folder).forEach((file) => {
       if (!file.endsWith(".json")) return;
-      let title = file
-        .split("_")
-        .slice(1)
-        .join("_")
-        .split(".")
-        .slice(0, -1)
-        .join(".");
+      let title = file.split("_").slice(1).join("_").split(".").slice(0, -1).join(".");
       let configRaw = jsonfile.readFileSync(path.join(folder, file));
       let isField2d = file.startsWith("Field2d_");
       let isField3d = file.startsWith("Field3d_");
@@ -60,20 +51,13 @@ export function loadFRCData(): FRCData {
           topLeft: [0, 0],
           bottomRight: [0, 0],
           widthInches: 0,
-          heightInches: 0,
+          heightInches: 0
         };
         if (typeof configRaw == "object") {
-          if (
-            "sourceUrl" in configRaw &&
-            typeof configRaw.sourceUrl === "string"
-          ) {
+          if ("sourceUrl" in configRaw && typeof configRaw.sourceUrl === "string") {
             config.sourceUrl = configRaw.sourceUrl;
           }
-          if (
-            "topLeft" in configRaw &&
-            checkArrayType(configRaw.topLeft, "number") &&
-            configRaw.topLeft.length == 2
-          ) {
+          if ("topLeft" in configRaw && checkArrayType(configRaw.topLeft, "number") && configRaw.topLeft.length == 2) {
             config.topLeft = configRaw.topLeft;
           }
           if (
@@ -83,16 +67,10 @@ export function loadFRCData(): FRCData {
           ) {
             config.bottomRight = configRaw.bottomRight;
           }
-          if (
-            "widthInches" in configRaw &&
-            typeof configRaw.widthInches === "number"
-          ) {
+          if ("widthInches" in configRaw && typeof configRaw.widthInches === "number") {
             config.widthInches = configRaw.widthInches;
           }
-          if (
-            "heightInches" in configRaw &&
-            typeof configRaw.heightInches === "number"
-          ) {
+          if ("heightInches" in configRaw && typeof configRaw.heightInches === "number") {
             config.heightInches = configRaw.heightInches;
           }
         }
@@ -104,13 +82,10 @@ export function loadFRCData(): FRCData {
           path: path.join(folder, "Field3d_" + title + ".glb"),
           rotations: [],
           widthInches: 0,
-          heightInches: 0,
+          heightInches: 0
         };
         if (typeof configRaw == "object") {
-          if (
-            "sourceUrl" in configRaw &&
-            typeof configRaw.sourceUrl === "string"
-          ) {
+          if ("sourceUrl" in configRaw && typeof configRaw.sourceUrl === "string") {
             config.sourceUrl = configRaw.sourceUrl;
           }
           if (
@@ -120,25 +95,17 @@ export function loadFRCData(): FRCData {
               (rotation: any) =>
                 typeof rotation === "object" &&
                 "axis" in rotation &&
-                (rotation.axis === "x" ||
-                  rotation.axis === "y" ||
-                  rotation.axis === "z") &&
+                (rotation.axis === "x" || rotation.axis === "y" || rotation.axis === "z") &&
                 "degrees" in rotation &&
                 typeof rotation.degrees === "number"
             )
           ) {
             config.rotations = configRaw.rotations;
           }
-          if (
-            "widthInches" in configRaw &&
-            typeof configRaw.widthInches === "number"
-          ) {
+          if ("widthInches" in configRaw && typeof configRaw.widthInches === "number") {
             config.widthInches = configRaw.widthInches;
           }
-          if (
-            "heightInches" in configRaw &&
-            typeof configRaw.heightInches === "number"
-          ) {
+          if ("heightInches" in configRaw && typeof configRaw.heightInches === "number") {
             config.heightInches = configRaw.heightInches;
           }
         }
@@ -151,13 +118,10 @@ export function loadFRCData(): FRCData {
           rotations: [],
           position: [0, 0, 0],
           cameras: [],
-          components: [],
+          components: []
         };
         if (typeof configRaw == "object") {
-          if (
-            "sourceUrl" in configRaw &&
-            typeof configRaw.sourceUrl === "string"
-          ) {
+          if ("sourceUrl" in configRaw && typeof configRaw.sourceUrl === "string") {
             config.sourceUrl = configRaw.sourceUrl;
           }
           if (
@@ -167,9 +131,7 @@ export function loadFRCData(): FRCData {
               (rotation: any) =>
                 typeof rotation === "object" &&
                 "axis" in rotation &&
-                (rotation.axis === "x" ||
-                  rotation.axis === "y" ||
-                  rotation.axis === "z") &&
+                (rotation.axis === "x" || rotation.axis === "y" || rotation.axis === "z") &&
                 "degrees" in rotation &&
                 typeof rotation.degrees === "number"
             )
@@ -190,7 +152,7 @@ export function loadFRCData(): FRCData {
                 rotations: [],
                 position: [0, 0, 0],
                 resolution: [200, 100],
-                fov: 90,
+                fov: 90
               };
               config.cameras.push(camera);
               if ("name" in cameraRaw && typeof cameraRaw.name === "string") {
@@ -203,9 +165,7 @@ export function loadFRCData(): FRCData {
                   (rotation: any) =>
                     typeof rotation === "object" &&
                     "axis" in rotation &&
-                    (rotation.axis === "x" ||
-                      rotation.axis === "y" ||
-                      rotation.axis === "z") &&
+                    (rotation.axis === "x" || rotation.axis === "y" || rotation.axis === "z") &&
                     "degrees" in rotation &&
                     typeof rotation.degrees === "number"
                 )
@@ -231,14 +191,11 @@ export function loadFRCData(): FRCData {
               }
             });
           }
-          if (
-            "components" in configRaw &&
-            Array.isArray(configRaw.components)
-          ) {
+          if ("components" in configRaw && Array.isArray(configRaw.components)) {
             configRaw.components.forEach((componentRaw: any) => {
               let component: Config3dRobot_Component = {
                 zeroedRotations: [],
-                zeroedPosition: [0, 0, 0],
+                zeroedPosition: [0, 0, 0]
               };
               config.components.push(component);
               if (
@@ -248,9 +205,7 @@ export function loadFRCData(): FRCData {
                   (rotation: any) =>
                     typeof rotation === "object" &&
                     "axis" in rotation &&
-                    (rotation.axis === "x" ||
-                      rotation.axis === "y" ||
-                      rotation.axis === "z") &&
+                    (rotation.axis === "x" || rotation.axis === "y" || rotation.axis === "z") &&
                     "degrees" in rotation &&
                     typeof rotation.degrees === "number"
                 )
@@ -273,15 +228,12 @@ export function loadFRCData(): FRCData {
         let config: ConfigJoystick = {
           title: title,
           path: path.join(folder, "Joystick_" + title + ".png"),
-          components: [],
+          components: []
         };
         if (Array.isArray(configRaw)) {
           configRaw.forEach((componentRaw) => {
             let isYellow = false;
-            if (
-              "isYellow" in componentRaw &&
-              typeof componentRaw.isYellow === "boolean"
-            ) {
+            if ("isYellow" in componentRaw && typeof componentRaw.isYellow === "boolean") {
               isYellow = componentRaw.isYellow;
             }
             let centerPx: [number, number] = [0, 0];
@@ -294,10 +246,7 @@ export function loadFRCData(): FRCData {
               centerPx = componentRaw.centerPx;
             }
 
-            if (
-              "type" in componentRaw &&
-              typeof componentRaw.type === "string"
-            ) {
+            if ("type" in componentRaw && typeof componentRaw.type === "string") {
               switch (componentRaw.type) {
                 case "button":
                   let buttonComponent: ConfigJoystick_Button = {
@@ -306,12 +255,9 @@ export function loadFRCData(): FRCData {
                     isEllipse: false,
                     centerPx: centerPx,
                     sizePx: [0, 0],
-                    sourceIndex: 0,
+                    sourceIndex: 0
                   };
-                  if (
-                    "isEllipse" in componentRaw &&
-                    typeof componentRaw.isEllipse === "boolean"
-                  ) {
+                  if ("isEllipse" in componentRaw && typeof componentRaw.isEllipse === "boolean") {
                     buttonComponent.isEllipse = componentRaw.isEllipse;
                   }
                   if (
@@ -322,10 +268,7 @@ export function loadFRCData(): FRCData {
                   ) {
                     buttonComponent.sizePx = componentRaw.sizePx;
                   }
-                  if (
-                    "sourceIndex" in componentRaw &&
-                    typeof componentRaw.sourceIndex === "number"
-                  ) {
+                  if ("sourceIndex" in componentRaw && typeof componentRaw.sourceIndex === "number") {
                     buttonComponent.sourceIndex = componentRaw.sourceIndex;
                   }
                   if (
@@ -350,46 +293,25 @@ export function loadFRCData(): FRCData {
                     xSourceIndex: 0,
                     xSourceInverted: false,
                     ySourceIndex: 0,
-                    ySourceInverted: false,
+                    ySourceInverted: false
                   };
-                  if (
-                    "radiusPx" in componentRaw &&
-                    typeof componentRaw.radiusPx === "number"
-                  ) {
+                  if ("radiusPx" in componentRaw && typeof componentRaw.radiusPx === "number") {
                     joystickComponent.radiusPx = componentRaw.radiusPx;
                   }
-                  if (
-                    "xSourceIndex" in componentRaw &&
-                    typeof componentRaw.xSourceIndex === "number"
-                  ) {
+                  if ("xSourceIndex" in componentRaw && typeof componentRaw.xSourceIndex === "number") {
                     joystickComponent.xSourceIndex = componentRaw.xSourceIndex;
                   }
-                  if (
-                    "xSourceInverted" in componentRaw &&
-                    typeof componentRaw.xSourceInverted === "boolean"
-                  ) {
-                    joystickComponent.xSourceInverted =
-                      componentRaw.xSourceInverted;
+                  if ("xSourceInverted" in componentRaw && typeof componentRaw.xSourceInverted === "boolean") {
+                    joystickComponent.xSourceInverted = componentRaw.xSourceInverted;
                   }
-                  if (
-                    "ySourceIndex" in componentRaw &&
-                    typeof componentRaw.ySourceIndex === "number"
-                  ) {
+                  if ("ySourceIndex" in componentRaw && typeof componentRaw.ySourceIndex === "number") {
                     joystickComponent.ySourceIndex = componentRaw.ySourceIndex;
                   }
-                  if (
-                    "ySourceInverted" in componentRaw &&
-                    typeof componentRaw.ySourceInverted === "boolean"
-                  ) {
-                    joystickComponent.ySourceInverted =
-                      componentRaw.ySourceInverted;
+                  if ("ySourceInverted" in componentRaw && typeof componentRaw.ySourceInverted === "boolean") {
+                    joystickComponent.ySourceInverted = componentRaw.ySourceInverted;
                   }
-                  if (
-                    "buttonSourceIndex" in componentRaw &&
-                    typeof componentRaw.buttonSourceIndex === "number"
-                  ) {
-                    joystickComponent.buttonSourceIndex =
-                      componentRaw.buttonSourceIndex;
+                  if ("buttonSourceIndex" in componentRaw && typeof componentRaw.buttonSourceIndex === "number") {
+                    joystickComponent.buttonSourceIndex = componentRaw.buttonSourceIndex;
                   }
                   config.components.push(joystickComponent);
                   break;
@@ -401,7 +323,7 @@ export function loadFRCData(): FRCData {
                     centerPx: centerPx,
                     sizePx: [0, 0],
                     sourceIndex: 0,
-                    sourceRange: [-1, 1],
+                    sourceRange: [-1, 1]
                   };
                   if (
                     "sizePx" in componentRaw &&
@@ -411,10 +333,7 @@ export function loadFRCData(): FRCData {
                   ) {
                     axisComponent.sizePx = componentRaw.sizePx;
                   }
-                  if (
-                    "sourceIndex" in componentRaw &&
-                    typeof componentRaw.sourceIndex === "number"
-                  ) {
+                  if ("sourceIndex" in componentRaw && typeof componentRaw.sourceIndex === "number") {
                     axisComponent.sourceIndex = componentRaw.sourceIndex;
                   }
                   if (
@@ -435,9 +354,7 @@ export function loadFRCData(): FRCData {
       }
     });
   });
-  frcData.field2ds.sort((a, b) =>
-    a.title > b.title ? -1 : b.title > a.title ? 1 : 0
-  );
+  frcData.field2ds.sort((a, b) => (a.title > b.title ? -1 : b.title > a.title ? 1 : 0));
   frcData.field3ds.sort((a, b) => {
     if (a.title == "Evergreen") return 1;
     if (b.title == "Evergreen") return -1;
@@ -448,9 +365,7 @@ export function loadFRCData(): FRCData {
     if (b.title == "KitBot") return 1;
     return smartSort(a.title, b.title);
   });
-  frcData.joysticks.sort((a, b) =>
-    a.title > b.title ? -1 : b.title > a.title ? 1 : 0
-  );
+  frcData.joysticks.sort((a, b) => (a.title > b.title ? -1 : b.title > a.title ? 1 : 0));
 
   return frcData;
 }

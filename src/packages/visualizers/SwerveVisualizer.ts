@@ -18,10 +18,7 @@ export default class SwerveVisualizer implements Visualizer {
   render(command: any): number | null {
     // Update canvas size
     let context = this.CANVAS.getContext("2d") as CanvasRenderingContext2D;
-    let size = Math.min(
-      this.CONTAINER.clientWidth,
-      this.CONTAINER.clientHeight
-    );
+    let size = Math.min(this.CONTAINER.clientWidth, this.CONTAINER.clientHeight);
     this.CANVAS.style.width = size.toString() + "px";
     this.CANVAS.style.height = size.toString() + "px";
     this.CANVAS.width = size * window.devicePixelRatio;
@@ -33,9 +30,7 @@ export default class SwerveVisualizer implements Visualizer {
     let centerPx: [number, number] = [size / 2, size / 2];
     let isLight = !window.matchMedia("(prefers-color-scheme: dark)").matches;
     let strokeColor = isLight ? this.BLACK_COLOR : this.WHITE_COLOR;
-    let backgroundColor = isLight
-      ? this.BLACK_BACKGROUND_COLOR
-      : this.WHITE_BACKGROUND_COLOR;
+    let backgroundColor = isLight ? this.BLACK_BACKGROUND_COLOR : this.WHITE_BACKGROUND_COLOR;
 
     // Calculate component dimensions
     let frameWidthPx = size * 0.3 * Math.min(command.frameAspectRatio, 1);
@@ -48,80 +43,44 @@ export default class SwerveVisualizer implements Visualizer {
     context.lineWidth = 4;
     context.beginPath();
     context.moveTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        frameHeightPx / 2,
-        frameWidthPx / 2 - moduleRadiusPx,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [frameHeightPx / 2, frameWidthPx / 2 - moduleRadiusPx])
     );
     context.lineTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        frameHeightPx / 2,
-        -frameWidthPx / 2 + moduleRadiusPx,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [frameHeightPx / 2, -frameWidthPx / 2 + moduleRadiusPx])
     );
     context.stroke();
     context.beginPath();
     context.moveTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        frameHeightPx / 2 - moduleRadiusPx,
-        -frameWidthPx / 2,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [frameHeightPx / 2 - moduleRadiusPx, -frameWidthPx / 2])
     );
     context.lineTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        -frameHeightPx / 2 + moduleRadiusPx,
-        -frameWidthPx / 2,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [-frameHeightPx / 2 + moduleRadiusPx, -frameWidthPx / 2])
     );
     context.stroke();
     context.beginPath();
     context.moveTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        frameHeightPx / 2 - moduleRadiusPx,
-        frameWidthPx / 2,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [frameHeightPx / 2 - moduleRadiusPx, frameWidthPx / 2])
     );
     context.lineTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        -frameHeightPx / 2 + moduleRadiusPx,
-        frameWidthPx / 2,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [-frameHeightPx / 2 + moduleRadiusPx, frameWidthPx / 2])
     );
     context.stroke();
     context.beginPath();
     context.moveTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        -frameHeightPx / 2,
-        frameWidthPx / 2 - moduleRadiusPx,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [-frameHeightPx / 2, frameWidthPx / 2 - moduleRadiusPx])
     );
     context.lineTo(
-      ...transformPx(centerPx, command.robotRotation, [
-        -frameHeightPx / 2,
-        -frameWidthPx / 2 + moduleRadiusPx,
-      ])
+      ...transformPx(centerPx, command.robotRotation, [-frameHeightPx / 2, -frameWidthPx / 2 + moduleRadiusPx])
     );
     context.stroke();
 
     // Draw arrow on robot
     context.strokeStyle = strokeColor;
     context.lineWidth = 4;
-    let arrowBack = transformPx(centerPx, command.robotRotation, [
-      frameHeightPx * -0.3,
-      0,
-    ]);
-    let arrowFront = transformPx(centerPx, command.robotRotation, [
-      frameHeightPx * 0.3,
-      0,
-    ]);
-    let arrowLeft = transformPx(centerPx, command.robotRotation, [
-      frameHeightPx * 0.15,
-      frameWidthPx * 0.15,
-    ]);
-    let arrowRight = transformPx(centerPx, command.robotRotation, [
-      frameHeightPx * 0.15,
-      frameWidthPx * -0.15,
-    ]);
+    let arrowBack = transformPx(centerPx, command.robotRotation, [frameHeightPx * -0.3, 0]);
+    let arrowFront = transformPx(centerPx, command.robotRotation, [frameHeightPx * 0.3, 0]);
+    let arrowLeft = transformPx(centerPx, command.robotRotation, [frameHeightPx * 0.15, frameWidthPx * 0.15]);
+    let arrowRight = transformPx(centerPx, command.robotRotation, [frameHeightPx * 0.15, frameWidthPx * -0.15]);
     context.beginPath();
     context.moveTo(...arrowBack);
     context.lineTo(...arrowFront);
@@ -135,11 +94,11 @@ export default class SwerveVisualizer implements Visualizer {
       [1, 1],
       [1, -1],
       [-1, 1],
-      [-1, -1],
+      [-1, -1]
     ].forEach((corner, index) => {
       let moduleCenterPx = transformPx(centerPx, command.robotRotation, [
         (frameHeightPx / 2) * corner[0],
-        (frameWidthPx / 2) * corner[1],
+        (frameWidthPx / 2) * corner[1]
       ]);
 
       // Draw module data
@@ -154,9 +113,7 @@ export default class SwerveVisualizer implements Visualizer {
         if (command.redStates && command.blueStates) {
           context.moveTo(...moduleCenterPx);
         } else {
-          context.moveTo(
-            ...transformPx(moduleCenterPx, fullRotation, [moduleRadiusPx, 0])
-          );
+          context.moveTo(...transformPx(moduleCenterPx, fullRotation, [moduleRadiusPx, 0]));
         }
         context.arc(
           ...moduleCenterPx,
@@ -176,21 +133,15 @@ export default class SwerveVisualizer implements Visualizer {
           vectorRotation += Math.PI;
         }
         let vectorLength = fullVectorPx * vectorSpeed;
-        let arrowBack = transformPx(moduleCenterPx, vectorRotation, [
-          moduleRadiusPx,
-          0,
-        ]);
-        let arrowFront = transformPx(moduleCenterPx, vectorRotation, [
-          moduleRadiusPx + vectorLength,
-          0,
-        ]);
+        let arrowBack = transformPx(moduleCenterPx, vectorRotation, [moduleRadiusPx, 0]);
+        let arrowFront = transformPx(moduleCenterPx, vectorRotation, [moduleRadiusPx + vectorLength, 0]);
         let arrowLeft = transformPx(moduleCenterPx, vectorRotation, [
           moduleRadiusPx + vectorLength - moduleRadiusPx * 0.4,
-          moduleRadiusPx * 0.4,
+          moduleRadiusPx * 0.4
         ]);
         let arrowRight = transformPx(moduleCenterPx, vectorRotation, [
           moduleRadiusPx + vectorLength - moduleRadiusPx * 0.4,
-          moduleRadiusPx * -0.4,
+          moduleRadiusPx * -0.4
         ]);
         context.beginPath();
         context.moveTo(...arrowBack);

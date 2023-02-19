@@ -21,14 +21,9 @@ export default class OdometryVisualizer implements Visualizer {
     // Set up canvas
     let context = this.CANVAS.getContext("2d") as CanvasRenderingContext2D;
     let isVertical =
-      command.options.orientation == "blue bottom, red top" ||
-      command.options.orientation == "red bottom, blue top";
-    let width = isVertical
-      ? this.CONTAINER.clientHeight
-      : this.CONTAINER.clientWidth;
-    let height = isVertical
-      ? this.CONTAINER.clientWidth
-      : this.CONTAINER.clientHeight;
+      command.options.orientation == "blue bottom, red top" || command.options.orientation == "red bottom, blue top";
+    let width = isVertical ? this.CONTAINER.clientHeight : this.CONTAINER.clientWidth;
+    let height = isVertical ? this.CONTAINER.clientWidth : this.CONTAINER.clientHeight;
     this.CANVAS.style.width = width.toString() + "px";
     this.CANVAS.style.height = height.toString() + "px";
     this.CANVAS.width = width * window.devicePixelRatio;
@@ -53,9 +48,7 @@ export default class OdometryVisualizer implements Visualizer {
     }
 
     // Get game data and update image element
-    let gameData = window.frcData?.field2ds.find(
-      (game) => game.title == command.options.game
-    );
+    let gameData = window.frcData?.field2ds.find((game) => game.title == command.options.game);
     if (!gameData) return null;
     if (gameData.path != this.lastImageSource) {
       this.lastImageSource = gameData.path;
@@ -80,8 +73,7 @@ export default class OdometryVisualizer implements Visualizer {
     let margin = Math.min(topMargin, bottomMargin, leftMargin, rightMargin);
     let extendedFieldWidth = fieldWidth + margin * 2;
     let extendedFieldHeight = fieldHeight + margin * 2;
-    let constrainHeight =
-      width / height > extendedFieldWidth / extendedFieldHeight;
+    let constrainHeight = width / height > extendedFieldWidth / extendedFieldHeight;
     let imageScalar = 1;
     if (constrainHeight) {
       imageScalar = height / extendedFieldHeight;
@@ -96,33 +88,21 @@ export default class OdometryVisualizer implements Visualizer {
       Math.ceil(width * -0.5 - fieldCenterX * imageScalar), // X (flipped)
       Math.ceil(height * -0.5 - fieldCenterY * imageScalar), // Y (flipped)
       this.IMAGE.width * imageScalar, // Width
-      this.IMAGE.height * imageScalar, // Height
+      this.IMAGE.height * imageScalar // Height
     ];
-    context.drawImage(
-      this.IMAGE,
-      renderValues[0],
-      renderValues[1],
-      renderValues[4],
-      renderValues[5]
-    );
+    context.drawImage(this.IMAGE, renderValues[0], renderValues[1], renderValues[4], renderValues[5]);
 
     // Calculate field edges
     let canvasFieldLeft = renderValues[0] + gameData.topLeft[0] * imageScalar;
     let canvasFieldTop = renderValues[1] + gameData.topLeft[1] * imageScalar;
     let canvasFieldWidth = fieldWidth * imageScalar;
     let canvasFieldHeight = fieldHeight * imageScalar;
-    let pixelsPerInch =
-      (canvasFieldHeight / gameData.heightInches +
-        canvasFieldWidth / gameData.widthInches) /
-      2;
+    let pixelsPerInch = (canvasFieldHeight / gameData.heightInches + canvasFieldWidth / gameData.widthInches) / 2;
 
     // Convert translation to pixel coordinates
     let calcCoordinates = (translation: Translation2d): [number, number] => {
       if (!gameData) return [0, 0];
-      let positionInches = [
-        convert(translation[0], "meters", "inches"),
-        convert(translation[1], "meters", "inches"),
-      ];
+      let positionInches = [convert(translation[0], "meters", "inches"), convert(translation[1], "meters", "inches")];
 
       positionInches[1] *= -1; // Positive y is flipped on the canvas
       switch (command.options.origin) {
@@ -138,13 +118,11 @@ export default class OdometryVisualizer implements Visualizer {
 
       let positionPixels: [number, number] = [
         positionInches[0] * (canvasFieldWidth / gameData.widthInches),
-        positionInches[1] * (canvasFieldHeight / gameData.heightInches),
+        positionInches[1] * (canvasFieldHeight / gameData.heightInches)
       ];
       if (objectsFlipped) {
-        positionPixels[0] =
-          canvasFieldLeft + canvasFieldWidth - positionPixels[0];
-        positionPixels[1] =
-          canvasFieldTop + canvasFieldHeight - positionPixels[1];
+        positionPixels[0] = canvasFieldLeft + canvasFieldWidth - positionPixels[0];
+        positionPixels[1] = canvasFieldTop + canvasFieldHeight - positionPixels[1];
       } else {
         positionPixels[0] += canvasFieldLeft;
         positionPixels[1] += canvasFieldTop;
@@ -186,9 +164,7 @@ export default class OdometryVisualizer implements Visualizer {
     }
 
     // Draw robots
-    let robotLengthPixels =
-      pixelsPerInch *
-      convert(command.options.size, command.options.unitDistance, "inches");
+    let robotLengthPixels = pixelsPerInch * convert(command.options.size, command.options.unitDistance, "inches");
     command.poses.robot.forEach((robotPose: Pose2d, index: number) => {
       let robotPos = calcCoordinates(robotPose.translation);
       let rotation = robotPose.rotation;
@@ -201,10 +177,7 @@ export default class OdometryVisualizer implements Visualizer {
       trailData.forEach((translation: Translation2d) => {
         let coordinates = calcCoordinates(translation);
         trailCoordinates.push(coordinates);
-        let distance = Math.hypot(
-          coordinates[0] - robotPos[0],
-          coordinates[1] - robotPos[0]
-        );
+        let distance = Math.hypot(coordinates[0] - robotPos[0], coordinates[1] - robotPos[0]);
         if (distance > maxDistance) maxDistance = distance;
       });
 
@@ -240,22 +213,10 @@ export default class OdometryVisualizer implements Visualizer {
       context.fillStyle = "#222";
       context.strokeStyle = command.allianceRedBumpers ? "red" : "blue";
       context.lineWidth = 3 * pixelsPerInch;
-      let backLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.5,
-        robotLengthPixels * 0.5,
-      ]);
-      let frontLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.5,
-        robotLengthPixels * 0.5,
-      ]);
-      let frontRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.5,
-        robotLengthPixels * -0.5,
-      ]);
-      let backRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.5,
-        robotLengthPixels * -0.5,
-      ]);
+      let backLeft = transformPx(robotPos, rotation, [robotLengthPixels * -0.5, robotLengthPixels * 0.5]);
+      let frontLeft = transformPx(robotPos, rotation, [robotLengthPixels * 0.5, robotLengthPixels * 0.5]);
+      let frontRight = transformPx(robotPos, rotation, [robotLengthPixels * 0.5, robotLengthPixels * -0.5]);
+      let backRight = transformPx(robotPos, rotation, [robotLengthPixels * -0.5, robotLengthPixels * -0.5]);
       context.beginPath();
       context.moveTo(frontLeft[0], frontLeft[1]);
       context.lineTo(frontRight[0], frontRight[1]);
@@ -267,22 +228,10 @@ export default class OdometryVisualizer implements Visualizer {
 
       context.strokeStyle = "white";
       context.lineWidth = 1.5 * pixelsPerInch;
-      let arrowBack = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.3,
-        0,
-      ]);
-      let arrowFront = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.3,
-        0,
-      ]);
-      let arrowLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.15,
-        robotLengthPixels * 0.15,
-      ]);
-      let arrowRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.15,
-        robotLengthPixels * -0.15,
-      ]);
+      let arrowBack = transformPx(robotPos, rotation, [robotLengthPixels * -0.3, 0]);
+      let arrowFront = transformPx(robotPos, rotation, [robotLengthPixels * 0.3, 0]);
+      let arrowLeft = transformPx(robotPos, rotation, [robotLengthPixels * 0.15, robotLengthPixels * 0.15]);
+      let arrowRight = transformPx(robotPos, rotation, [robotLengthPixels * 0.15, robotLengthPixels * -0.15]);
       context.beginPath();
       context.moveTo(arrowBack[0], arrowBack[1]);
       context.lineTo(arrowFront[0], arrowFront[1]);
@@ -304,22 +253,10 @@ export default class OdometryVisualizer implements Visualizer {
       context.fillStyle = "#222";
       context.strokeStyle = command.allianceRedBumpers ? "red" : "blue";
       context.lineWidth = 3 * pixelsPerInch;
-      let backLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.5,
-        robotLengthPixels * 0.5,
-      ]);
-      let frontLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.5,
-        robotLengthPixels * 0.5,
-      ]);
-      let frontRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.5,
-        robotLengthPixels * -0.5,
-      ]);
-      let backRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.5,
-        robotLengthPixels * -0.5,
-      ]);
+      let backLeft = transformPx(robotPos, rotation, [robotLengthPixels * -0.5, robotLengthPixels * 0.5]);
+      let frontLeft = transformPx(robotPos, rotation, [robotLengthPixels * 0.5, robotLengthPixels * 0.5]);
+      let frontRight = transformPx(robotPos, rotation, [robotLengthPixels * 0.5, robotLengthPixels * -0.5]);
+      let backRight = transformPx(robotPos, rotation, [robotLengthPixels * -0.5, robotLengthPixels * -0.5]);
       context.beginPath();
       context.moveTo(frontLeft[0], frontLeft[1]);
       context.lineTo(frontRight[0], frontRight[1]);
@@ -331,22 +268,10 @@ export default class OdometryVisualizer implements Visualizer {
 
       context.strokeStyle = "white";
       context.lineWidth = 1.5 * pixelsPerInch;
-      let arrowBack = transformPx(robotPos, rotation, [
-        robotLengthPixels * -0.3,
-        0,
-      ]);
-      let arrowFront = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.3,
-        0,
-      ]);
-      let arrowLeft = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.15,
-        robotLengthPixels * 0.15,
-      ]);
-      let arrowRight = transformPx(robotPos, rotation, [
-        robotLengthPixels * 0.15,
-        robotLengthPixels * -0.15,
-      ]);
+      let arrowBack = transformPx(robotPos, rotation, [robotLengthPixels * -0.3, 0]);
+      let arrowFront = transformPx(robotPos, rotation, [robotLengthPixels * 0.3, 0]);
+      let arrowLeft = transformPx(robotPos, rotation, [robotLengthPixels * 0.15, robotLengthPixels * 0.15]);
+      let arrowRight = transformPx(robotPos, rotation, [robotLengthPixels * 0.15, robotLengthPixels * -0.15]);
       context.beginPath();
       context.moveTo(arrowBack[0], arrowBack[1]);
       context.lineTo(arrowFront[0], arrowFront[1]);
@@ -358,57 +283,43 @@ export default class OdometryVisualizer implements Visualizer {
     });
 
     // Draw arrows
-    [
-      command.poses.arrowFront,
-      command.poses.arrowCenter,
-      command.poses.arrowBack,
-    ].forEach((arrowPoses: Pose2d[], index: number) => {
-      arrowPoses.forEach((arrowPose: Pose2d) => {
-        let position = calcCoordinates(arrowPose.translation);
-        let rotation = arrowPose.rotation;
-        if (objectsFlipped) rotation += Math.PI;
+    [command.poses.arrowFront, command.poses.arrowCenter, command.poses.arrowBack].forEach(
+      (arrowPoses: Pose2d[], index: number) => {
+        arrowPoses.forEach((arrowPose: Pose2d) => {
+          let position = calcCoordinates(arrowPose.translation);
+          let rotation = arrowPose.rotation;
+          if (objectsFlipped) rotation += Math.PI;
 
-        context.strokeStyle = "white";
-        context.lineCap = "round";
-        context.lineJoin = "round";
-        context.lineWidth = 1.5 * pixelsPerInch;
-        let arrowBack = transformPx(position, rotation, [
-          robotLengthPixels * (-0.6 + 0.3 * index),
-          0,
-        ]);
-        let arrowFront = transformPx(position, rotation, [
-          robotLengthPixels * (0.3 * index),
-          0,
-        ]);
-        let arrowLeft = transformPx(position, rotation, [
-          robotLengthPixels * (-0.15 + 0.3 * index),
-          robotLengthPixels * 0.15,
-        ]);
-        let arrowRight = transformPx(position, rotation, [
-          robotLengthPixels * (-0.15 + 0.3 * index),
-          robotLengthPixels * -0.15,
-        ]);
-        let crossbarLeft = transformPx(position, rotation, [
-          0,
-          robotLengthPixels * (index == 0 ? 0.15 : 0.1),
-        ]);
-        let crossbarRight = transformPx(position, rotation, [
-          0,
-          robotLengthPixels * -(index == 0 ? 0.15 : 0.1),
-        ]);
-        context.beginPath();
-        context.moveTo(arrowBack[0], arrowBack[1]);
-        context.lineTo(arrowFront[0], arrowFront[1]);
-        context.lineTo(arrowLeft[0], arrowLeft[1]);
-        context.moveTo(arrowFront[0], arrowFront[1]);
-        context.lineTo(arrowRight[0], arrowRight[1]);
-        context.stroke();
-        context.beginPath();
-        context.moveTo(crossbarLeft[0], crossbarLeft[1]);
-        context.lineTo(crossbarRight[0], crossbarRight[1]);
-        context.stroke();
-      });
-    });
+          context.strokeStyle = "white";
+          context.lineCap = "round";
+          context.lineJoin = "round";
+          context.lineWidth = 1.5 * pixelsPerInch;
+          let arrowBack = transformPx(position, rotation, [robotLengthPixels * (-0.6 + 0.3 * index), 0]);
+          let arrowFront = transformPx(position, rotation, [robotLengthPixels * (0.3 * index), 0]);
+          let arrowLeft = transformPx(position, rotation, [
+            robotLengthPixels * (-0.15 + 0.3 * index),
+            robotLengthPixels * 0.15
+          ]);
+          let arrowRight = transformPx(position, rotation, [
+            robotLengthPixels * (-0.15 + 0.3 * index),
+            robotLengthPixels * -0.15
+          ]);
+          let crossbarLeft = transformPx(position, rotation, [0, robotLengthPixels * (index == 0 ? 0.15 : 0.1)]);
+          let crossbarRight = transformPx(position, rotation, [0, robotLengthPixels * -(index == 0 ? 0.15 : 0.1)]);
+          context.beginPath();
+          context.moveTo(arrowBack[0], arrowBack[1]);
+          context.lineTo(arrowFront[0], arrowFront[1]);
+          context.lineTo(arrowLeft[0], arrowLeft[1]);
+          context.moveTo(arrowFront[0], arrowFront[1]);
+          context.lineTo(arrowRight[0], arrowRight[1]);
+          context.stroke();
+          context.beginPath();
+          context.moveTo(crossbarLeft[0], crossbarLeft[1]);
+          context.lineTo(crossbarRight[0], crossbarRight[1]);
+          context.stroke();
+        });
+      }
+    );
 
     // Return target aspect ratio
     return isVertical ? fieldHeight / fieldWidth : fieldWidth / fieldHeight;

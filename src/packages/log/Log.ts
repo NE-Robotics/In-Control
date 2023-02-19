@@ -10,7 +10,7 @@ import {
   LogValueSetNumberArray,
   LogValueSetRaw,
   LogValueSetString,
-  LogValueSetStringArray,
+  LogValueSetStringArray
 } from "./LogValueSets";
 
 /** Represents a collection of log fields. */
@@ -29,11 +29,7 @@ export default class Log {
   public createBlankField(key: string, type: LoggableType) {
     if (key in this.fields) return;
     this.fields[key] = new LogField(type);
-    if (
-      type == LoggableType.BooleanArray ||
-      type == LoggableType.NumberArray ||
-      type == LoggableType.StringArray
-    ) {
+    if (type == LoggableType.BooleanArray || type == LoggableType.NumberArray || type == LoggableType.StringArray) {
       this.arrayLengths[key] = 0;
     }
   }
@@ -68,9 +64,7 @@ export default class Log {
 
   /** Returns the count of fields (excluding array item fields). */
   getFieldCount(): number {
-    return Object.keys(this.fields).filter(
-      (field) => !this.arrayItemFields.includes(field)
-    ).length;
+    return Object.keys(this.fields).filter((field) => !this.arrayItemFields.includes(field)).length;
   }
 
   /** Returns the constant field type. */
@@ -93,23 +87,18 @@ export default class Log {
       // Multiple fields, read from cache if possible
       let saveCache = false;
       if (uuid != null) {
-        if (
-          uuid in this.timestampSetCache &&
-          arraysEqual(this.timestampSetCache[uuid].keys, keys)
-        ) {
+        if (uuid in this.timestampSetCache && arraysEqual(this.timestampSetCache[uuid].keys, keys)) {
           return [...this.timestampSetCache[uuid].timestamps];
         }
         this.timestampSetCache[uuid] = {
           keys: keys,
-          timestamps: [],
+          timestamps: []
         };
         saveCache = true;
       }
 
       // Get new data
-      output = [
-        ...new Set(keys.map((key) => this.fields[key].getTimestamps()).flat()),
-      ];
+      output = [...new Set(keys.map((key) => this.fields[key].getTimestamps()).flat())];
       output.sort((a, b) => a - b);
       if (saveCache && uuid) this.timestampSetCache[uuid].timestamps = output;
     } else if (keys.length == 1) {
@@ -135,10 +124,7 @@ export default class Log {
   }
 
   /** Organizes the fields into a tree structure. */
-  getFieldTree(
-    includeArrayItems: boolean = true,
-    prefix: string = ""
-  ): { [id: string]: LogFieldTree } {
+  getFieldTree(includeArrayItems: boolean = true, prefix: string = ""): { [id: string]: LogFieldTree } {
     let root: { [id: string]: LogFieldTree } = {};
     Object.keys(this.fields).forEach((key) => {
       if (!includeArrayItems && this.arrayItemFields.includes(key)) return;
@@ -161,11 +147,7 @@ export default class Log {
   }
 
   /** Reads a set of generic values from the field. */
-  getRange(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetAny | undefined {
+  getRange(key: string, start: number, end: number): LogValueSetAny | undefined {
     if (key in this.fields) return this.fields[key].getRange(start, end);
   }
 
@@ -175,56 +157,32 @@ export default class Log {
   }
 
   /** Reads a set of Boolean values from the field. */
-  getBoolean(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetBoolean | undefined {
+  getBoolean(key: string, start: number, end: number): LogValueSetBoolean | undefined {
     if (key in this.fields) return this.fields[key].getBoolean(start, end);
   }
 
   /** Reads a set of Number values from the field. */
-  getNumber(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetNumber | undefined {
+  getNumber(key: string, start: number, end: number): LogValueSetNumber | undefined {
     if (key in this.fields) return this.fields[key].getNumber(start, end);
   }
 
   /** Reads a set of String values from the field. */
-  getString(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetString | undefined {
+  getString(key: string, start: number, end: number): LogValueSetString | undefined {
     if (key in this.fields) return this.fields[key].getString(start, end);
   }
 
   /** Reads a set of BooleanArray values from the field. */
-  getBooleanArray(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetBooleanArray | undefined {
+  getBooleanArray(key: string, start: number, end: number): LogValueSetBooleanArray | undefined {
     if (key in this.fields) return this.fields[key].getBooleanArray(start, end);
   }
 
   /** Reads a set of NumberArray values from the field. */
-  getNumberArray(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetNumberArray | undefined {
+  getNumberArray(key: string, start: number, end: number): LogValueSetNumberArray | undefined {
     if (key in this.fields) return this.fields[key].getNumberArray(start, end);
   }
 
   /** Reads a set of StringArray values from the field. */
-  getStringArray(
-    key: string,
-    start: number,
-    end: number
-  ): LogValueSetStringArray | undefined {
+  getStringArray(key: string, start: number, end: number): LogValueSetStringArray | undefined {
     if (key in this.fields) return this.fields[key].getStringArray(start, end);
   }
 
@@ -275,9 +233,7 @@ export default class Log {
       this.fields[key].putBooleanArray(timestamp, value);
       if (value.length > this.arrayLengths[key]) {
         for (let i = this.arrayLengths[key]; i < value.length; i++) {
-          this.fields[key + "/" + i.toString()] = new LogField(
-            LoggableType.Boolean
-          );
+          this.fields[key + "/" + i.toString()] = new LogField(LoggableType.Boolean);
           this.arrayItemFields.push(key + "/" + i.toString());
         }
         this.arrayLengths[key] = value.length;
@@ -297,9 +253,7 @@ export default class Log {
       this.fields[key].putNumberArray(timestamp, value);
       if (value.length > this.arrayLengths[key]) {
         for (let i = this.arrayLengths[key]; i < value.length; i++) {
-          this.fields[key + "/" + i.toString()] = new LogField(
-            LoggableType.Number
-          );
+          this.fields[key + "/" + i.toString()] = new LogField(LoggableType.Number);
           this.arrayItemFields.push(key + "/" + i.toString());
         }
         this.arrayLengths[key] = value.length;
@@ -319,9 +273,7 @@ export default class Log {
       this.fields[key].putStringArray(timestamp, value);
       if (value.length > this.arrayLengths[key]) {
         for (let i = this.arrayLengths[key]; i < value.length; i++) {
-          this.fields[key + "/" + i.toString()] = new LogField(
-            LoggableType.String
-          );
+          this.fields[key + "/" + i.toString()] = new LogField(LoggableType.String);
           this.arrayItemFields.push(key + "/" + i.toString());
         }
         this.arrayLengths[key] = value.length;
@@ -339,7 +291,7 @@ export default class Log {
       fields: {},
       arrayLengths: this.arrayLengths,
       arrayItemFields: this.arrayItemFields,
-      timestampRange: this.timestampRange,
+      timestampRange: this.timestampRange
     };
     Object.entries(this.fields).forEach(([key, value]) => {
       result.fields[key] = value.toSerialized();
@@ -360,24 +312,18 @@ export default class Log {
   }
 
   /** Merges two log objects with no overlapping fields. */
-  static mergeLogs(
-    firstLog: Log,
-    secondLog: Log,
-    timestampOffset: number
-  ): Log {
+  static mergeLogs(firstLog: Log, secondLog: Log, timestampOffset: number): Log {
     // Serialize logs and adjust timestamps
     let firstSerialized = firstLog.toSerialized();
     let secondSerialized = secondLog.toSerialized();
     Object.values(secondSerialized.fields).forEach((field) => {
       let newField = field as { timestamps: number[]; values: number[] };
-      newField.timestamps = newField.timestamps.map(
-        (timestamp) => timestamp + timestampOffset
-      );
+      newField.timestamps = newField.timestamps.map((timestamp) => timestamp + timestampOffset);
     });
     if (secondSerialized.timestampRange) {
-      secondSerialized.timestampRange = (
-        secondSerialized.timestampRange as number[]
-      ).map((timestamp) => timestamp + timestampOffset);
+      secondSerialized.timestampRange = (secondSerialized.timestampRange as number[]).map(
+        (timestamp) => timestamp + timestampOffset
+      );
     }
 
     // Merge logs
@@ -390,22 +336,13 @@ export default class Log {
     });
     log.arrayLengths = {
       ...firstSerialized.arrayLengths,
-      ...secondSerialized.arrayLengths,
+      ...secondSerialized.arrayLengths
     };
-    log.arrayItemFields = [
-      ...firstSerialized.arrayItemFields,
-      ...secondSerialized.arrayItemFields,
-    ];
+    log.arrayItemFields = [...firstSerialized.arrayItemFields, ...secondSerialized.arrayItemFields];
     if (firstSerialized.timestampRange && secondSerialized.timestampRange) {
       log.timestampRange = [
-        Math.min(
-          firstSerialized.timestampRange[0],
-          secondSerialized.timestampRange[0]
-        ),
-        Math.max(
-          firstSerialized.timestampRange[1],
-          secondSerialized.timestampRange[1]
-        ),
+        Math.min(firstSerialized.timestampRange[0], secondSerialized.timestampRange[0]),
+        Math.max(firstSerialized.timestampRange[1], secondSerialized.timestampRange[1])
       ];
     } else if (firstSerialized.timestampRange) {
       log.timestampRange = firstSerialized.timestampRange;
