@@ -107,6 +107,8 @@ export default class LogField {
 
   /** Inserts a new value at the correct index. */
   private putData(timestamp: number, value: any) {
+    if (value === null) return;
+
     if (this.data.timestamps.includes(timestamp)) return;
     let insertIndex: number;
     if (this.data.timestamps.length > 0 && timestamp > this.data.timestamps[this.data.timestamps.length - 1]) {
