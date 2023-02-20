@@ -402,6 +402,10 @@ function handleHubMessage(window: BrowserWindow, message: NamedMessage) {
       }
       break;
 
+    case "ask-3d-camera":
+      select3DCameraPopup(window, message.data.options, message.data.selectedIndex);
+      break;
+
     case "prompt-export":
       createExportWindow(window, message.data);
       break;
@@ -664,6 +668,52 @@ function downloadStart() {
       username: DOWNLOAD_USERNAME,
       password: DOWNLOAD_PASSWORD
     });
+}
+
+function select3DCameraPopup(window: BrowserWindow, options: string[], selectedIndex: number) {
+  const cameraMenu = new Menu();
+  cameraMenu.append(
+    new MenuItem({
+      label: "Orbit Field",
+      type: "checkbox",
+      checked: selectedIndex == -1,
+      click() {
+        sendMessage(window, "set-3d-camera", -1);
+      }
+    })
+  );
+  cameraMenu.append(
+    new MenuItem({
+      label: "Orbit Robot",
+      type: "checkbox",
+      checked: selectedIndex == -2,
+      click() {
+        sendMessage(window, "set-3d-camera", -2);
+      }
+    })
+  );
+  if (options.length > 0) {
+    cameraMenu.append(
+      new MenuItem({
+        type: "separator"
+      })
+    );
+  }
+  options.forEach((option, index) => {
+    cameraMenu.append(
+      new MenuItem({
+        label: option,
+        type: "checkbox",
+        checked: index == selectedIndex,
+        click() {
+          sendMessage(window, "set-3d-camera", index);
+        }
+      })
+    );
+  });
+  cameraMenu.popup({
+    window: window
+  });
 }
 
 /**
@@ -1617,6 +1667,10 @@ function createSatellite(parentWindow: Electron.BrowserWindow, uuid: string, typ
             satellite.setAspectRatio(aspectRatio);
             satellite.setContentSize(Math.round(newX), Math.round(newY));
           }
+          break;
+
+        case "ask-3d-camera":
+          select3DCameraPopup(satellite, message.data.options, message.data.selectedIndex);
           break;
       }
     });
