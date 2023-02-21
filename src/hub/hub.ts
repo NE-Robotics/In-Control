@@ -37,6 +37,7 @@ declare global {
     sidebar: Sidebar;
     tabs: Tabs;
     messagePort: MessagePort | null;
+    setNt4: (topic: string, value: any) => void;
     sendMainMessage: (name: string, data?: any) => void;
     startDrag: (x: number, y: number, offsetX: number, offsetY: number, data: any) => void;
 
@@ -56,6 +57,11 @@ window.selection = new Selection();
 window.sidebar = new Sidebar();
 window.tabs = new Tabs();
 window.messagePort = null;
+window.setNt4 = (topic: string, value: any) => {
+  if (liveSource instanceof NT4Source) {
+    liveSource.publishValue(topic, value);
+  }
+};
 
 let historicalSource: HistorialDataSource | null;
 let liveSource: LiveDataSource | null;

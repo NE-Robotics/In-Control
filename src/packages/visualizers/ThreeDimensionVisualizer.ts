@@ -49,6 +49,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private controls: OrbitControls;
+  private rayCaster: THREE.Raycaster;
+  private planeX: THREE.Plane;
   private wpilibCoordinateGroup: THREE.Group; // Rotated to match WPILib coordinates
   private wpilibFieldCoordinateGroup: THREE.Group; // Field coordinates (origin at driver stations and flipped based on alliance)
   private fixedCameraGroup: THREE.Group;
@@ -141,7 +143,15 @@ export default class ThreeDimensionVisualizer implements Visualizer {
 
     // Reset camera and controls
     this.resetCamera();
-
+    // Setup raycaster
+    {
+      this.rayCaster = new THREE.Raycaster();
+      // new plane facing up
+      this.planeX = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      addEventListener("auxclick", (event) => {
+        this.getClicked3DPoint(event);
+      });
+    }
     // Add lights
     {
       const skyColor = 0xffffff;
@@ -312,6 +322,24 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       window.requestAnimationFrame(periodic);
     };
     window.requestAnimationFrame(periodic);
+  }
+
+  getClicked3DPoint(evt: any) {
+    if (evt.button != 1) return;
+    evt.preventDefault();
+    let mousePosition: THREE.Vector2 = new THREE.Vector2();
+    mousePosition.x = (evt.layerX / this.canvas.width) * 2 - 1;
+    mousePosition.y = -(evt.layerY / this.canvas.height) * 2 + 1;
+
+    // Create a ray, point it from the camera to the mouse position, and find the intersection with a plane
+    var intersects = new THREE.Vector3();
+    this.rayCaster.setFromCamera(mousePosition, this.camera);
+    this.rayCaster.ray.intersectPlane(this.planeX, intersects);
+
+    console.log(window);
+    console.log([-(intersects.x - 8), intersects.z + 4]);
+    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8));
+    window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
   }
 
   /** Switches the selected camera. */
@@ -716,7 +744,9 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       for (let i = 0; i < this.trajectories.length; i++) {
         // Update poses
         this.trajectories[i].geometry.setFromPoints(
-          this.command.poses.trajectory[i].map((pose: Pose3d) => new THREE.Vector3(...pose.translation))
+          this.command.poses.trajectory[i].map(
+            (pose: Pose3d) => new THREE.Vector3(pose.translation[0], pose.translation[1], pose.translation[2] + 0.005)
+          )
         );
       }
     }
