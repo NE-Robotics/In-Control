@@ -336,8 +336,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     this.rayCaster.setFromCamera(mousePosition, this.camera);
     this.rayCaster.ray.intersectPlane(this.planeX, intersects);
 
-    console.log(window);
-    console.log([-(intersects.x - 8), intersects.z + 4]);
+    console.log("Click at:" + [-(intersects.x - 8), intersects.z + 4]);
     window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8));
     window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
   }
