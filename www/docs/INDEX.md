@@ -1,7 +1,6 @@
 # Welcome to In Control!
 
 In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
-
 ## Getting Started
 
 These links cover the basics of getting around in In Control and and accessing data.
@@ -35,3 +34,5 @@ In Control supports many ways to view and analyze data, organized into tabs. The
 - [Sample Log Data](https://drive.google.com/drive/folders/14Bbp10csQPjh2VcApNM07lwt2v77-z_I?usp=share_link) (6328 @ 2022 Championship)
 - [Custom Fields/Robots/Joysticks](/docs/CUSTOM-CONFIG.md)
 - [Converting Onshape & STEP Files to glTF](/docs/GLTF-CONVERT.md)
+- [AdvantageScope](https://github.com/Mechanical-Advantage/AdvantageScope)
+- [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit)
