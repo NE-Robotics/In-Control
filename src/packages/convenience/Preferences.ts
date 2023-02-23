@@ -8,4 +8,5 @@ export default interface Preferences {
   threeDimensionMode: "quality" | "efficiency" | "auto";
   usb?: boolean;
   keys: any[];
+  dashboardMode: "sim" | "real" | "none";
 }

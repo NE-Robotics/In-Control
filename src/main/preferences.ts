@@ -6,6 +6,7 @@ const RIO_PATH = document.getElementById("rioPath") as HTMLInputElement;
 const LIVE_MODE = document.getElementById("liveMode") as HTMLInputElement;
 const RLOG_PORT = document.getElementById("rlogPort") as HTMLInputElement;
 const THREE_DIMENSION_MODE = document.getElementById("threeDimensionMode") as HTMLInputElement;
+const DASHBOARD_MODE = document.getElementById("dashboardMode") as HTMLInputElement;
 const EXIT_BUTTON = document.getElementById("exit") as HTMLInputElement;
 const CONFIRM_BUTTON = document.getElementById("confirm") as HTMLInputElement;
 
@@ -41,6 +42,7 @@ window.addEventListener("message", (event) => {
       LIVE_MODE.value = oldPrefs.liveMode;
       RLOG_PORT.value = oldPrefs.rlogPort.toString();
       THREE_DIMENSION_MODE.value = oldPrefs.threeDimensionMode;
+      DASHBOARD_MODE.value = oldPrefs.dashboardMode;
 
       // Close function
       function close(useNewPrefs: boolean) {
@@ -62,6 +64,11 @@ window.addEventListener("message", (event) => {
           if (THREE_DIMENSION_MODE.value == "efficiency") threeDimensionMode = "efficiency";
           if (THREE_DIMENSION_MODE.value == "auto") threeDimensionMode = "auto";
 
+          let dashboardMode: "sim" | "real" | "none" = "none";
+          if (DASHBOARD_MODE.value == "sim") dashboardMode = "sim";
+          if (DASHBOARD_MODE.value == "real") dashboardMode = "real";
+          if (DASHBOARD_MODE.value == "none") dashboardMode = "none";
+
           // Preserve old keys
           let keys = oldPrefs.keys;
 
@@ -72,7 +79,8 @@ window.addEventListener("message", (event) => {
             liveMode: liveMode,
             rlogPort: Number(RLOG_PORT.value),
             threeDimensionMode: threeDimensionMode,
-            keys: keys
+            keys: keys,
+            dashboardMode: dashboardMode
           };
           messagePort.postMessage(newPrefs);
         } else {

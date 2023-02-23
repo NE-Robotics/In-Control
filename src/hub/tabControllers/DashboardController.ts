@@ -30,8 +30,6 @@ export default class DashboardController implements TabController {
     this.TABLE_CONTAINER = content.getElementsByClassName("dashboard-table-container")[0] as HTMLElement;
     this.TABLE_BODY = content.getElementsByClassName("dashboard-table")[0].firstElementChild as HTMLElement;
     this.VIDEO_CONTAINER = content.getElementsByClassName("dashboard-video-container")[0] as HTMLElement;
-
-    this.VIDEO_CONTAINER.setAttribute("src", "http://localhost:1181/stream.mjpg");
   }
 
   saveState(): TabState {
@@ -54,7 +52,18 @@ export default class DashboardController implements TabController {
     }
   }
 
-  refresh() {}
+  refresh() {
+    let IP = null;
+    if (window.preferences?.dashboardMode == "sim") {
+      IP = "localhost";
+    } else if (window.preferences?.dashboardMode == "real") {
+      IP = window.preferences?.rioAddress;
+    } else {
+      // none
+      this.VIDEO_CONTAINER.style.display = "none";
+    }
+    this.VIDEO_CONTAINER.setAttribute("src", "http://" + window.preferences?.rioAddress + ":1181/stream.mjpg");
+  }
 }
 
 // import { TableState } from "../../packages/utils/HubState";

@@ -30,7 +30,8 @@ export const DEFAULT_PREFS: Preferences = {
   liveMode: "nt4",
   rlogPort: 5800,
   threeDimensionMode: "quality",
-  keys: []
+  keys: [],
+  dashboardMode: "none"
 };
 
 // Live RLOG
