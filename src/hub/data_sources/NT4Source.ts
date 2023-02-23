@@ -162,6 +162,8 @@ export default class NT4Source extends LiveDataSource {
           this.setStatus(LiveDataSourceStatus.Active);
           this.log = new Log();
           this.shouldRunOutputCallback = true;
+          this.publishTopic("/SmartDashboard/Target X", "double");
+          this.publishTopic("/SmartDashboard/Target Y", "double");
           if (this.akitMode) {
             this.noFieldsTimeout = setTimeout(() => {
               window.sendMainMessage("error", {
@@ -221,6 +223,19 @@ export default class NT4Source extends LiveDataSource {
   stop() {
     super.stop();
     this.client?.disconnect();
+  }
+
+  publishTopic(topic: string, type: string) {
+    console.log("Publishing topic: " + topic + " type: " + type);
+    if (this.client) {
+      this.client.publishTopic(topic, type);
+    }
+  }
+
+  publishValue(topic: string, value: unknown) {
+    if (this.client) {
+      this.client.addSample(topic, value);
+    }
   }
 
   /** Gets the name of the topic, depending on whether we're running in AdvantageKit mode. */
