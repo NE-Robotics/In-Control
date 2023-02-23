@@ -316,6 +316,7 @@ function handleHubMessage(window: BrowserWindow, message: NamedMessage) {
             enabled: lockedRange != null,
             click() {
               createEditRangeWindow(window, lockedRange as [number, number], (newLockedRange) => {
+                console.log(newLockedRange);
                 sendMessage(window, "edit-axis", {
                   legend: legend,
                   lockedRange: newLockedRange,
