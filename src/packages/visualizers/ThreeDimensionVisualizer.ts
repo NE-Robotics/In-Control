@@ -231,8 +231,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     // Create cone models
     const loader = new THREE.TextureLoader();
     {
-      let coneTextureBlue = loader.load("../www/textures/cone-blue.png");
-      let coneTextureBlueBase = loader.load("../www/textures/cone-blue-base.png");
+      let coneTextureBlue = loader.load("../textures/cone-blue.png");
+      let coneTextureBlueBase = loader.load("../textures/cone-blue-base.png");
       coneTextureBlue.offset.set(0.25, 0);
 
       let coneMesh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.25, 16, 32), [
@@ -256,8 +256,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       this.coneBlueBackSet.setSource(new THREE.Group().add(backMesh));
     }
     {
-      let coneTextureYellow = loader.load("../www/textures/cone-yellow.png");
-      let coneTextureYellowBase = loader.load("../www/textures/cone-yellow-base.png");
+      let coneTextureYellow = loader.load("../textures/cone-yellow.png");
+      let coneTextureYellowBase = loader.load("../textures/cone-yellow-base.png");
       coneTextureYellow.offset.set(0.25, 0);
 
       let coneMesh = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.25, 16, 32), [
@@ -283,7 +283,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
 
     // Create AprilTag models
     [null, ...Array(30).keys()].forEach((id) => {
-      let aprilTagTexture = loader.load("../www/textures/apriltag/" + (id === null ? "smile" : id.toString()) + ".png");
+      let aprilTagTexture = loader.load("../textures/apriltag/" + (id === null ? "smile" : id.toString()) + ".png");
       aprilTagTexture.minFilter = THREE.NearestFilter;
       aprilTagTexture.magFilter = THREE.NearestFilter;
       let whiteMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
