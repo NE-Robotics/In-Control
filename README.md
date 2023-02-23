@@ -2,4 +2,4 @@
 
 ---
 
-Hey welcome to the empty readme
+Online documentation is available [here](/www/docs/INDEX.md)
