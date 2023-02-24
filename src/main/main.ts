@@ -1140,7 +1140,15 @@ function setupMenu() {
                   let data = jsonfile.readFileSync(files.filePaths[0]);
 
                   // Check for required fields
-                  if (!("version" in data && "keys" in data && Array.isArray(data.keys))) {
+                  if (
+                    !(
+                      "version" in data &&
+                      "keys" in data &&
+                      Array.isArray(data.keys) &&
+                      "publishers" in data &&
+                      Array.isArray(data.publishers)
+                    )
+                  ) {
                     dialog.showMessageBox(window, {
                       type: "error",
                       title: "Error",
@@ -1165,6 +1173,7 @@ function setupMenu() {
                     });
                     if (result != 0) return;
                   }
+                  console.log(data.keys, data.publishers);
                   let oldPrefs = jsonfile.readFileSync(PREFS_FILENAME);
                   jsonfile.writeFile(
                     PREFS_FILENAME,
@@ -1830,6 +1839,9 @@ app.whenReady().then(() => {
     }
     if ("keys" in oldPrefs) {
       prefs.keys = oldPrefs.keys;
+    }
+    if ("publishers" in oldPrefs) {
+      prefs.publishers = oldPrefs.publishers;
     }
     if (
       "liveMode" in oldPrefs &&

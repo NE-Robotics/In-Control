@@ -212,8 +212,8 @@ export default class NT4Source extends LiveDataSource {
           );
           this.client?.subscribe([key[0]], key[1], key[2], key[3]);
         }
-        for (const key of window.preferences.publishers) {
-          this.client?.publishTopic(key, "raw");
+        for (const publisher of window.preferences.publishers) {
+          this.publishTopic(publisher[0], publisher[1]);
         }
       } else {
         this.client?.subscribe(["/"], true, true, 0);

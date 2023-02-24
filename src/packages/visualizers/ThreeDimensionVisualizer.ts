@@ -325,7 +325,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   }
 
   getClicked3DPoint(evt: MouseEvent) {
-    if (evt.button != 1) return;
+    if (evt.button != 2) return;
+    if (evt.ctrlKey != true) return;
     evt.preventDefault();
     // Get mouse position
     let rect = this.canvas.getBoundingClientRect();
@@ -339,7 +340,9 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     this.rayCaster.ray.intersectPlane(this.planeX, intersects);
 
     console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
-    window.setNt4("/SmartDashboard/TargetLocation", [-(intersects.x - 8.25), intersects.z + 4]);
+    // sets selected position on field (right click) in WPI field relative values
+    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8.25));
+    window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
   }
 
   /** Switches the selected camera. */
