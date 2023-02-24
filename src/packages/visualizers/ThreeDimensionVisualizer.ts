@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { Config3dField, Config3dRobot, Config3d_Rotation } from "../FRC/FRCData";
 import { AprilTag, Pose3d, rotation3dToQuaternion } from "../utils/geometry";
-import { MechanismState } from "../log/LogUtil";
+import { MechanismState, getIsRedAlliance } from "../log/LogUtil";
 import { convert } from "../utils/units";
 import Visualizer from "./Visualizer";
 
@@ -150,6 +150,18 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       this.planeX = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
       addEventListener("auxclick", (event) => {
         this.getClicked3DPoint(event);
+      });
+    }
+
+    // Handle hotkeys
+    {
+      addEventListener("keydown", (event: KeyboardEvent) => {
+        let isRed: boolean = getIsRedAlliance(window.log);
+        if (window.frcData?.hotkeys.has((isRed ? "red/" : "blue/") + event.key)) {
+          event.preventDefault();
+          let hotkey = window.frcData?.hotkeys.get((isRed ? "red/" : "blue/") + event.key);
+          window.setNt4("/SmartDashboard/TargetLocation", hotkey);
+        }
       });
     }
     // Add lights
@@ -341,8 +353,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
 
     console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
     // sets selected position on field (right click) in WPI field relative values
-    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8.25));
-    window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
+    window.setNt4("/SmartDashboard/TargetLocation", [-(intersects.x - 8.25), intersects.z + 4, -2]);
   }
 
   /** Switches the selected camera. */

@@ -65,7 +65,8 @@ let frcData: FRCData = {
   field2ds: [],
   field3ds: [],
   robots: [],
-  joysticks: []
+  joysticks: [],
+  hotkeys: new Map()
 };
 
 // Live RLOG variables
