@@ -148,6 +148,17 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       this.rayCaster = new THREE.Raycaster();
       // new plane facing up
       this.planeX = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      // create some plane geometry that aligns with the plane
+      const geometry = new THREE.PlaneGeometry(16.5, 8);
+      // create a mesh with plane geometry
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.8, transparent: false })
+      );
+
+      mesh.lookAt(new THREE.Vector3(0, 1, 0));
+      // add it to the scene
+      this.scene.add(mesh);
       addEventListener("auxclick", (event) => {
         this.getClicked3DPoint(event);
       });
