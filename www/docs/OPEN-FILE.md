@@ -6,7 +6,7 @@ This section describes how to open log files for analysis.
 
 ## Opening a Saved Log
 
-In the menu bar, click "File" > "Open Log..." or press **cmd/ctrl + O**, then choose a log file from the local disk. Dragging a log file from the system file browser to the AdvantageScope icon or window also causes it to open.
+In the menu bar, click "Data" > "Logs" > "Open Log..." or press **cmd/ctrl + O**, then choose a log file from the local disk. Dragging a log file from the system file browser to the AdvantageScope icon or window also causes it to open.
 
 ![Opening a saved log](/docs/resources/open-file/open-file-1.gif)
 
@@ -20,7 +20,7 @@ Supported log formats are:
 
 ## Merging Logs
 
-Log files of different types can be merged automatically. For example, DS log data can be combined with a WPILOG file from the robot. Click "File" > "Merge Log..." or press **shift + cmd/ctrl + O**, then choose a log file from the local disk. The timestamps of the logs are aligned based on when the robot was first enabled (usually the start of the match).
+Log files of different types can be merged automatically. For example, DS log data can be combined with a WPILOG file from the robot. Click "Data" > "Logs" > "Merge Log..." or press **shift + cmd/ctrl + O**, then choose a log file from the local disk. The timestamps of the logs are aligned based on when the robot was first enabled (usually the start of the match).
 
 > Note: Merging is only possible when the logs do not contain conflicting (shared) fields.
 
@@ -28,13 +28,13 @@ Log files of different types can be merged automatically. For example, DS log da
 
 ## Downloading from a roboRIO
 
-Open the preferences window by pressing **cmd/ctrl + comma** or clicking "Help" > "Show Preferences..." (Windows/Linux) or "In Control" > "Preferences..." (macOS). Update the "roboRIO Address" and "roboRIO Log Folder".
+Open the preferences window by pressing **cmd/ctrl + comma** or clicking "Options" > "Preferences..." (Windows/Linux) or "In Control" > "Preferences..." (macOS). Update the "roboRIO Address" and "roboRIO Log Folder".
 
-> Note: Click "File" > "Use USB roboRIO Address" to temporarily use the IP address "172.22.11.2" for all connections.
+> Note: Click "Data" > "Connections" > "Use USB roboRIO Address" to temporarily use the IP address "172.22.11.2" for all connections.
 
 ![Diagram of roboRIO preferences](/docs/resources/open-file/open-file-3.png)
 
-Click "File" > "Download Logs..." or press **cmd/ctrl + D** to open the download window. Once connected to the roboRIO, available logs are shown with the newest at the top. Select one or more log files to download (shift-click to select a range or **cmd/ctrl + A** to select all). Then click the ↓ symbol and select a save location.
+Click "Data" > "Logs" > "Download Logs..." or press **cmd/ctrl + D** to open the download window. Once connected to the roboRIO, available logs are shown with the newest at the top. Select one or more log files to download (shift-click to select a range or **cmd/ctrl + A** to select all). Then click the ↓ symbol and select a save location.
 
 > Note: When downloading multiple files, In Control skips any that are already found in the destination folder.
 

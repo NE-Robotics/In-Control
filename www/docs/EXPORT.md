@@ -8,7 +8,7 @@ In Control includes a flexible system for exporting log data as a CSV or WPILOG 
 - Exporting a WPILOG file based on NetworkTables data, for later access.
 - Saving a WPILOG with a limited number of fields (and duplicate values removed) to reduce file size.
 
-To view options for exporting, click "File" > "Export Data..." or press **cmd/ctrl + E**.
+To view options for exporting, click "Data" > "Logs" > "Export Data..." or press **cmd/ctrl + E**.
 
 ![Export options](/docs/resources/export/export-1.png)
 

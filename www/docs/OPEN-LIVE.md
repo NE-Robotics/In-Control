@@ -6,9 +6,9 @@ All visualizations in In Control are designed to receive live data from a robot 
 
 ## Configuration
 
-Open the preferences window by pressing **cmd/ctrl + comma** or clicking "Help" > "Show Preferences..." (Windows/Linux) or "In Control" > "Preferences..." (macOS). Update the "roboRIO Address" and "Live Mode (options listed below).
+Open the preferences window by pressing **cmd/ctrl + comma** or clicking "Options" > Preferences..." (Windows/Linux) or "In Control" > "Preferences..." (macOS). Update the "roboRIO Address" and "Live Mode (options listed below).
 
-> Note: Click "File" > "Use USB roboRIO Address" to temporarily use the IP address "172.22.11.2" for all connections.
+> Note: Click "Data" > "Connections" > "Use USB roboRIO Address" to temporarily use the IP address "172.22.11.2" for all connections.
 
 - **NetworkTables 4:** This is the default networking protocol starting in WPILib 2023, and is commonly used by dashboards, coprocessors, etc. See the [WPILib documentation](https://docs.wpilib.org/en/stable/docs/software/networktables/index.html) for more details. Note that NetworkTables 3 (used by WPILib 2022 and older) is not supported by In Control. Defualt **NetworkTables 4** will subscribe to everything & update all connections as fast as possible.
 - **NetworkTables 4 (AdvantageKit):** This mode is designed for use with robot code running AdvantageKit, which publishes to the "/AdvantageKit" table in NetworkTables. The only difference from the **NetworkTables 4** mode is that the "/AdvantageKit" table is used as the root, which allows for easier switching between an NT4 connection and an AdvantageKit log file.
@@ -21,8 +21,8 @@ Open the preferences window by pressing **cmd/ctrl + comma** or clicking "Help" 
 
 To start the connection to a robot (using the configured "roboRIO Address") or a simulator (using "127.0.0.1"), follow these steps:
 
-- **Robot:** Click "File" > "Connect to Robot" or press **cmd/ctrl + K**
-- **Simulator:** Click "File" > "Connect to Simulator" or press **shift + cmd/ctrl + K**
+- **Robot:** Click "Data" > "Connections" > "Connect to Robot" or press **cmd/ctrl + K**
+- **Simulator:** Click "Data" > "Connections" > "Connect to Simulator" or press **shift + cmd/ctrl + K**
 
 The window title displays the IP address and the text "Searching" until the robot/sim is connected. It attempts to reconnect automatically using the same settings after a disconnect.
 

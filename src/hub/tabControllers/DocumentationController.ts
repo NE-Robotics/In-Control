@@ -26,20 +26,7 @@ export default class DocumentationController implements TabController {
 
   refresh(): void {}
 
-  periodic(): void {
-    // Update screenshot on index page
-    if (this.isIndex) {
-      let images = this.TEXT.getElementsByTagName("img");
-      if (images.length >= 1) {
-        let isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        if (isDark && images[0].src.endsWith("screenshot-light.png")) {
-          images[0].src = "../docs/resources/screenshot-dark.png";
-        } else if (!isDark && images[0].src.endsWith("screenshot-dark.png")) {
-          images[0].src = "../docs/resources/screenshot-light.png";
-        }
-      }
-    }
-  }
+  periodic(): void {}
 
   private loadMarkdown(markdownPath: string) {
     fetch(markdownPath)

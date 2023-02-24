@@ -4,7 +4,7 @@ _[< Return to homepage](/docs/INDEX.md)_
 
 The screenshot below shows the important elements of the main In Control window. The exact appearance differs between operating systems.
 
-> Note: To view multiple log files simultaneously, click "File" > "New Window" or press **cmd/ctrl + N**.
+> Note: To view multiple log files simultaneously, click "Display" > "New Window" or press **cmd/ctrl + N**.
 
 ![Navigation diagram](/docs/resources/navigation/navigation-1.png)
 
@@ -18,7 +18,7 @@ To the left is the <span style="color: red;">sidebar (red)</span> with the list 
 
 ## Tab Bar
 
-Use the <span style="color: blue;">tab bar (blue)</span> to switch between different views. This documentation is available at any time by clicking the 📖 icon to the left. To export the current tab layout (and associated settings), click "File" > "Export Layout..." To import a layout from a file, click "File" > "Import Layout..."
+Use the <span style="color: blue;">tab bar (blue)</span> to switch between different views. This documentation is available at any time by clicking the 📖 icon to the left. To export the current tab layout (and associated settings), click "Options" > "Export Layout..." To import a layout from a file, click "Options" > "Import Layout..."
 
 > Note: Tabs can be named to identify their contents. Rename a tab by right-clicking it and selecting "Rename..."
 
