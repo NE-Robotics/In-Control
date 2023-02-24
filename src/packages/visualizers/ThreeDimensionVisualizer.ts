@@ -149,16 +149,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       // new plane facing up
       this.planeX = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
       // create some plane geometry that aligns with the plane
-      const geometry = new THREE.PlaneGeometry(16.5, 8);
-      // create a mesh with plane geometry
-      const mesh = new THREE.Mesh(
-        geometry,
-        new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.8, transparent: false })
-      );
-
-      mesh.lookAt(new THREE.Vector3(0, 1, 0));
-      // add it to the scene
-      this.scene.add(mesh);
+      const helper = new THREE.PlaneHelper(this.planeX, 1, 0xffff00);
+      this.scene.add(helper);
       addEventListener("auxclick", (event) => {
         this.getClicked3DPoint(event);
       });
@@ -347,8 +339,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     this.rayCaster.setFromCamera(mousePosition, this.camera);
     this.rayCaster.ray.intersectPlane(this.planeX, intersects);
 
-    console.log("Click at:" + [-(intersects.x - 8), intersects.z + 4]);
-    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8));
+    console.log("Click at:" + [-(intersects.x - 8.25), intersects.z + 4]);
+    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8.25));
     window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
   }
 
