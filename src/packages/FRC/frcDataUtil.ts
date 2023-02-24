@@ -30,7 +30,8 @@ export function loadFRCData(): FRCData {
     field2ds: [],
     field3ds: [],
     robots: [],
-    joysticks: []
+    joysticks: [],
+    hotkeys: new Map()
   };
 
   [path.join(__dirname, "..", "frcData"), EXTRA_FRC_DATA].forEach((folder) => {
@@ -42,6 +43,7 @@ export function loadFRCData(): FRCData {
       let isField3d = file.startsWith("Field3d_");
       let isRobot = file.startsWith("Robot_");
       let isJoystick = file.startsWith("Joystick_");
+      let isHotkey = file.startsWith("Hotkey_");
 
       if (isField2d) {
         // ***** 2D FIELD *****
@@ -351,6 +353,19 @@ export function loadFRCData(): FRCData {
           });
         }
         frcData.joysticks.push(config);
+      } else if (isHotkey) {
+        let keys: any = configRaw.keys;
+        // Yea I know this is gross. Feel free to fix it if you want
+        for (let group in configRaw.red) {
+          for (let location in configRaw.red[group]) {
+            frcData.hotkeys.set("red/" + keys[group][location], configRaw.red[group][location]);
+          }
+        }
+        for (let group in configRaw.blue) {
+          for (let location in configRaw.blue[group]) {
+            frcData.hotkeys.set("blue/" + keys[group][location], configRaw.red[group][location]);
+          }
+        }
       }
     });
   });

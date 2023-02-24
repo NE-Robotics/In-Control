@@ -3,6 +3,7 @@ export interface FRCData {
   field3ds: Config3dField[];
   robots: Config3dRobot[];
   joysticks: ConfigJoystick[];
+  hotkeys: Map<String, [number, number, number]>;
 }
 
 export interface Config2d {
