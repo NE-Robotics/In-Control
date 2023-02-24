@@ -162,8 +162,6 @@ export default class NT4Source extends LiveDataSource {
           this.setStatus(LiveDataSourceStatus.Active);
           this.log = new Log();
           this.shouldRunOutputCallback = true;
-          this.publishTopic("/SmartDashboard/Target X", "double");
-          this.publishTopic("/SmartDashboard/Target Y", "double");
           if (this.akitMode) {
             this.noFieldsTimeout = setTimeout(() => {
               window.sendMainMessage("error", {
@@ -213,6 +211,9 @@ export default class NT4Source extends LiveDataSource {
             "Key: " + key + " key[0] " + key[0] + " key[1] " + key[1] + " key[2] " + key[2] + " key[3] " + key[3]
           );
           this.client?.subscribe([key[0]], key[1], key[2], key[3]);
+        }
+        for (const key of window.preferences.publishers) {
+          this.client?.publishTopic(key, "raw");
         }
       } else {
         this.client?.subscribe(["/"], true, true, 0);

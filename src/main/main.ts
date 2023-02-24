@@ -1175,7 +1175,8 @@ function setupMenu() {
                       liveMode: oldPrefs.liveMode,
                       rlogPort: oldPrefs.rlogPort,
                       threeDimensionMode: oldPrefs.threeDimensionMode,
-                      keys: data.keys
+                      keys: data.keys,
+                      publishers: data.publishers
                     },
                     { spaces: 2 }
                   );

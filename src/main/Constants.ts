@@ -31,6 +31,7 @@ export const DEFAULT_PREFS: Preferences = {
   rlogPort: 5800,
   threeDimensionMode: "quality",
   keys: [],
+  publishers: [],
   dashboardMode: "none"
 };
 

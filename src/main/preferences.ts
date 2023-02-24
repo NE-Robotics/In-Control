@@ -71,16 +71,18 @@ window.addEventListener("message", (event) => {
 
           // Preserve old keys
           let keys = oldPrefs.keys;
+          let publishers = oldPrefs.publishers;
 
           let newPrefs: Preferences = {
-            theme: theme,
+            theme,
             rioAddress: RIO_ADDRESS.value,
             rioPath: RIO_PATH.value,
             liveMode: liveMode,
             rlogPort: Number(RLOG_PORT.value),
-            threeDimensionMode: threeDimensionMode,
-            keys: keys,
-            dashboardMode: dashboardMode
+            threeDimensionMode,
+            keys,
+            publishers,
+            dashboardMode
           };
           messagePort.postMessage(newPrefs);
         } else {
