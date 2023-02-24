@@ -327,19 +327,21 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     window.requestAnimationFrame(periodic);
   }
 
-  getClicked3DPoint(evt: any) {
+  getClicked3DPoint(evt: MouseEvent) {
     if (evt.button != 1) return;
     evt.preventDefault();
-    let mousePosition: THREE.Vector2 = new THREE.Vector2();
-    mousePosition.x = (evt.layerX / this.canvas.width) * 2 - 1;
-    mousePosition.y = -(evt.layerY / this.canvas.height) * 2 + 1;
+    // Get mouse position
+    let rect = this.canvas.getBoundingClientRect();
+    let mousePosition = new THREE.Vector2();
+    mousePosition.x = ((evt.clientX - rect.left) / rect.width) * 2 - 1;
+    mousePosition.y = -(((evt.clientY - rect.top) / rect.height) * 2) + 1;
 
     // Create a ray, point it from the camera to the mouse position, and find the intersection with a plane
     var intersects = new THREE.Vector3();
     this.rayCaster.setFromCamera(mousePosition, this.camera);
     this.rayCaster.ray.intersectPlane(this.planeX, intersects);
 
-    console.log("Click at:" + [-(intersects.x - 8.25), intersects.z + 4]);
+    console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
     window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8.25));
     window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
   }
