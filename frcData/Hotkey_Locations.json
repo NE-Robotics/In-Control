@@ -1,7 +1,7 @@
 {
   "red": {
     "loading zones": {
-      "single substation": [14.3, 7.4, 90],
+      "single substation": [4.3, 7.4, 90],
       "double substation bottom": [1, 6.1, 180],
       "double substation top": [1, 7.5, 180]
     },
