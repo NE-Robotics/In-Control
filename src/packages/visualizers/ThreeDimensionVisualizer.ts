@@ -341,8 +341,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
 
     console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
     // sets selected position on field (right click) in WPI field relative values
-    window.setNt4("/SmartDashboard/Target X", -(intersects.x - 8.25));
-    window.setNt4("/SmartDashboard/Target Y", intersects.z + 4);
+    window.setNt4("/SmartDashboard/TargetLocation", [-(intersects.x - 8.25), intersects.z + 4, -2]);
   }
 
   /** Switches the selected camera. */
