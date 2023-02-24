@@ -26,7 +26,20 @@ export default class DocumentationController implements TabController {
 
   refresh(): void {}
 
-  periodic(): void {}
+  periodic(): void {
+    // Update screenshot on index page
+    if (this.isIndex) {
+      let logo = this.TEXT.getElementsByTagName("img");
+      if (logo.length >= 1) {
+        let isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (isDark && logo[0].src.endsWith(".png")) {
+          logo[0].src = "../docs/resources/logo-white.png";
+        } else if (!isDark && logo[0].src.endsWith(".png")) {
+          logo[0].src = "../docs/resources/logo-black.png";
+        }
+      }
+    }
+  }
 
   private loadMarkdown(markdownPath: string) {
     fetch(markdownPath)
