@@ -1,4 +1,5 @@
 # Welcome to In Control!
+![In Control](/docs/resources/logo-black.png)
 
 In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
 ## Getting Started
