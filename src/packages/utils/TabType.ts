@@ -12,7 +12,8 @@ enum TabType {
   Swerve,
   Mechanism,
   Points,
-  AKMetadata
+  AKMetadata,
+  ScoringNodes
 }
 
 export default TabType;
@@ -61,6 +62,8 @@ export function getDefaultTabTitle(type: TabType): string {
       return "Points";
     case TabType.AKMetadata:
       return "AK Metadata";
+    case TabType.ScoringNodes:
+      return "Scoring Nodes";
 
     default:
       return "";
@@ -97,6 +100,8 @@ export function getTabIcon(type: TabType): string {
       return "🔵";
     case TabType.AKMetadata:
       return "🔍";
+    case TabType.ScoringNodes:
+      return "🟪";
     default:
       return "";
   }

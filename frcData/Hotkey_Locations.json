@@ -5,16 +5,38 @@
       "double substation bottom": [1, 6.1, 180],
       "double substation top": [1, 7.5, 180]
     },
-    "nodes": {
-      "bottom one": [14.7, 0.55, 0],
-      "bottom two": [14.7, 1.1, 0],
-      "bottom three": [14.7, 1.6, 0],
-      "middle one": [14.7, 2.2, 0],
-      "middle two": [14.7, 2.7, 0],
-      "middle three": [14.7, 3.3, 0],
-      "top one": [14.7, 3.9, 0],
-      "top two": [14.7, 4.4, 0],
-      "top three": [14.7, 5, 0]
+    "high-nodes": {
+      "bottom one": [16.2, 0.55, 0],
+      "bottom two": [16.2, 1.1, 0],
+      "bottom three": [16.2, 1.6, 0],
+      "middle one": [16.2, 2.2, 0],
+      "middle two": [16.2, 2.7, 0],
+      "middle three": [16.2, 3.3, 0],
+      "top one": [16.2, 3.9, 0],
+      "top two": [16.2, 4.4, 0],
+      "top three": [16.2, 5, 0]
+    },
+    "mid-nodes": {
+      "bottom one": [16.2, 0.55, 0],
+      "bottom two": [16.2, 1.1, 0],
+      "bottom three": [16.2, 1.6, 0],
+      "middle one": [16.2, 2.2, 0],
+      "middle two": [16.2, 2.7, 0],
+      "middle three": [16.2, 3.3, 0],
+      "top one": [16.2, 3.9, 0],
+      "top two": [16.2, 4.4, 0],
+      "top three": [16.2, 5, 0]
+    },
+    "hybrid-nodes": {
+      "bottom one": [16.2, 0.55, 0],
+      "bottom two": [16.2, 1.1, 0],
+      "bottom three": [16.2, 1.6, 0],
+      "middle one": [16.2, 2.2, 0],
+      "middle two": [16.2, 2.7, 0],
+      "middle three": [16.2, 3.3, 0],
+      "top one": [16.2, 3.9, 0],
+      "top two": [16.2, 4.4, 0],
+      "top three": [16.2, 5, 0]
     },
     "charge stations": {
       "bottom": [12.6, 1.9, 0],
