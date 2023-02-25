@@ -49,7 +49,6 @@ export default class DashboardController implements TabController {
       } else {
         this.content.getElementsByClassName("AllainceColour")[0].innerHTML = "Blue";
       }
-      console.log(this.isRed.values[0]);
     }
   }
 
