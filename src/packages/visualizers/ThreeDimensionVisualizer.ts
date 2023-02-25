@@ -148,7 +148,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
       this.rayCaster = new THREE.Raycaster();
       // new plane facing up
       this.planeX = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-      addEventListener("auxclick", (event) => {
+      addEventListener("click", (event) => {
         this.getClicked3DPoint(event);
       });
     }
@@ -161,6 +161,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
           event.preventDefault();
           let hotkey = window.frcData?.hotkeys.get((isRed ? "red/" : "blue/") + event.key);
           window.setNt4("/SmartDashboard/TargetLocation", hotkey);
+          window.setNt4("/SmartDashboard/NavType", "hotkey");
         }
       });
     }
@@ -337,8 +338,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
   }
 
   getClicked3DPoint(evt: MouseEvent) {
-    if (evt.button != 2) return;
-    if (evt.ctrlKey != true) return;
+    if (!evt.getModifierState("CapsLock")) return;
+    if (evt.button !== 0) return;
     evt.preventDefault();
     // Get mouse position
     let rect = this.canvas.getBoundingClientRect();
@@ -354,6 +355,7 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
     // sets selected position on field (right click) in WPI field relative values
     window.setNt4("/SmartDashboard/TargetLocation", [-(intersects.x - 8.25), intersects.z + 4, -2]);
+    window.setNt4("/SmartDashboard/NavType", "click");
   }
 
   /** Switches the selected camera. */

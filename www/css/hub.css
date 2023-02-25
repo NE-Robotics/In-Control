@@ -1713,3 +1713,40 @@ div.tab-right {
   flex-grow: 0.5;
   color: #222;
 }
+
+.scoring-table {
+  position: absolute;
+  left: 0%;
+  width: 100%;
+  top: 0%;
+  height: 100%;
+  border-spacing: 10px;
+}
+
+td.hybrid {
+  background-color: #777777;
+}
+
+td.hybrid.scored {
+  background-color: #ffffff;
+}
+
+td.cone {
+  background-color: #ffda1e5d;
+}
+
+td.cone.scored {
+  background-color: #ffda1e;
+}
+
+td.cube {
+  background-color: #aa00ff4d;
+}
+
+td.cube.scored {
+  background-color: #aa00ff;
+}
+
+td.active {
+  background-color: #00ff08;
+}

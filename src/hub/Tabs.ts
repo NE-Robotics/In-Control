@@ -18,6 +18,7 @@ import ThreeDimensionController from "./tabControllers/ThreeDimensionController"
 import TimelineVizController from "./tabControllers/TimelineVizController";
 import VideoController from "./tabControllers/VideoController";
 import DashboardController from "./tabControllers/DashboardController";
+import ScoringNodesController from "./tabControllers/ScoringNodesController";
 
 export default class Tabs {
   private VIEWER = document.getElementsByClassName("viewer")[0] as HTMLElement;
@@ -237,6 +238,10 @@ export default class Tabs {
       case TabType.Dashboard:
         contentElement = this.CONTENT_TEMPLATES.children[14].cloneNode(true) as HTMLElement;
         controller = new DashboardController(contentElement);
+        break;
+      case TabType.ScoringNodes:
+        contentElement = this.CONTENT_TEMPLATES.children[15].cloneNode(true) as HTMLElement;
+        controller = new ScoringNodesController(contentElement);
         break;
     }
 
