@@ -1,7 +1,7 @@
 {
   "name": "in-control",
   "productName": "In Control",
-  "version": "0.0.11",
+  "version": "0.1.0",
   "description": "Robot dashboard, data logger, and data visualizer for FRC teams",
   "author": {
     "name": "Autumn O."
@@ -53,11 +53,10 @@
   "build": {
     "win": {
       "target": "nsis",
-      "icon": "icons/logo_B.png"
+      "icon": "icons/logo.png"
     },
     "mac": {
-      "target": "dmg",
-      "icon": "icons/logo_B.icns"
+      "target": "dmg"
     },
     "linux": {
       "target": [
@@ -65,7 +64,7 @@
         "AppImage",
         "rpm"
       ],
-      "icon": "icons/logo_B.png",
+      "icon": "icons/logo.png",
       "category": "Utility"
     },
     "nsis": {
