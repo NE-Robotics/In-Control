@@ -1,47 +1,33 @@
-import { TabState } from "../../packages/utils/HubState";
+import LoggableType from "../../packages/log/LoggableType";
 import TabType from "../../packages/utils/TabType";
-import TabController from "../TabController";
+import TimelineVizController from "./TimelineVizController";
+import ScoringNodesVisualizer from "../../packages/visualizers/ScoringNodesVisualizer";
 
-export default class ScoringNodesController implements TabController {
-  private content: HTMLElement;
-
-  private nodeElements: HTMLElement[] = [];
+export default class ScoringNodesController extends TimelineVizController {
+  get options(): { [id: string]: any } {
+    return {};
+  }
+  set options(options: { [id: string]: any }) {}
+  getCommand(time: number) {
+    return null;
+  }
 
   constructor(content: HTMLElement) {
-    this.content = content;
-
-    let container: HTMLElement = this.content.children[0].children[0] as HTMLElement;
-    console.log(container);
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 9; j++) {
-        this.nodeElements.push(container.children[i].children[j] as HTMLElement);
-      }
-    }
-  }
-
-  saveState(): TabState {
-    return { type: TabType.ScoringNodes };
-  }
-
-  restoreState(state: TabState) {}
-
-  periodic() {}
-
-  refresh() {
-    let data = window.log.getBooleanArray(
-      "/SmartDashboard/ScoringNodes",
-      window.log.getTimestampRange()[1],
-      window.log.getTimestampRange()[1]
+    super(
+      content,
+      TabType.ScoringNodes,
+      [],
+      [
+        {
+          element: content.getElementsByClassName("timeline-viz-config")[0].firstElementChild?.children[1]
+            .firstElementChild as HTMLElement,
+          types: [LoggableType.NumberArray],
+          options: [
+            ["Robot", "Ghost", "Trajectory", "Vision Target", "Arrow (Front)", "Arrow (Center)", "Arrow (Back)"]
+          ]
+        }
+      ],
+      new ScoringNodesVisualizer(content.getElementsByClassName("scoring-table")[0] as HTMLElement)
     );
-    if (data == undefined) return;
-    let scoreState = data.values[0];
-
-    for (let node in scoreState) {
-      if (scoreState[node]) {
-        this.nodeElements[node].classList.add("scored");
-      } else {
-        this.nodeElements[node].classList.remove("scored");
-      }
-    }
   }
 }

@@ -730,7 +730,76 @@
             </div>
           </div>
           <!-- Scoring -->
+
           <div class="tab-content">
+            <table class="timeline-viz-config" style="display: none">
+              <tbody>
+                <tr>
+                  <th>Poses</th>
+                  <th>Coordinate System</th>
+                  <th>Robot Config</th>
+                </tr>
+                <tr>
+                  <td rowspan="3" class="list"></td>
+                  <td>
+                    <span class="label">Game:</span>
+                    <select tabindex="-1"></select>
+                    <a class="credit-link" href="#" tabindex="-1">Source</a>
+                  </td>
+                  <td>
+                    <span class="label">Side Length:</span>
+                    <input type="number" min="0" value="0.75" step="0.01" tabindex="-1" />
+                    <span>meters</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="label">Units:</span>
+                    <select tabindex="-1">
+                      <option>meters</option>
+                      <option>inches</option>
+                    </select>
+                    and
+                    <select tabindex="-1">
+                      <option>radians</option>
+                      <option>degrees</option>
+                    </select>
+                  </td>
+                  <td>
+                    <span class="label">Alliance:</span>
+                    <select tabindex="-1">
+                      <option value="auto">auto bumpers</option>
+                      <option value="blue">blue bumpers</option>
+                      <option value="red">red bumpers</option>
+                    </select>
+                    <select tabindex="-1">
+                      <option value="auto">auto origin</option>
+                      <option value="blue">blue origin</option>
+                      <option value="red">red origin</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="label">Origin:</span>
+                    <select tabindex="-1">
+                      <option>right</option>
+                      <option>center</option>
+                      <option>left</option>
+                    </select>
+                  </td>
+                  <td>
+                    <span class="label">Orientation:</span>
+                    <select tabindex="-1">
+                      <option>blue left, red right</option>
+                      <option>red left, blue right</option>
+                      <option>blue bottom, red top</option>
+                      <option>red bottom, blue top</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <table class="scoring-table">
               <tbody>
                 <tr>

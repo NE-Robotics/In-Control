@@ -5,39 +5,6 @@
       "double substation bottom": [1, 6.1, 180],
       "double substation top": [1, 7.5, 180]
     },
-    "high-nodes": {
-      "bottom one": [16.2, 0.55, 0],
-      "bottom two": [16.2, 1.1, 0],
-      "bottom three": [16.2, 1.6, 0],
-      "middle one": [16.2, 2.2, 0],
-      "middle two": [16.2, 2.7, 0],
-      "middle three": [16.2, 3.3, 0],
-      "top one": [16.2, 3.9, 0],
-      "top two": [16.2, 4.4, 0],
-      "top three": [16.2, 5, 0]
-    },
-    "mid-nodes": {
-      "bottom one": [16.2, 0.55, 0],
-      "bottom two": [16.2, 1.1, 0],
-      "bottom three": [16.2, 1.6, 0],
-      "middle one": [16.2, 2.2, 0],
-      "middle two": [16.2, 2.7, 0],
-      "middle three": [16.2, 3.3, 0],
-      "top one": [16.2, 3.9, 0],
-      "top two": [16.2, 4.4, 0],
-      "top three": [16.2, 5, 0]
-    },
-    "hybrid-nodes": {
-      "bottom one": [16.2, 0.55, 0],
-      "bottom two": [16.2, 1.1, 0],
-      "bottom three": [16.2, 1.6, 0],
-      "middle one": [16.2, 2.2, 0],
-      "middle two": [16.2, 2.7, 0],
-      "middle three": [16.2, 3.3, 0],
-      "top one": [16.2, 3.9, 0],
-      "top two": [16.2, 4.4, 0],
-      "top three": [16.2, 5, 0]
-    },
     "charge stations": {
       "bottom": [12.6, 1.9, 0],
       "middle": [12.6, 2.75, 0],
@@ -50,17 +17,6 @@
       "double substation bottom": [15.5, 6.1, 0],
       "double substation top": [15.5, 7.5, 0]
     },
-    "nodes": {
-      "bottom one": [1.8, 0.55, 180],
-      "bottom two": [1.8, 1.1, 180],
-      "bottom three": [1.8, 1.6, 180],
-      "middle one": [1.8, 2.2, 180],
-      "middle two": [1.8, 2.7, 180],
-      "middle three": [1.8, 3.3, 180],
-      "top one": [1.8, 3.9, 180],
-      "top two": [1.8, 4.4, 180],
-      "top three": [1.8, 5, 180]
-    },
     "charge stations": {
       "bottom": [3.9, 1.9, 180],
       "middle": [3.9, 2.75, 180],
@@ -69,21 +25,10 @@
   },
   "keys": {
     "loading zones": {
-      "single substation": "q",
-      "double substation bottom": "w",
-      "double substation top": "e"
+      "single substation": "1",
+      "double substation bottom": "2",
+      "double substation top": "3"
     },
-    "nodes": {
-      "bottom one": "1",
-      "bottom two": "2",
-      "bottom three": "3",
-      "middle one": "4",
-      "middle two": "5",
-      "middle three": "6",
-      "top one": "7",
-      "top two": "8",
-      "top three": "9"
-    },
-    "charge stations": { "bottom": "a", "middle": "s", "top": "d" }
+    "charge stations": { "bottom": "4", "middle": "5", "top": "6" }
   }
 }

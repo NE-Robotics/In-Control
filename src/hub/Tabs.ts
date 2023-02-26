@@ -240,7 +240,8 @@ export default class Tabs {
         controller = new DashboardController(contentElement);
         break;
       case TabType.ScoringNodes:
-        contentElement = this.CONTENT_TEMPLATES.children[15].cloneNode(true) as HTMLElement;
+        contentElement = this.CONTENT_TEMPLATES.children[5].cloneNode(true) as HTMLElement;
+        contentElement.appendChild(this.CONTENT_TEMPLATES.children[15].cloneNode(true));
         controller = new ScoringNodesController(contentElement);
         break;
     }

@@ -9,6 +9,7 @@ import OdometryVisualizer from "../packages/visualizers/OdometryVisualizer";
 import PointsVisualizer from "../packages/visualizers/PointsVisualizer";
 import SwerveVisualizer from "../packages/visualizers/SwerveVisualizer";
 import ThreeDimensionVisualizer from "../packages/visualizers/ThreeDimensionVisualizer";
+import ScoringNodesVisualizer from "../packages/visualizers/ScoringNodesVisualizer";
 import VideoVisualizer from "../packages/visualizers/VideoVisualizer";
 import Visualizer from "../packages/visualizers/Visualizer";
 
@@ -61,6 +62,7 @@ window.addEventListener("message", (event) => {
           (document.getElementById("swerve") as HTMLElement).hidden = type != TabType.Swerve;
           (document.getElementById("mechanism") as HTMLElement).hidden = type != TabType.Mechanism;
           (document.getElementById("points") as HTMLElement).hidden = type != TabType.Points;
+          (document.getElementById("scoring") as HTMLElement).hidden = type != TabType.ScoringNodes;
 
           // Create visualizer
           switch (type) {
@@ -93,6 +95,11 @@ window.addEventListener("message", (event) => {
             case TabType.Points:
               visualizer = new PointsVisualizer(
                 document.getElementsByClassName("points-background-container")[0] as HTMLElement
+              );
+              break;
+            case TabType.ScoringNodes:
+              visualizer = new ScoringNodesVisualizer(
+                document.getElementsByClassName("scoring-table")[0] as HTMLElement
               );
               break;
           }

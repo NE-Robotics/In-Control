@@ -1748,5 +1748,5 @@ td.cube.scored {
 }
 
 td.active {
-  background-color: #00ff08;
+  background-color: #00ff08 !important;
 }

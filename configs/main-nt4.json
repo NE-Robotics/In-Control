@@ -11,6 +11,8 @@
   ],
   "publishers": [
     ["/SmartDashboard/TargetLocation", "double[]"],
-    ["/SmartDashboard/NavType", "string"]
+    ["/SmartDashboard/NavType", "string"],
+    ["/SmartDashboard/ScoringNodes", "boolean[]"],
+    ["/SmartDashboard/TargetNode", "double"]
   ]
 }
