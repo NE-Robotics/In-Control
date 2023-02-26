@@ -73,6 +73,13 @@ export function getEnabledData(log: Log): LogValueSetBoolean | null {
   return enabledData;
 }
 
+export function getFMSControlData(log: Log): number {
+  let controlDataKey = "/FMSInfo/FMSControlData";
+  let controlData = log.getNumber(controlDataKey, Infinity, Infinity);
+  if (controlData == undefined) return 0;
+  return controlData.values[0];
+}
+
 export function getIsRedAlliance(log: Log): boolean {
   let allianceKey = ALLIANCE_KEYS.find((key) => log.getFieldKeys().includes(key));
   if (!allianceKey) return false;

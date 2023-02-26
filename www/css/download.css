@@ -1,15 +1,12 @@
 body {
   background-color: #fff;
 }
-
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #222;
   }
 }
-
 /* File list */
-
 div.file-list {
   position: absolute;
   left: 0px;
@@ -20,7 +17,6 @@ div.file-list {
   background-color: #eee;
   box-shadow: inset 0px 0px 2px #ccc;
 }
-
 div.file-item {
   height: 25px;
   margin-left: 6px;
@@ -28,26 +24,21 @@ div.file-item {
   padding-left: 0px;
   padding-right: 5px;
   border-radius: 8px;
-
   font-size: 14px;
   line-height: 25px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 div.file-item:first-child {
   margin-top: 3px;
 }
-
 div.file-item:last-child {
   margin-bottom: 3px;
 }
-
 div.file-item:nth-child(even) {
   background-color: #ddd;
 }
-
 div.file-item img {
   position: relative;
   top: 2px;
@@ -56,62 +47,53 @@ div.file-item img {
   padding-right: 5px;
   filter: drop-shadow(0px 0.5px 1px #bbb);
 }
-
 div.file-item img.mac {
   top: 3px;
   height: 18px;
   padding-left: 7px;
   padding-right: 4px;
 }
-
 div.file-item > span:last-child {
   font-weight: 300;
   color: #777;
 }
-
 div.file-item.selected > span:last-child {
   color: #555;
 }
-
 @media (prefers-color-scheme: dark) {
   div.file-list {
     background-color: #111;
     box-shadow: inset 0px 0px 2px #000;
   }
-
   div.file-item:nth-child(even) {
     background-color: #1a1a1a;
   }
-
   div.file-item img {
     filter: drop-shadow(0px 0.5px 4px #000);
   }
-
   div.file-item.selected > span:last-child {
     color: #999;
   }
 }
-
 /* File selection */
 div.file-item:not(.selected):hover {
   background-color: #e8e8e8;
 }
-
 div.file-item:not(.selected):nth-child(even):hover {
   background-color: #d7d7d7;
 }
 
 div.file-item.selected {
-  background-color: #88f;
+  background-color: #b1a1f6;
 }
 
 div.file-item.selected:nth-child(even) {
-  background-color: #77e;
+  background-color: #c7c5fb;
 }
 
 @media (prefers-color-scheme: dark) {
   div.file-item:not(.selected):hover {
-    background-color: #151515;
+    background-color: #191919;
   }
 
   div.file-item:not(.selected):nth-child(even):hover {
@@ -119,27 +101,24 @@ div.file-item.selected:nth-child(even) {
   }
 
   div.file-item.selected {
-    background-color: #22a;
+    background-color: #7843fb;
   }
 
   div.file-item.selected:nth-child(even) {
-    background-color: #33b;
+    background-color: #7843fb;
   }
 
   div.file-item.selected img {
     filter: drop-shadow(0px 0.5px 1px #000);
   }
 }
-
 /* Loading animation */
-
 div.loading {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
 div.loading-bar {
   display: inline-block;
   width: 4px;
@@ -149,30 +128,29 @@ div.loading-bar {
 }
 
 .loading-bar:nth-child(1) {
-  background-color: #303dc9;
+  background-color: #7d53e9;
   animation-delay: 0;
 }
 
 .loading-bar:nth-child(2) {
-  background-color: #e8c24f;
+  background-color: #e1bc5a;
   animation-delay: 0.09s;
 }
 
 .loading-bar:nth-child(3) {
-  background-color: #303dc9;
+  background-color: #7d53e9;
   animation-delay: 0.18s;
 }
 
 .loading-bar:nth-child(4) {
-  background-color: #e8c24f;
+  background-color: #e1bc5a;
   animation-delay: 0.27s;
 }
 
 .loading-bar:nth-child(5) {
-  background-color: #303dc9;
+  background-color: #7d53e9;
   animation-delay: 0.36s;
 }
-
 @keyframes loading {
   0% {
     transform: scale(1);
@@ -184,23 +162,19 @@ div.loading-bar {
     transform: scale(1);
   }
 }
-
 /* Control bar */
-
 div.alert-text {
   position: absolute;
   bottom: 8px;
   height: 30px;
   left: 12px;
   right: 85px;
-
   font-size: 14px;
   line-height: 30px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 progress {
   position: absolute;
   bottom: 23px;
@@ -208,7 +182,6 @@ progress {
   left: 12px;
   width: calc(100% - 12px - 85px);
 }
-
 div.progress-details {
   position: absolute;
   bottom: 5px;
@@ -216,25 +189,21 @@ div.progress-details {
   left: 12px;
   width: calc(100% - 12px - 85px);
   text-align: center;
-
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: monospace;
 }
-
 button {
   position: absolute;
   bottom: 8px;
   width: 30px;
   height: 30px;
 }
-
 #exit {
   right: 43px;
 }
-
 #download {
   right: 8px;
 }

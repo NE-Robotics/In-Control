@@ -111,7 +111,7 @@ window.addEventListener("message", (event) => {
           let newTitle = message.data.title;
           if (newTitle != title) {
             titleElement.innerHTML =
-              (type ? getTabIcon(type) + " " : "") + htmlEncode(newTitle) + " &mdash; AdvantageScope";
+              (type ? getTabIcon(type) + " " : "") + htmlEncode(newTitle) + " &mdash; In Control";
             title = newTitle;
           }
 

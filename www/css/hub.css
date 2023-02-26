@@ -86,11 +86,11 @@ div.loading-glow-element {
   transform: skew(-45deg);
   animation: loadingGlowSlide 1.5s linear infinite;
 
-  background-color: #44087b;
+  background-color: #7d53e9;
 }
 
 div.loading-glow-element:nth-child(2n) {
-  background-color: #f5c537;
+  background-color: #7d53e9;
 }
 
 div.loading-glow-element:nth-child(1) {
@@ -1684,8 +1684,7 @@ table.dashboard-table td.no-data {
 }
 
 img.dashboard-video-container {
-  min-width: 50rem;
-  max-width: 100rem;
+  width: 30vw;
   height: 100%;
   overflow: hidden;
 }

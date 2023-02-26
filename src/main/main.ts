@@ -1185,6 +1185,7 @@ function setupMenu() {
                       liveMode: oldPrefs.liveMode,
                       rlogPort: oldPrefs.rlogPort,
                       threeDimensionMode: oldPrefs.threeDimensionMode,
+                      dashboadMode: oldPrefs.dashboadMode,
                       keys: data.keys,
                       publishers: data.publishers
                     },
@@ -1852,6 +1853,9 @@ app.whenReady().then(() => {
         oldPrefs.liveMode == "nt4-configurable")
     ) {
       prefs.liveMode = oldPrefs.liveMode;
+    }
+    if ("dashboardMode" in oldPrefs) {
+      prefs.dashboardMode = oldPrefs.dashboardMode;
     }
     if ("rlogPort" in oldPrefs && typeof oldPrefs.rlogPort == "number") {
       prefs.rlogPort = oldPrefs.rlogPort;
