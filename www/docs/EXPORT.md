@@ -10,7 +10,7 @@ In Control includes a flexible system for exporting log data as a CSV or WPILOG 
 
 To view options for exporting, click "Data" > "Logs" > "Export Data..." or press **cmd/ctrl + E**.
 
-![Export options](/docs/resources/export/export-1.png)
+![Export options](/docs/resources/export/export-1-dark.png)
 
 The following options are provided when exporting:
 

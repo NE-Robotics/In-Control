@@ -2,6 +2,8 @@
 
 _[< Return to homepage](/docs/INDEX.md)_
 
+> Note: This can be used for any drivebase for rotation only display, full support for other drive bases is coming soon, when using for other drive bases make sure to check the "Forward = ..." section as it is usually right iinstead of up for other drive bases.
+
 The swerve tab shows the state of four swerve modules, including the velocity vectors, idle positions, and robot rotation. The timeline shows when the robot is enabled and can be used to navigate through the log data.
 
 > Note: To view the swerve visualization alongside other tabs, click the "Add Window" icon just below the navigation/playback controls.
@@ -50,4 +52,4 @@ The following configuration options are available:
 - **Size (Front-Back):** The distance between the front and back modules. Any units can be used, but they must match the units for the left-right measurement.
 - **Forward Direction:** The direction the robot should be facing when the "Robot Rotation" is zero or blank. This option is often useful to align with odometry data or match videos.
 
-> Note: [🦀 🦀 🦀 🦀 🦀 🦀 🦀 🦀 🦀](https://www.youtube.com/watch?v=IbbwtyM8Dxs)
+> Note: [🦀 🦀 🦀 🦀 🦀 🦀 🦀 🦀 🦀 Mechanical Advantage Crab Bot](https://www.youtube.com/watch?v=IbbwtyM8Dxs)

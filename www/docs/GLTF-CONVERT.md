@@ -43,3 +43,13 @@ While Onshape includes an export option for glTF, this often produces very large
 7. Click the "Save" icon and wait for the export to finish:
 
 ![Clicking the "Save" icon](/docs/resources/gltf-convert/gltf-convert-7.png)
+
+## Converting Inventor to glb/glTF
+
+1. Open Inventor and select the file/project to convert.
+
+2. Click the "File" tab and select "Export":
+
+3. Select "glTF" or "glb" as the export format:
+
+4. Append .glb or .gltf to the file name and click "Save"

@@ -8,6 +8,18 @@ This tab shows a 3D visualization of the robot and field. It can be used with re
 
 ![Overview of 3D field tab](/docs/resources/3d-field/3d-field-1.png)
 
+## Publish Click Data
+
+When using [NT4 Configurable mode](/docs/NT4CONFIGURABLE.md) adding
+
+```
+ "publishers": [
+    ["/SmartDashboard/TargetLocation", "double[]"]
+  ]
+```
+
+will result in the publication of the exact location clicked on the field [x, y] meters when capslock is toggled on
+
 ## Pose Data
 
 To add a field with pose data, drag it from the sidebar to the box under "3D Poses" or "2D Poses" and use the drop down to select an object type. Multiple sets of objects can be added this way, and fields can be included multiple times. To remove a set of objects, right-click the field name.

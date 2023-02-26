@@ -33,7 +33,7 @@ boolean, double, int, float, string, json, raw, rpc, msgpack, protobuf, boolean[
 
 ```json
 {
-  "version":"0.0.5",
+  "version":"0.1.3",
   "keys":[
     ["/DataString/Substring",bool,bool,Update Rate],
     ["/FMSInfo/FMSControlData", false, false, 2],
@@ -52,3 +52,21 @@ boolean, double, int, float, string, json, raw, rpc, msgpack, protobuf, boolean[
 
 To switch to NT4 Configurable mode, click "Options" > "Preferences" > "Live Mode" & select "NetworkTables 4 (Configurable)", then click the check mark.
 Once you've made your config, click "File" > "Import NT4 Config..." & then select your config json. It will save after you've loaded it once but you can overwrite it by importing a new config.
+
+## Current Integrated Publishers
+
+```json
+{
+  "publishers": [
+    ["/SmartDashboard/TargetLocation", "double[]"],
+    ["/SmartDashboard/NavType", "string"],
+    ["/SmartDashboard/ScoringNodes", "boolean[]"],
+    ["/SmartDashboard/TargetNode", "double"]
+  ]
+}
+```
+
+- /SmartDashboard/TargetLocation : click location when capslock is on
+- /SmartDashboard/NavType : "click" or "hotkey"
+- /SmartDashboard/ScoringNodes : 27 booleans in an array from top left to bottom right of scoring nodes, togglable for trtackibng scoring and adding scoring data from robot or to signal which pieces have been scored to your robot
+- /SmartDashboard/TargetNode : The selected node in the Scoring Nodes tab

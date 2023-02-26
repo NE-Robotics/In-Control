@@ -2,7 +2,7 @@
 
 ![In Control](/docs/resources/logo-black.png)
 
-In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built on top of Advantage Kit a datalogging and viewing utility.
+In Control is a dashboard, datalogger, & debug utility for FIRST robotics teams, built from Advantage Kit, Advantage Scope, & Ico
 
 ## Getting Started
 
@@ -16,10 +16,10 @@ These links cover the basics of getting around in In Control and and accessing d
 
 ## Tab Information
 
-In Control supports many ways to view and analyze data, organized into tabs. The type of visualization is selectable for each new tab opened, and multiple tabs of a given type can be open at once. Tabs can be named for ease of organization and many can "pop out" to separate windows for simultaneous, synchronized data viewing.
+In Control supports many ways to view and analyze data, organized into tabs. The type of visualization is selectable for each new tab opened, and multiple tabs of a given type can be open at once. Tabs can be named for ease of organization and many can be popped out separate windows for simultaneous, synchronized data viewing. If you need multiple tabs without the popout option opening multiple instances of the app is recommended.
 
-- 📉 [Line Graph](/docs/tabs/LINE-GRAPH.md)
 - 💻 [Dashboard](/docs/tabs/DASHBOARD.md)
+- 📉 [Line Graph](/docs/tabs/LINE-GRAPH.md)
 - 🔢 [Table](/docs/tabs/TABLE.md)
 - 💬 [Console](/docs/tabs/CONSOLE.md)
 - 📊 [Statistics](/docs/tabs/STATISTICS.md)
@@ -31,11 +31,12 @@ In Control supports many ways to view and analyze data, organized into tabs. The
 - 🦾 [Mechanism](/docs/tabs/MECHANISM.md)
 - 🔵 [Points](/docs/tabs/POINTS.md)
 - 🔍 [AK Metadata](/docs/tabs/METADATA.md)
+- 🟪 Scoring Nodes, docs coming soon
 
 ## Other Links
 
 - [Sample Log Data](https://drive.google.com/drive/folders/14Bbp10csQPjh2VcApNM07lwt2v77-z_I?usp=share_link) (6328 @ 2022 Championship)
 - [Custom Fields/Robots/Joysticks](/docs/CUSTOM-CONFIG.md)
-- [Converting Onshape & STEP Files to glTF](/docs/GLTF-CONVERT.md)
+- [Converting CAD files to glTF & glb](/docs/GLTF-CONVERT.md)
 - [AdvantageScope](https://github.com/Mechanical-Advantage/AdvantageScope)
 - [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit)

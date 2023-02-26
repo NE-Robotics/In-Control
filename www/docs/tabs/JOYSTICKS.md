@@ -6,7 +6,8 @@ The joysticks tab shows the state of up to three connected controllers. The vide
 
 > Note: To view the joystick visualization alongside other tabs, click the "Add Window" icon just below the navigation/playback controls.
 
-![Overview of joystick tab](/docs/resources/joysticks/joysticks-1.gif)
+![Overview of joystick tab](/docs/resources/joysticks/joysticks-1-dark.png)
+![Overview of joystick tab](/docs/resources/joysticks/joysticks-2-dark.png)
 
 ## Configuration
 
@@ -16,4 +17,4 @@ In Control includes a set of common joysticks, including a "Generic Joystick" wi
 
 > Note: The source fields are automatically selected from the log data. WPILib logs (with [joystick logging enabled](https://docs.wpilib.org/en/stable/docs/software/telemetry/datalog.html#logging-joystick-data)), AdvantageKit logs, and AdvantageKit streaming are supported. **Joystick data is NOT available via an NT4 connection with stock WPILib.**
 
-![Custom joystick](/docs/resources/joysticks/joysticks-2.png)
+![Custom joystick](/docs/resources/joysticks/joysticks-3.png)

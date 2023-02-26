@@ -6,7 +6,7 @@ The odometry tab shows a 2D visualization of the robot overlayed on a map of the
 
 > Note: To view the odometry visualization alongside other tabs, click the "Add Window" icon just below the navigation/playback controls.
 
-![Overview of odometry tab](/docs/resources/odometry/odometry-1.png)
+![Overview of odometry tab](/docs/resources/odometry/odometry-1-dark.png)
 
 ## Pose Data
 
