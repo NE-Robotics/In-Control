@@ -1,7 +1,7 @@
 {
   "name": "in-control",
   "productName": "In Control",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Robot dashboard, data logger, and data visualizer for FRC teams",
   "author": {
     "name": "Autumn O."
@@ -49,7 +49,8 @@
     "fast-build": "npm run compile && electron-builder build --dir",
     "watch": "rollup -c -w",
     "format": "prettier --write .",
-    "check-format": "prettier --check ."
+    "check-format": "prettier --check .",
+    "postinstall": "node ffmpegDownload.js"
   },
   "build": {
     "win": {
