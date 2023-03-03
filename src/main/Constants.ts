@@ -31,7 +31,12 @@ export const DEFAULT_PREFS: Preferences = {
   rlogPort: 5800,
   threeDimensionMode: "quality",
   keys: [],
-  publishers: [],
+  publishers: [
+    ["/SmartDashboard/TargetLocation", "double[]"],
+    ["/SmartDashboard/NavType", "string"],
+    ["/SmartDashboard/ScoringNodes", "boolean[]"],
+    ["/SmartDashboard/TargetNode", "double"]
+  ],
   dashboardMode: "none"
 };
 

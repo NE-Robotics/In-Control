@@ -217,6 +217,9 @@ export default class NT4Source extends LiveDataSource {
         }
       } else {
         this.client?.subscribe(["/"], true, true, 0);
+        for (const publisher of window.preferences.publishers) {
+          this.publishTopic(publisher[0], publisher[1]);
+        }
       }
     }
   }

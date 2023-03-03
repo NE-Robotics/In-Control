@@ -1719,7 +1719,7 @@ function openPreferences(parentWindow: Electron.BrowserWindow) {
   }
 
   const width = 400;
-  const height = process.platform == "win32" ? 276 : 260; // "useContentSize" is broken on Windows when not resizable
+  const height = process.platform == "win32" ? 300 : 285; // "useContentSize" is broken on Windows when not resizable
   prefsWindow = new BrowserWindow({
     width: width,
     height: height,
