@@ -1,0 +1,23 @@
+name: Build/release
+
+on:
+  workflow_dispatch:
+jobs:
+  release:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: Build Electron app
+        run: |
+          export GH_TOKEN=${{ secrets.GH_SECRET }}
+          yarn install
+          yarn postinstall
+          yarn build -w --x64 --ia32 --arm64 --publish always && yarn build -l --x64 --armv7l --arm64 --publish always && yarn build -m --x64 --arm64 --publish always
