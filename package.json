@@ -75,6 +75,15 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "multiLanguageInstaller": true
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "private": true,
+        "owner": "Autumn-Ou",
+        "repo": "In-Control",
+        "token": ".."
+      }
+    ]
   }
 }
