@@ -58,7 +58,8 @@
       "icon": "icons/logo.png"
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "icons/logo.icns"
     },
     "linux": {
       "target": [
