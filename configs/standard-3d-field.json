@@ -1,0 +1,46 @@
+{
+  "version": "dev",
+  "layout": [
+    {
+      "type": 14,
+      "fields": [],
+      "listFields": [
+        []
+      ],
+      "options": {},
+      "title": "Scoring Nodes"
+    },
+    {
+      "type": 7,
+      "fields": [],
+      "listFields": [
+        [],
+        [
+          {
+            "type": "Robot",
+            "key": "/SmartDashboard/vision-main/Sim Field/bestPoses",
+            "fieldTypeIndex": 0
+          },
+          {
+            "type": "Mechanism (Robot)",
+            "key": "/SmartDashboard/Arm",
+            "fieldTypeIndex": 1
+          },
+          {
+            "type": "Trajectory",
+            "key": "/SmartDashboard/Field/PathSmooth",
+            "fieldTypeIndex": 0
+          }
+        ]
+      ],
+      "options": {
+        "field": "2023",
+        "alliance": "blue",
+        "robot": "3044",
+        "unitDistance": "meters",
+        "unitRotation": "degrees"
+      },
+      "title": "3D Field"
+    }
+  ]
+}

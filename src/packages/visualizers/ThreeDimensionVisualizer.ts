@@ -352,9 +352,11 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     this.rayCaster.setFromCamera(mousePosition, this.camera);
     this.rayCaster.ray.intersectPlane(this.planeX, intersects);
 
-    console.log("Click at: " + [-(intersects.x - 8.25), intersects.z + 4]);
+    let click = [-(intersects.x - 8.25), intersects.z + 4];
+    console.log("Click at: " + click);
+    click.push(-2);
     // sets selected position on field (right click) in WPI field relative values
-    window.setNt4("/SmartDashboard/TargetLocation", [-(intersects.x - 8.25), intersects.z + 4, -2]);
+    if (!(click[0] == 8.25 && click[1] == 4)) window.setNt4("/SmartDashboard/TargetLocation", click);
     window.setNt4("/SmartDashboard/NavType", "click");
   }
 
