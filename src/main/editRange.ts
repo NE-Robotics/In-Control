@@ -8,11 +8,11 @@ const CONFIRM_BUTTON = document.getElementById("confirm") as HTMLInputElement;
 window.addEventListener("message", (event) => {
   if (event.source == window && event.data == "port") {
     let messagePort = event.ports[0];
-    messagePort.onmessage = (event) => {
+    messagePort.onmessage = ({ data: range }) => {
       // Update button focus
-      if (typeof event.data === "object" && "isFocused" in event.data) {
+      if (typeof range === "object" && "isFocused" in range) {
         Array.from(document.getElementsByTagName("button")).forEach((button) => {
-          if (event.data.isFocused) {
+          if (range.isFocused) {
             button.classList.remove("blurred");
           } else {
             button.classList.add("blurred");
@@ -22,7 +22,6 @@ window.addEventListener("message", (event) => {
       }
 
       // Normal message
-      let range: [number, number] = event.data;
 
       // Update values
       MIN_INPUT.value = cleanFloat(range[0]).toString();

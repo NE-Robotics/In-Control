@@ -21,7 +21,7 @@ export default class LineGraphController implements TabController {
   private LEGEND_ITEM_TEMPLATE: HTMLElement;
   private CANVAS_CONTAINER: HTMLElement;
   private CANVAS: HTMLCanvasElement;
-  private SCROLL_OVERLAY: HTMLElement;
+  private readonly SCROLL_OVERLAY: HTMLElement;
 
   private LEFT_LIST: HTMLElement;
   private DISCRETE_LIST: HTMLElement;

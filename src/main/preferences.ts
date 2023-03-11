@@ -13,11 +13,11 @@ const CONFIRM_BUTTON = document.getElementById("confirm") as HTMLInputElement;
 window.addEventListener("message", (event) => {
   if (event.source == window && event.data == "port") {
     let messagePort = event.ports[0];
-    messagePort.onmessage = (event) => {
+    messagePort.onmessage = ({ data }) => {
       // Update button focus
-      if (typeof event.data === "object" && "isFocused" in event.data) {
+      if (typeof data === "object" && "isFocused" in data) {
         Array.from(document.getElementsByTagName("button")).forEach((button) => {
-          if (event.data.isFocused) {
+          if (data.isFocused) {
             button.classList.remove("blurred");
           } else {
             button.classList.add("blurred");
@@ -27,8 +27,8 @@ window.addEventListener("message", (event) => {
       }
 
       // Normal message
-      let platform: string = event.data.platform;
-      let oldPrefs: Preferences = event.data.prefs;
+      let platform: string = data.platform;
+      let oldPrefs: Preferences = data.prefs;
 
       // Update values
       if (platform == "linux") {

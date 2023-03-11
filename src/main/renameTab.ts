@@ -5,11 +5,11 @@ const CONFIRM_BUTTON = document.getElementById("confirm") as HTMLInputElement;
 window.addEventListener("message", (event) => {
   if (event.source == window && event.data == "port") {
     let messagePort = event.ports[0];
-    messagePort.onmessage = (event) => {
+    messagePort.onmessage = ({ data: oldName }) => {
       // Update button focus
-      if (typeof event.data === "object" && "isFocused" in event.data) {
+      if (typeof oldName === "object" && "isFocused" in oldName) {
         Array.from(document.getElementsByTagName("button")).forEach((button) => {
-          if (event.data.isFocused) {
+          if (oldName.isFocused) {
             button.classList.remove("blurred");
           } else {
             button.classList.add("blurred");
@@ -19,7 +19,6 @@ window.addEventListener("message", (event) => {
       }
 
       // Normal message
-      let oldName: string = event.data;
 
       // Update values
       NAME_INPUT.value = oldName;

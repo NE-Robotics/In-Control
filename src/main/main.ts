@@ -1441,6 +1441,8 @@ function createHubWindow() {
 /**
  * Creates a new window to edit axis range.
  * @param parentWindow The parent window to use for alignment
+ * @param range The range [Max, Min]
+ * @param callback
  */
 function createEditRangeWindow(
   parentWindow: Electron.BrowserWindow,
@@ -1483,6 +1485,8 @@ function createEditRangeWindow(
 /**
  * Creates a new window to edit unit conversion for axis.
  * @param parentWindow The parent window to use for alignment
+ * @param unitConversion
+ * @param callback
  */
 function createUnitConversionWindow(
   parentWindow: Electron.BrowserWindow,
@@ -1525,6 +1529,8 @@ function createUnitConversionWindow(
 /**
  * Creates a new window to edit a tab name.
  * @param parentWindow The parent window to use for alignment
+ * @param name
+ * @param callback
  */
 function createRenameTabWindow(
   parentWindow: Electron.BrowserWindow,
@@ -1567,6 +1573,7 @@ function createRenameTabWindow(
 /**
  * Creates a new window for export options.
  * @param parentWindow The parent window to use for alignment
+ * @param currentLogPath The current path for wpilogs
  */
 function createExportWindow(parentWindow: Electron.BrowserWindow, currentLogPath: string | null) {
   const exportWindow = new BrowserWindow({
@@ -1639,6 +1646,8 @@ function createExportWindow(parentWindow: Electron.BrowserWindow, currentLogPath
 /**
  * Creates a new satellite window.
  * @param parentWindow The parent (source) window
+ * @param uuid the unique ID
+ * @param type the type of the tab ex. TabType.Joysticks
  */
 function createSatellite(parentWindow: Electron.BrowserWindow, uuid: string, type: TabType) {
   const width = 900;
