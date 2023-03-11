@@ -44,7 +44,7 @@
   "scripts": {
     "start": "electron bundles/main.js",
     "compile": "rollup -c --configMain && rollup -c --configLargeRenderers && rollup -c --configSmallRenderers && rollup -c --configWorkers",
-    "quick": "rollup -c --configLargeRenderers",
+    "quick": "rollup -c --configLargeRenderers && rollup -c --configMain",
     "build": "npm run compile && electron-builder build",
     "fast-build": "npm run compile && electron-builder build --dir",
     "watch": "rollup -c -w",
