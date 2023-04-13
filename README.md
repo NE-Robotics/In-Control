@@ -39,3 +39,13 @@ In Control supports many ways to view and analyze data, organized into tabs. The
 - [Converting Onshape & STEP Files to glTF](/docs/GLTF-CONVERT.md)
 - [AdvantageScope](https://github.com/Mechanical-Advantage/AdvantageScope)
 - [AdvantageKit](https://github.com/Mechanical-Advantage/AdvantageKit)
+
+## Major Contributors
+
+- [Mechanical Advantage](https://github.com/Mechanical-Advantage)
+- [Northeastern Robotics](https://github.com/NE-Robotics)
+- [Oxbe4](https://github.com/FRCTeam3044)
+
+A major thanks to [Jonah](https://github.com/jwbonner) from Mechanical Advantage for his work on the original 
+AdvantageScope, which forms the basis for In Control. an additional thanks to [Nick](https://github.com/nab138) for his 
+work on the scoring nodes tab & NT4 publisher.
