@@ -160,8 +160,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
         if (window.frcData?.hotkeys.has((isRed ? "red/" : "blue/") + event.key)) {
           event.preventDefault();
           let hotkey = window.frcData?.hotkeys.get((isRed ? "red/" : "blue/") + event.key);
-          window.setNt4("/SmartDashboard/TargetLocation", hotkey);
-          window.setNt4("/SmartDashboard/NavType", "hotkey");
+          window.setNt4("/InControl/TargetLocation", hotkey);
+          window.setNt4("/InControl/NavType", "hotkey");
         }
       });
     }
@@ -356,8 +356,8 @@ export default class ThreeDimensionVisualizer implements Visualizer {
     console.log("Click at: " + click);
     click.push(-2);
     // sets selected position on field (right click) in WPI field relative values
-    if (!(click[0] == 8.25 && click[1] == 4)) window.setNt4("/SmartDashboard/TargetLocation", click);
-    window.setNt4("/SmartDashboard/NavType", "click");
+    if (!(click[0] == 8.25 && click[1] == 4)) window.setNt4("/InControl/TargetLocation", click);
+    window.setNt4("/InControl/NavType", "click");
   }
 
   /** Switches the selected camera. */

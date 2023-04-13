@@ -32,10 +32,10 @@ export const DEFAULT_PREFS: Preferences = {
   threeDimensionMode: "quality",
   keys: [],
   publishers: [
-    ["/SmartDashboard/TargetLocation", "double[]"],
-    ["/SmartDashboard/NavType", "string"],
-    ["/SmartDashboard/ScoringNodes", "boolean[]"],
-    ["/SmartDashboard/TargetNode", "double"]
+    ["/InControl/TargetLocation", "double[]"],
+    ["/InControl/NavType", "string"],
+    ["/InControl/ScoringNodes", "boolean[]"],
+    ["/InControl/TargetNode", "double"]
   ],
   dashboardMode: "none"
 };

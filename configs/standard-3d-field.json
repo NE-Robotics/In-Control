@@ -4,9 +4,7 @@
     {
       "type": 14,
       "fields": [],
-      "listFields": [
-        []
-      ],
+      "listFields": [[]],
       "options": {},
       "title": "Scoring Nodes"
     },

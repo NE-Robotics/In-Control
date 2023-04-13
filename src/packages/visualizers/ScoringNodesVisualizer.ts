@@ -16,7 +16,7 @@ export default class ScoringNodesVisualizer implements Visualizer {
       node.addEventListener("click", (event: MouseEvent) => {
         if (event.button != 0) return;
         event.preventDefault();
-        window.setNt4("/SmartDashboard/TargetNode", parseInt(nodeNum));
+        window.setNt4("/InControl/TargetNode", parseInt(nodeNum));
 
         for (let node of this.nodeElements) {
           node.classList.remove("active");
@@ -27,13 +27,13 @@ export default class ScoringNodesVisualizer implements Visualizer {
         if (event.button != 2) return;
         event.preventDefault();
         let oldArray = window.log.getBooleanArray(
-          "/SmartDashboard/ScoringNodes",
+          "/InControl/ScoringNodes",
           window.log.getTimestampRange()[1],
           window.log.getTimestampRange()[1]
         )?.values[0];
         if (oldArray == undefined) return;
         oldArray[nodeNum] = !oldArray[nodeNum];
-        window.setNt4("/SmartDashboard/ScoringNodes", oldArray);
+        window.setNt4("/InControl/ScoringNodes", oldArray);
         // Now that we sent it to networktables, it will be updated in the refresh function
       });
     }
@@ -41,7 +41,7 @@ export default class ScoringNodesVisualizer implements Visualizer {
 
   render(command: null) {
     let data = window.log.getBooleanArray(
-      "/SmartDashboard/ScoringNodes",
+      "/InControl/ScoringNodes",
       window.log.getTimestampRange()[1],
       window.log.getTimestampRange()[1]
     );

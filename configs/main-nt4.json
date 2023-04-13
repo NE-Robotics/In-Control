@@ -1,5 +1,5 @@
 {
-  "version": "0.0.6",
+  "version": "0.1.8",
   "keys": [
     ["/FMSInfo/FMSControlData", false, false, 2],
     ["/FMSInfo/IsRedAlliance", false, false, 0.1],
@@ -7,12 +7,12 @@
     ["/SmartDashboard/Arm", true, false, 0.02],
     ["/SmartDashboard/Field/PathSmooth", true, false, 0.05],
     ["/SmartDashboard/Field/Edges", true, false, 5],
-    ["/SmartDashboard/ScoringNodes", true, false, 1]
+    ["/InControl/ScoringNodes", true, false, 1]
   ],
   "publishers": [
-    ["/SmartDashboard/TargetLocation", "double[]"],
-    ["/SmartDashboard/NavType", "string"],
-    ["/SmartDashboard/ScoringNodes", "boolean[]"],
-    ["/SmartDashboard/TargetNode", "double"]
+    ["/InControl/TargetLocation", "double[]"],
+    ["/InControl/NavType", "string"],
+    ["/InControl/ScoringNodes", "boolean[]"],
+    ["/InControl/TargetNode", "double"]
   ]
 }

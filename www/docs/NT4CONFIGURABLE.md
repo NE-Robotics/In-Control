@@ -43,7 +43,7 @@ boolean, double, int, float, string, json, raw, rpc, msgpack, protobuf, boolean[
   ],
   "publishers": [
     ["/DataString/Substring","type"],
-    ["/SmartDashboard/TargetLocation","double[]"],
+    ["/InControl/TargetLocation","double[]"]
   ]
 }
 ```
@@ -58,15 +58,15 @@ Once you've made your config, click "File" > "Import NT4 Config..." & then selec
 ```json
 {
   "publishers": [
-    ["/SmartDashboard/TargetLocation", "double[]"],
-    ["/SmartDashboard/NavType", "string"],
-    ["/SmartDashboard/ScoringNodes", "boolean[]"],
-    ["/SmartDashboard/TargetNode", "double"]
+    ["/InControl/TargetLocation", "double[]"],
+    ["/InControl/NavType", "string"],
+    ["/InControl/ScoringNodes", "boolean[]"],
+    ["/InControl/TargetNode", "double"]
   ]
 }
 ```
 
-- /SmartDashboard/TargetLocation : click location when capslock is on
-- /SmartDashboard/NavType : "click" or "hotkey"
-- /SmartDashboard/ScoringNodes : 27 booleans in an array from top left to bottom right of scoring nodes, togglable for trtackibng scoring and adding scoring data from robot or to signal which pieces have been scored to your robot
-- /SmartDashboard/TargetNode : The selected node in the Scoring Nodes tab
+- /InControl/TargetLocation : click location when capslock is on
+- /InControl/NavType : "click" or "hotkey" note hotkey currently buggy
+- /InControl/ScoringNodes : 27 booleans in an array from top left to bottom right of scoring nodes, Used for inputting targets
+- /InControl/TargetNode : The selected node in the Scoring Nodes tab
