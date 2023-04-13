@@ -3,8 +3,7 @@ import path from "path";
 import Preferences from "../packages/convenience/Preferences";
 
 // General
-// TODO assign repository once it is public
-export const REPOSITORY = "";
+export const REPOSITORY = "NE-Robotics/In-Control";
 export const PREFS_FILENAME = path.join(app.getPath("userData"), "prefs.json");
 export const STATE_FILENAME = path.join(
   app.getPath("userData"),

@@ -1,7 +1,6 @@
 import ExportOptions from "../packages/utils/ExportOptions";
 
-//TODO add help URL
-const HELP_URL = "https://github.com/";
+const HELP_URL = "https://github.com/NE-Robotics/In-Control";
 
 const FORMAT = document.getElementById("format") as HTMLInputElement;
 const SAMPLING_MODE = document.getElementById("samplingMode") as HTMLInputElement;
