@@ -29,7 +29,7 @@
     "chart.js": "^3.9.1",
     "download": "^8.0.0",
     "electron": "^22.0.0",
-    "electron-builder": "^23.3.3",
+    "electron-builder": "^24.4.0",
     "mathjs": "^11.3.0",
     "prettier": "2.7.1",
     "remarkable": "^2.0.1",
